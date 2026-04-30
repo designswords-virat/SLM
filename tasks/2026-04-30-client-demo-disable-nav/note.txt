@@ -1,0 +1,22 @@
+Task: Disable cross-page navigation on index.html for client demo (home only)
+Date: 2026-04-30
+Status: ACTIVE — script currently in place
+
+What it does:
+  - On index.html load, neutralizes any <a href="*.html"> link (About,
+    Tools, Journey, Leadership, sector cards → projects.html, flagship
+    cards → project.html).
+  - Strips href + sets cursor:default + preventDefault on click.
+  - In-page anchors (#hero, #services, #projects, #contact) still work.
+
+Files changed:
+  - index.html  (added script block in <head>, marked BEGIN/END CLIENT DEMO)
+
+To revert (option A — surgical):
+  Open index.html, find the block:
+    "<!-- ════════════════════ BEGIN CLIENT DEMO ═══..."
+  Delete everything from BEGIN CLIENT DEMO through END CLIENT DEMO.
+
+To revert (option B — full restore):
+  Copy   tasks/2026-04-30-client-demo-disable-nav/before/index.html
+  Over   index.html

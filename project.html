@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- Apply theme before paint -->
+  <script>(function(){try{var t=localStorage.getItem('slm-theme');if(t==='dark')document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
+
+  <!-- SEO: PRIMARY (title/description updated at runtime per ?id=) -->
+  <title>Project Details | SLM Construction</title>
+  <meta id="metaDesc" name="description" content="Project specifications, scope of work, gallery and related projects from SLM's portfolio." />
+  <meta name="author" content="M/S Sohan Lal Mathur" />
+  <meta name="robots" content="index, follow, max-image-preview:large" />
+  <meta name="theme-color" content="#F47721" />
+  <link id="canonicalLink" rel="canonical" href="https://slmindia.in/project.html" />
+
+  <!-- OPEN GRAPH (dynamically updated by main.js) -->
+  <meta property="og:type" content="article" />
+  <meta property="og:site_name" content="SLM Construction" />
+  <meta property="og:locale" content="en_IN" />
+  <meta id="ogTitle" property="og:title" content="Project Details | SLM Construction" />
+  <meta id="ogDesc"  property="og:description" content="Project specifications, scope of work, gallery and related projects." />
+  <meta id="ogUrl"   property="og:url" content="https://slmindia.in/project.html" />
+  <meta id="ogImage" property="og:image" content="https://slmindia.in/wp-content/uploads/2025/09/891adaad9532912464a4c2f7904de3f8fb278369.png" />
+
+  <!-- TWITTER (dynamically updated by main.js) -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta id="twTitle" name="twitter:title" content="Project Details | SLM Construction" />
+  <meta id="twDesc"  name="twitter:description" content="Project specifications, scope of work, gallery and related projects." />
+  <meta id="twImage" name="twitter:image" content="https://slmindia.in/wp-content/uploads/2025/09/891adaad9532912464a4c2f7904de3f8fb278369.png" />
+
+  <!-- FAVICON -->
+  <link rel="icon" type="image/png" href="SLM Main logos/Slm logomark.png" />
+  <link rel="apple-touch-icon" href="SLM Main logos/Slm logomark.png" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: { orange: '#F47721', 'orange-dk': '#D96218', dark: '#111827', muted: '#6B7280', border: '#E5E7EB', off: '#F8F8F6' },
+          fontFamily: { serif: ['"Archivo Black"', 'Impact', 'sans-serif'], sans: ['Inter', 'sans-serif'] }
+        }
+      }
+    }
+  </script>
+
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+
+<body class="font-sans bg-white text-dark overflow-x-hidden page-project">
+
+<!-- SITE LOADER -->
+<div id="siteLoader" class="site-loader" aria-hidden="true">
+  <div class="loader-stage">
+    <div class="loader-mark-wrap">
+      <img src="SLM Main logos/logo 1.png" class="loader-mark" alt="SLM" onerror="this.style.display='none'" />
+    </div>
+    <div class="loader-bar"></div>
+  </div>
+</div>
+
+<div id="nav-slot"></div>
+
+<main class="pt-20">
+  <!-- Project detail HTML is rendered here by main.js -->
+  <div id="projectDetailContent"></div>
+</main>
+
+<!-- Gallery lightbox -->
+<div id="galleryLightbox" class="fixed inset-0 z-[500]" onclick="closeLightbox()">
+  <div class="gl-backdrop"></div>
+  <button class="gl-close" onclick="event.stopPropagation();closeLightbox()" aria-label="Close">
+    <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12"/></svg>
+  </button>
+  <button class="gl-nav gl-prev" onclick="event.stopPropagation();lightboxNav(-1)" aria-label="Previous">
+    <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M15 19l-7-7 7-7"/></svg>
+  </button>
+  <button class="gl-nav gl-next" onclick="event.stopPropagation();lightboxNav(1)" aria-label="Next">
+    <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg>
+  </button>
+  <div class="gl-wrap" onclick="event.stopPropagation()">
+    <img id="lightboxImg" src="" alt="Gallery image" />
+  </div>
+  <p id="lightboxCounter" class="gl-counter">0 / 0</p>
+</div>
+
+<div id="footer-slot"></div>
+
+<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+<script src="https://unpkg.com/lenis@1.1.20/dist/lenis.min.js"></script>
+<script src="js/chrome.js"></script>
+<script src="js/main.js"></script>
+
+</body>
+</html>

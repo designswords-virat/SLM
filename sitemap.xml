@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+
+  <!-- Core pages -->
+  <url><loc>https://slmindia.in/</loc><priority>1.0</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://slmindia.in/about.html</loc><priority>0.95</priority><changefreq>yearly</changefreq></url>
+  <url><loc>https://slmindia.in/journey.html</loc><priority>0.9</priority><changefreq>yearly</changefreq></url>
+  <url><loc>https://slmindia.in/leadership.html</loc><priority>0.9</priority><changefreq>yearly</changefreq></url>
+  <url><loc>https://slmindia.in/tools.html</loc><priority>0.8</priority><changefreq>quarterly</changefreq></url>
+
+  <!-- Category listing pages -->
+  <url><loc>https://slmindia.in/projects.html?category=Industrial</loc><priority>0.8</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://slmindia.in/projects.html?category=Hospitality</loc><priority>0.8</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://slmindia.in/projects.html?category=Institutional</loc><priority>0.8</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://slmindia.in/projects.html?category=Commercial</loc><priority>0.8</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://slmindia.in/projects.html?category=Residential</loc><priority>0.8</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://slmindia.in/projects.html?category=Public%20Works</loc><priority>0.8</priority><changefreq>monthly</changefreq></url>
+
+  <!-- Industrial projects (19) -->
+  <url><loc>https://slmindia.in/project.html?id=bright-metal</loc><priority>0.7</priority></url>
+  <url><loc>https://slmindia.in/project.html?id=hi-growth</loc><priority>0.7</priority></url>
+  <url><loc>https://slmindia.in/project.html?id=universal-auto-iii</loc><priority>0.7</priority></url>
+  <url><loc>https://slmindia.in/project.html?id=paavan-products</loc><priority>0.7</priority></url>
+  <url><loc>https://slmindia.in/project.html?id=precision-auto</loc><priority>0.7</priority></url>
+  <url><loc>https://slmindia.in/project.html?id=oswal-cables</loc><priority>0.7</priority></url>
+  <url><loc>https://slmindia.in/project.html?id=universal-auto-ii</loc><priority>0.7</priority></url>
+  <url><loc>https://slmindia.in/project.html?id=arl-infratech</loc><priority>0.7</priority></url>
+  <url><loc>https://slmindia.in/project.html?id=sigma-j1</loc><priority>0.7</priority></url>
+  <url><loc>https://slmindia.in/project.html?id=mayur-uniquoters-ind</loc><priority>0.7</priority></url>
+  <url><loc>https://slmindia.in/project.html?id=ankit-roofing</loc><priority>0.7</priority></url>
+  <url><loc>https://slmindia.in/project.html?id=vinayak-jewels</loc><priority>0.7</priority></url>
+  <url><loc>https://slmindia.in/project.html?id=autolite</loc><priority>0.7</priority></url>
+  <url><loc>https://slmindia.in/project.html?id=pacific-granites</loc><priority>0.7</priority></url>
+  <url><loc>https://slmindia.in/project.html?id=reil-kanakpura</loc><priority>0.7</priority></url>
+  <url><loc>https://slmindia.in/project.html?id=microtek-sitapura</loc><priority>0.7</priority></url>
+  <url><loc>https://slmindia.in/project.html?id=vaibhav-global</loc><priority>0.7</priority></url>
+  <url><loc>https://slmindia.in/project.html?id=kec-ind</loc><priority>0.7</priority></url>
+  <url><loc>https://slmindia.in/project.html?id=microtek-bassi</loc><priority>0.7</priority></url>
+
+  <!-- Hospitality projects (9) -->
+  <url><loc>https://slmindia.in/project.html?id=oberoi-vanyavilas</loc><priority>0.7</priority></url>
+  <url><loc>https://slmindia.in/project.html?id=stardom-resort</loc><priority>0.7</priority></url>
+  <url><loc>https://slmindia.in/project.html?id=hotel-allied-mahendra</loc><priority>0.7</priority></url>
+  <url><loc>https://slmindia.in/project.html?id=westin-pushkar</loc><priority>0.7</priority></url>
+  <url><loc>https://slmindia.in/project.html?id=hotel-paradise</loc><priority>0.7</priority></url>
+  <url><loc>https://slmindia.in/project.html?id=gold-palace</loc><priority>0.7</priority></url>
+  <url><loc>https://slmindia.in/project.html?id=hotel-gajner</loc><priority>0.7</priority></url>
+  <url><loc>https://slmindia.in/project.html?id=hotel-gaudavan</loc><priority>0.7</priority></url>
+  <url><loc>https://slmindia.in/project.html?id=gorbandh-palace</loc><priority>0.7</priority></url>
+
+  <!-- Institutional projects (8) -->
+  <url><loc>https://slmindia.in/project.html?id=hare-krishna</loc><priority>0.7</priority></url>
+  <url><loc>https://slmindia.in/project.html?id=jecrc-ncr</loc><priority>0.7</priority></url>
+  <url><loc>https://slmindia.in/project.html?id=digambar-jain</loc><priority>0.7</priority></url>
+  <url><loc>https://slmindia.in/project.html?id=vipra-foundation</loc><priority>0.7</priority></url>
+  <url><loc>https://slmindia.in/project.html?id=jnit-campus</loc><priority>0.7</priority></url>
+  <url><loc>https://slmindia.in/project.html?id=jagannath-chaksu</loc><priority>0.7</priority></url>
+  <url><loc>https://slmindia.in/project.html?id=gyan-vihar</loc><priority>0.7</priority></url>
+  <url><loc>https://slmindia.in/project.html?id=jaipur-dental</loc><priority>0.7</priority></url>
+
+  <!-- Commercial projects (3) -->
+  <url><loc>https://slmindia.in/project.html?id=akshat-nilay-c</loc><priority>0.7</priority></url>
+  <url><loc>https://slmindia.in/project.html?id=akshat-meadows-c</loc><priority>0.7</priority></url>
+  <url><loc>https://slmindia.in/project.html?id=akshat-meadows-2-c</loc><priority>0.7</priority></url>
+
+  <!-- Residential projects (3) -->
+  <url><loc>https://slmindia.in/project.html?id=akshat-nilay-r</loc><priority>0.7</priority></url>
+  <url><loc>https://slmindia.in/project.html?id=akshat-meadows-r</loc><priority>0.7</priority></url>
+  <url><loc>https://slmindia.in/project.html?id=akshat-meadows-2-r</loc><priority>0.7</priority></url>
+
+  <!-- Public Works projects (4) -->
+  <url><loc>https://slmindia.in/project.html?id=hindustan-zinc-pw</loc><priority>0.7</priority></url>
+  <url><loc>https://slmindia.in/project.html?id=birla-corporation</loc><priority>0.7</priority></url>
+  <url><loc>https://slmindia.in/project.html?id=maharana-pratap</loc><priority>0.7</priority></url>
+  <url><loc>https://slmindia.in/project.html?id=rajasthan-police</loc><priority>0.7</priority></url>
+
+</urlset>

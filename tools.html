@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- Apply theme before paint -->
+  <script>(function(){try{var t=localStorage.getItem('slm-theme');if(t==='dark')document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
+
+  <!-- SEO: PRIMARY -->
+  <title>Tools &amp; Machinery | SLM Construction | Owned Fleet &amp; QA Lab</title>
+  <meta name="description" content="SLM's owned fleet: 33+ equipment types across 6 categories — concrete works, earthworks, cutting &amp; drilling, material handling, fabrication and a full in-house QA lab. 1 Lakh+ Sq.Ft shuttering, 100% owned." />
+  <meta name="keywords" content="SLM tools and machinery, construction equipment Jaipur, concrete mixer, shuttering material, field testing lab, compression testing machine, bar cutting machine, core cutting, SLM fleet, owned construction equipment Rajasthan" />
+  <meta name="author" content="M/S Sohan Lal Mathur" />
+  <meta name="robots" content="index, follow, max-image-preview:large" />
+  <meta name="theme-color" content="#F47721" />
+  <link rel="canonical" href="https://slmindia.in/tools.html" />
+
+  <!-- OPEN GRAPH -->
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="SLM Construction" />
+  <meta property="og:locale" content="en_IN" />
+  <meta property="og:title" content="Tools &amp; Machinery | SLM Construction" />
+  <meta property="og:description" content="33+ equipment types across 6 categories. 1 Lakh+ Sq.Ft shuttering. 100% owned fleet — ready to deploy across every SLM site." />
+  <meta property="og:url" content="https://slmindia.in/tools.html" />
+  <meta property="og:image" content="https://slmindia.in/wp-content/uploads/2025/09/beb2d05252f88d21f5be24845d680f4de012b285-scaled.jpg" />
+
+  <!-- TWITTER -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Tools &amp; Machinery | SLM Construction" />
+  <meta name="twitter:description" content="33+ equipment types. 100% owned fleet. Full in-house QA lab." />
+  <meta name="twitter:image" content="https://slmindia.in/wp-content/uploads/2025/09/beb2d05252f88d21f5be24845d680f4de012b285-scaled.jpg" />
+
+  <!-- FAVICON -->
+  <link rel="icon" type="image/png" href="SLM Main logos/Slm logomark.png" />
+  <link rel="apple-touch-icon" href="SLM Main logos/Slm logomark.png" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: { orange: '#F47721', 'orange-dk': '#D96218', dark: '#111827', muted: '#6B7280', border: '#E5E7EB', off: '#F8F8F6' },
+          fontFamily: { serif: ['"Archivo Black"', 'Impact', 'sans-serif'], sans: ['Inter', 'sans-serif'] }
+        }
+      }
+    }
+  </script>
+
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+
+<body class="font-sans bg-white text-dark overflow-x-hidden page-tools">
+
+<!-- SITE LOADER -->
+<div id="siteLoader" class="site-loader" aria-hidden="true">
+  <div class="loader-stage">
+    <div class="loader-mark-wrap">
+      <img src="SLM Main logos/logo 1.png" class="loader-mark" alt="SLM" onerror="this.style.display='none'" />
+    </div>
+    <div class="loader-bar"></div>
+  </div>
+</div>
+
+<div id="nav-slot"></div>
+
+<main>
+
+  <!-- ═══ HERO STAT BAND ═══ -->
+  <section class="tm-hero">
+    <div class="tm-hero-inner">
+
+      <div class="tm-hero-head">
+        <p class="tm-eyebrow">
+          <span class="tm-eyebrow-bar"></span>Owned Fleet &amp; QA Lab
+        </p>
+        <h1 class="tm-hero-title">Tools &amp; Machinery</h1>
+        <p class="tm-hero-lead">
+          Every piece of equipment on an SLM site is owned, maintained, and deployed by our team. No rentals, no delays — just a complete in-house fleet backed by a full-service QA lab.
+        </p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ═══ FILTER BAR (sticky) ═══ -->
+  <div class="tm-filter-bar">
+    <div class="tm-filter-inner">
+      <nav id="tmPills" class="tm-pills" aria-label="Equipment categories"></nav>
+    </div>
+  </div>
+
+  <!-- ═══ EQUIPMENT GRID ═══ -->
+  <section class="tm-grid-wrap">
+    <div id="tmGrid" class="tm-grid"></div>
+    <p id="tmEmpty" class="tm-empty is-hidden">
+      No equipment matches that search. Try a different keyword or clear the filter.
+    </p>
+  </section>
+
+  <!-- ═══ STATS STRIP (at-a-glance numbers) ═══ -->
+  <section class="tm-stats-section" aria-label="Fleet at a glance">
+    <div class="tm-stats-section-inner">
+      <div id="tmHeroStats" class="tm-hero-stats"></div>
+    </div>
+  </section>
+
+  <!-- ═══ CTA (site-wide standard — matches journey / leadership) ═══ -->
+  <section class="bg-dark py-20 lg:py-24 relative overflow-hidden" aria-label="Contact">
+    <div class="absolute top-0 right-0 w-[40%] h-full opacity-5" style="background: radial-gradient(circle at right, #F47721, transparent 70%)"></div>
+    <div class="relative max-w-3xl mx-auto px-6 lg:px-10 text-center">
+      <p class="text-[11px] font-bold tracking-[0.32em] uppercase text-orange mb-5">Speak To Our Team</p>
+      <h2 class="font-serif text-3xl lg:text-5xl font-semibold text-white leading-tight mb-5">
+        Ready to build your<br/><span class="text-orange">next landmark</span>
+      </h2>
+      <p class="text-white/60 text-[15px] leading-relaxed max-w-xl mx-auto mb-9">
+        Reach the partners directly for project-level discussions.
+      </p>
+      <a href="index.html#contact" data-magnetic
+         class="inline-flex items-center gap-3 bg-orange text-white text-[12px] font-bold tracking-[0.1em] uppercase px-8 py-4 hover:bg-orange-dk transition-colors">
+        Explore Now
+        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </a>
+    </div>
+  </section>
+
+  <!-- ═══ STICKY MOBILE BAR (reused) ═══ -->
+  <div class="prj-sticky-bar" id="prjStickyBar" aria-hidden="false">
+    <a href="tel:+919509911871" class="prj-sticky-call" aria-label="Call SLM">
+      <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498A1 1 0 0121 17v3a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>
+    </a>
+    <a href="index.html#contact" class="prj-sticky-enquire">
+      Enquire About Equipment
+      <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+    </a>
+  </div>
+
+</main>
+
+<div id="footer-slot"></div>
+
+<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+<script src="https://unpkg.com/lenis@1.1.20/dist/lenis.min.js"></script>
+<script src="js/chrome.js"></script>
+<script src="js/main.js"></script>
+
+</body>
+</html>

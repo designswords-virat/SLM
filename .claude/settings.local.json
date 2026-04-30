@@ -1,0 +1,23 @@
+{
+  "permissions": {
+    "allow": [
+      "WebFetch(domain:slmindia.in)",
+      "WebFetch(domain:tectonicjpr.com)",
+      "Bash(node -c js/main.js)",
+      "Bash(curl -s -L -A \"Mozilla/5.0 \\(Windows NT 10.0; Win64; x64\\) AppleWebKit/537.36\" \"https://slmindia.in/\" -o /tmp/slm_home.html -w \"HTTP_CODE:%{http_code}\\\\n\" --max-time 30)",
+      "Bash(mkdir -p /tmp/slm_scrape)",
+      "Bash(curl -sL -A \"Mozilla/5.0 \\(Windows NT 10.0; Win64; x64\\) AppleWebKit/537.36\" \"https://slmindia.in/journey/\" -o /tmp/slm_scrape/journey.html)",
+      "Bash(curl -sL -A \"Mozilla/5.0 \\(Windows NT 10.0; Win64; x64\\) AppleWebKit/537.36\" \"https://slmindia.in/leadership/\" -o /tmp/slm_scrape/leadership.html)",
+      "Read(//tmp/**)",
+      "Bash(curl -s -A \"Mozilla/5.0\" \"https://slmindia.in/journey/\" -o /tmp/slm-journey.html)",
+      "Bash(grep -oE '<\\(h[1-6]|p|span|a|button|figcaption\\)[^>]*>[^<]{3,}</\\(h[1-6]|p|span|a|button|figcaption\\)>' /tmp/slm-journey.html)",
+      "Bash(awk 'NF')",
+      "Bash(sed -n 's/.*<meta name=\"description\" content=\"\\\\\\([^\"]*\\\\\\)\".*/DESC: \\\\1/p' /tmp/slm-journey.html)",
+      "Bash(sed -n 's/.*<title>\\\\\\([^<]*\\\\\\)<.*/TITLE: \\\\1/p' /tmp/slm-journey.html)",
+      "Bash(sed -i 's/ — /, /g' index.html js/main.js)",
+      "Bash(sed -i 's/—/,/g' index.html js/main.js)",
+      "Bash(sed -n '1054,1060p' \"c:/Users/hp/Desktop/SLM WEBSITE/index.html\")",
+      "Bash(sed -n '1725,1732p' \"c:/Users/hp/Desktop/SLM WEBSITE/index.html\")"
+    ]
+  }
+}

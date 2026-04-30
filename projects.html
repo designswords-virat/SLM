@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- Apply theme before paint -->
+  <script>(function(){try{var t=localStorage.getItem('slm-theme');if(t==='dark')document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
+
+  <!-- SEO: PRIMARY (title/description updated at runtime per ?category=) -->
+  <title>Projects | SLM Construction</title>
+  <meta id="metaDesc" name="description" content="Explore SLM's 46+ completed projects across Industrial, Hospitality, Institutional, Commercial, Residential and Public Works sectors across Rajasthan since 1954." />
+  <meta name="keywords" content="SLM projects, industrial construction projects, hospitality construction projects, institutional construction, commercial projects Jaipur, residential projects Rajasthan, public works Rajasthan" />
+  <meta name="author" content="M/S Sohan Lal Mathur" />
+  <meta name="robots" content="index, follow, max-image-preview:large" />
+  <meta name="theme-color" content="#F47721" />
+  <link id="canonicalLink" rel="canonical" href="https://slmindia.in/projects.html" />
+
+  <!-- OPEN GRAPH -->
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="SLM Construction" />
+  <meta property="og:locale" content="en_IN" />
+  <meta id="ogTitle" property="og:title" content="Projects | SLM Construction" />
+  <meta id="ogDesc"  property="og:description" content="Explore SLM's 46+ completed projects across six sectors." />
+  <meta id="ogUrl"   property="og:url" content="https://slmindia.in/projects.html" />
+  <meta id="ogImage" property="og:image" content="https://slmindia.in/wp-content/uploads/2025/09/beb2d05252f88d21f5be24845d680f4de012b285-scaled.jpg" />
+
+  <!-- TWITTER -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta id="twTitle" name="twitter:title" content="Projects | SLM Construction" />
+  <meta id="twDesc"  name="twitter:description" content="Explore SLM's 46+ completed projects across six sectors." />
+  <meta id="twImage" name="twitter:image" content="https://slmindia.in/wp-content/uploads/2025/09/beb2d05252f88d21f5be24845d680f4de012b285-scaled.jpg" />
+
+  <!-- FAVICON -->
+  <link rel="icon" type="image/png" href="SLM Main logos/Slm logomark.png" />
+  <link rel="apple-touch-icon" href="SLM Main logos/Slm logomark.png" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: { orange: '#F47721', 'orange-dk': '#D96218', dark: '#111827', muted: '#6B7280', border: '#E5E7EB', off: '#F8F8F6' },
+          fontFamily: { serif: ['"Archivo Black"', 'Impact', 'sans-serif'], sans: ['Inter', 'sans-serif'] }
+        }
+      }
+    }
+  </script>
+
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+
+<body class="font-sans bg-white text-dark overflow-x-hidden page-projects">
+
+<!-- SITE LOADER -->
+<div id="siteLoader" class="site-loader" aria-hidden="true">
+  <div class="loader-stage">
+    <div class="loader-mark-wrap">
+      <img src="SLM Main logos/logo 1.png" class="loader-mark" alt="SLM" onerror="this.style.display='none'" />
+    </div>
+    <div class="loader-bar"></div>
+  </div>
+</div>
+
+<div id="nav-slot"></div>
+
+<main class="pb-20 projects-main">
+
+  <!-- ═══ STICKY BREADCRUMB BAR ═══ -->
+  <nav class="projects-breadcrumb" aria-label="Breadcrumb">
+    <div class="projects-breadcrumb-inner">
+      <a href="index.html">Home</a>
+      <span class="projects-breadcrumb-sep">/</span>
+      <a href="index.html#projects">Projects</a>
+      <span class="projects-breadcrumb-sep">/</span>
+      <span id="overlayCategory" class="projects-breadcrumb-current"></span>
+    </div>
+  </nav>
+
+  <!-- ═══ HERO (Directory preset — matches tools.html) ═══ -->
+  <section class="dir-hero">
+    <div class="dir-hero-inner">
+
+      <div class="dir-hero-head flex items-end justify-between flex-nowrap gap-6">
+        <div class="min-w-0 flex-1">
+          <p class="dir-eyebrow">
+            <span class="dir-eyebrow-bar"></span>Selected Work
+          </p>
+          <h1 id="overlayCategoryTitle" class="dir-hero-title">Projects</h1>
+        </div>
+        <span id="overlayCount" class="text-muted text-[13px] font-medium border border-[#E5E7EB] px-4 py-1.5 self-end whitespace-nowrap flex-shrink-0"></span>
+      </div>
+
+    </div>
+  </section>
+
+  <div class="max-w-screen-xl mx-auto px-6 lg:px-10 pt-8 lg:pt-12">
+
+    <!-- Cards grid -->
+    <div id="projectsGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+
+    <!-- Back link -->
+    <div class="mt-16 pt-10 border-t border-[#E5E7EB] text-center">
+      <a href="index.html#projects" class="inline-flex items-center gap-2 text-[13px] font-semibold text-dark hover:text-orange transition-colors">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
+        Back to All Sectors
+      </a>
+    </div>
+  </div>
+
+</main>
+
+<div id="footer-slot"></div>
+
+<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+<script src="https://unpkg.com/lenis@1.1.20/dist/lenis.min.js"></script>
+<script src="js/chrome.js"></script>
+<script src="js/main.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,11 @@
+# robots.txt for SLM Construction (slmindia.in)
+
+User-agent: *
+Allow: /
+
+# Don't crawl nav/footer assets or script files directly
+Disallow: /js/chrome.js
+Disallow: /js/main.js
+
+# Sitemap
+Sitemap: https://slmindia.in/sitemap.xml
