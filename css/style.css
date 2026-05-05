@@ -1233,6 +1233,423 @@ img[loading="lazy"].is-loaded {
 /* ── Flagship scroll-jacked ── */
 #fpTrackH { will-change: transform; }
 
+/* ════════════════════════════════════════════════════════════════════
+   FLAGSHIP — PINNED CINEMA REEL
+   Pattern: section is (N+1) × 100vh tall. Inside, a sticky 100vh
+   stage holds 5 absolutely-stacked images that cross-fade based on
+   scroll position. Caption stack swaps the active project.
+   Pure white + orange palette; deep navy used only as the
+   bottom-of-image gradient for legibility.
+═══════════════════════════════════════════════════════════════════ */
+.cr-section {
+  --cr-panels: 5;
+  position: relative;
+  height: calc((var(--cr-panels) + 1) * 100vh);
+  background: #FFFFFF;
+}
+.cr-sticky {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  width: 100%;
+  overflow: hidden;
+}
+.cr-stage {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  background: #FFFFFF;
+}
+
+/* Mobile-only header (hidden on desktop) */
+.cr-mhead { display: none; }
+
+/* Each panel: absolute-stacked over the stage on desktop. Holds its
+   own image, caption, and CTA so the mobile fallback can flow them. */
+.cr-panel {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+/* Image: full-bleed background, cross-fade scrubbed by scroll, Ken Burns drift */
+.cr-img {
+  position: absolute;
+  inset: 0;
+  display: block;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  opacity: 0;
+  transform: scale(1);
+  will-change: opacity, transform;
+  transition: opacity 0.05s linear;        /* scroll drives the rest */
+  text-decoration: none;
+}
+.cr-panel.is-active .cr-img { opacity: 1; }
+
+/* Vignette overlay applied per-panel for legibility on desktop */
+.cr-img::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(to bottom,
+      rgba(11,15,20,0.0) 30%,
+      rgba(11,15,20,0.55) 75%,
+      rgba(11,15,20,0.78) 100%),
+    linear-gradient(to right,
+      rgba(11,15,20,0.35) 0%,
+      rgba(11,15,20,0.0) 45%);
+}
+
+/* Top-level fade (legacy hook — kept empty so the JS lookup works
+   without throwing if the markup ever falls back to the old shape) */
+.cr-fade { display: none; }
+
+/* Top-left eyebrow */
+.cr-eyebrow {
+  position: absolute;
+  top: clamp(28px, 6vh, 56px);
+  left: clamp(24px, 5vw, 64px);
+  z-index: 4;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  color: #FFFFFF;
+}
+.cr-eyebrow-bar {
+  display: block;
+  width: 28px;
+  height: 1px;
+  background: #F47721;
+}
+.cr-eyebrow-text {
+  font-size: 11px;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  font-weight: 700;
+  opacity: 0.85;
+}
+
+/* Top-right counter */
+.cr-counter {
+  position: absolute;
+  top: clamp(24px, 5.5vh, 50px);
+  right: clamp(24px, 5vw, 64px);
+  z-index: 4;
+  font-family: 'Archivo Black', sans-serif;
+  color: #FFFFFF;
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  user-select: none;
+}
+.cr-counter > span:first-child {
+  font-size: clamp(40px, 5.5vw, 78px);
+  line-height: 1;
+  color: #F47721;
+}
+.cr-counter-sep,
+.cr-counter-total {
+  font-size: clamp(16px, 1.6vw, 22px);
+  opacity: 0.55;
+  font-weight: 400;
+}
+
+/* Caption — bottom-left of the panel, only the active one is visible */
+.cr-cap {
+  position: absolute;
+  left: clamp(24px, 5vw, 64px);
+  bottom: clamp(72px, 12vh, 130px);
+  right: clamp(24px, 5vw, 64px);
+  z-index: 5;
+  color: #FFFFFF;
+  max-width: min(620px, 60%);
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 0.7s cubic-bezier(0.2, 0.8, 0.2, 1),
+              transform 0.7s cubic-bezier(0.2, 0.8, 0.2, 1);
+  pointer-events: none;
+  will-change: opacity, transform;
+}
+.cr-panel.is-active .cr-cap {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+.cr-meta {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  font-size: 11px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  font-weight: 700;
+  opacity: 0.78;
+  margin-bottom: 18px;
+  white-space: nowrap;
+}
+.cr-meta .cr-num {
+  color: #F47721;
+  font-family: 'Archivo Black', sans-serif;
+  font-size: 13px;
+  letter-spacing: 0.16em;
+}
+.cr-meta .cr-sep {
+  display: block;
+  width: 22px;
+  height: 1px;
+  background: rgba(255,255,255,0.5);
+  flex-shrink: 0;
+}
+.cr-title {
+  font-family: 'Archivo Black', 'Impact', sans-serif;
+  font-size: clamp(40px, 5.6vw, 86px);
+  line-height: 1.02;
+  font-weight: 700;
+  margin-bottom: 22px;
+  letter-spacing: -0.01em;
+}
+.cr-info {
+  font-size: clamp(13px, 1vw, 15px);
+  letter-spacing: 0.04em;
+  opacity: 0.86;
+  font-weight: 400;
+  margin-bottom: 28px;
+}
+
+/* CTA — desktop: bottom-right of the panel; floats independently */
+.cr-cta {
+  position: absolute;
+  right: clamp(24px, 5vw, 64px);
+  bottom: clamp(72px, 12vh, 130px);
+  z-index: 6;
+  display: inline-flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 26px;
+  border: 1px solid rgba(255,255,255,0.45);
+  color: #FFFFFF;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  text-decoration: none;
+  background: transparent;
+  opacity: 0;
+  transform: translateY(28px);
+  transition: background 0.35s cubic-bezier(0.2,0.8,0.2,1),
+              border-color 0.35s, color 0.35s,
+              opacity 0.7s cubic-bezier(0.2,0.8,0.2,1),
+              transform 0.7s cubic-bezier(0.2,0.8,0.2,1);
+  pointer-events: none;
+}
+.cr-panel.is-active .cr-cta {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+.cr-cta:hover {
+  background: #F47721;
+  border-color: #F47721;
+  color: #FFFFFF;
+}
+.cr-cta:hover .cr-cta-arrow { transform: translateX(4px); }
+.cr-cta-arrow {
+  display: inline-flex;
+  transition: transform 0.35s cubic-bezier(0.2,0.8,0.2,1);
+}
+
+/* Bottom progress rail with tick marks */
+.cr-rail {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 3px;
+  z-index: 4;
+  background: rgba(255,255,255,0.16);
+  pointer-events: none;
+}
+.cr-rail-fill {
+  position: absolute;
+  inset: 0;
+  background: #F47721;
+  transform-origin: left center;
+  transform: scaleX(0);
+  will-change: transform;
+}
+.cr-rail-ticks {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  justify-content: space-between;
+  pointer-events: none;
+}
+.cr-rail-ticks span {
+  width: 1px;
+  height: 100%;
+  background: rgba(255,255,255,0.4);
+}
+.cr-rail-ticks span:first-child,
+.cr-rail-ticks span:last-child { background: transparent; }
+
+/* ════════════════════════════════════════════════════════════════════
+   MOBILE (< lg): each panel becomes a stacked card.
+   No pinned scroll, no cross-fade. Image on top, white card below.
+═══════════════════════════════════════════════════════════════════ */
+@media (max-width: 1023px) {
+  .cr-section {
+    height: auto !important;
+    background: #FFFFFF;
+  }
+  .cr-sticky {
+    position: static;
+    height: auto;
+    overflow: visible;
+  }
+  .cr-stage {
+    background: #FFFFFF;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* Hide desktop-only chrome on mobile */
+  .cr-eyebrow,
+  .cr-counter,
+  .cr-rail { display: none; }
+
+  /* Section header for mobile */
+  .cr-mhead {
+    display: block;
+    padding: 56px 24px 28px;
+    background: #FFFFFF;
+  }
+  .cr-mhead-eyebrow {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.32em;
+    text-transform: uppercase;
+    color: #F47721;
+    margin-bottom: 10px;
+  }
+  .cr-mhead-bar {
+    display: block;
+    width: 24px;
+    height: 1px;
+    background: #F47721;
+  }
+  .cr-mhead-title {
+    font-family: 'Archivo Black', 'Impact', sans-serif;
+    font-size: clamp(28px, 8vw, 40px);
+    font-weight: 700;
+    line-height: 1.05;
+    color: #111827;
+    letter-spacing: -0.01em;
+  }
+
+  /* Each panel becomes a stacked card */
+  .cr-panel {
+    position: relative;
+    inset: auto;
+    width: 100%;
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    border-bottom: 1px solid #E5E7EB;
+  }
+  .cr-panel:last-of-type { border-bottom: 0; }
+
+  /* Image: regular block at top of card (~50vh tall, never wider than viewport) */
+  .cr-img {
+    position: relative;
+    inset: auto;
+    width: 100%;
+    height: clamp(240px, 52vh, 460px);
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+  /* Subtle bottom fade only (so the orange '01' on white card peeks against the image edge) */
+  .cr-img::after {
+    background:
+      linear-gradient(to bottom,
+        rgba(11,15,20,0) 60%,
+        rgba(11,15,20,0.18) 100%);
+  }
+
+  /* Caption: white card below image, dark text */
+  .cr-cap {
+    position: relative;
+    inset: auto;
+    left: auto;
+    right: auto;
+    bottom: auto;
+    width: 100%;
+    max-width: none;
+    padding: 28px 24px 8px;
+    color: #111827;
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+    pointer-events: auto;
+  }
+  .cr-meta {
+    color: #6B7280;
+    opacity: 1;
+    margin-bottom: 14px;
+    flex-wrap: wrap;
+    white-space: normal;
+  }
+  .cr-meta .cr-sep {
+    background: #D1D5DB;
+  }
+  .cr-title {
+    font-size: clamp(28px, 7vw, 40px);
+    color: #111827;
+    margin-bottom: 14px;
+  }
+  .cr-info {
+    color: #6B7280;
+    opacity: 1;
+    font-size: 14px;
+    margin-bottom: 20px;
+  }
+
+  /* CTA: inline link inside the card, orange outline */
+  .cr-cta {
+    position: relative;
+    inset: auto;
+    right: auto;
+    bottom: auto;
+    margin: 0 24px 32px;
+    padding: 13px 22px;
+    border-color: #F47721;
+    color: #F47721;
+    background: #FFFFFF;
+    opacity: 1 !important;
+    transform: none !important;
+    pointer-events: auto;
+    align-self: flex-start;
+  }
+  .cr-cta:hover,
+  .cr-cta:active {
+    background: #F47721;
+    color: #FFFFFF;
+  }
+}
+
+/* ════════════════════════════════════════════════════════════════════
+   Legacy flagship styles (.fp-* — replaced by .cr-* cinema reel).
+   Kept untouched so the snapshot revert path is clean.
+═══════════════════════════════════════════════════════════════════ */
+
 /* Unified panel: image flush against info card, no gap */
 .fp-panel {
   gap: 0;
@@ -1423,7 +1840,29 @@ button.bg-orange:hover,
   transform: translateY(-2px);
 }
 
-/* ── Clients logo strips ── */
+/* ── Clients static grid ── */
+.clients-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 56px 40px;
+  align-items: center;
+  justify-items: center;
+}
+.clients-grid .clients-logo-img {
+  height: 80px;
+  max-width: 100%;
+  object-fit: contain;
+}
+@media (max-width: 1023px) {
+  .clients-grid { grid-template-columns: repeat(3, 1fr); gap: 40px 28px; }
+  .clients-grid .clients-logo-img { height: 64px; }
+}
+@media (max-width: 640px) {
+  .clients-grid { grid-template-columns: repeat(2, 1fr); gap: 28px 16px; }
+  .clients-grid .clients-logo-img { height: 52px; }
+}
+
+/* ── Clients logo strips (legacy — replaced by .clients-grid) ── */
 .clients-logo-img {
   height: 110px;
   width: auto;

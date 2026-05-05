@@ -117,7 +117,7 @@
   ════════════════════════════════════════════════════════════════ -->
   <script>
     document.addEventListener('DOMContentLoaded', function () {
-      var pagePattern = /(about|tools|journey|leadership|projects|project)\.html/i;
+      var pagePattern = /(tools|journey|leadership|projects|project)\.html/i;
       // Neutralize anchor links pointing to other pages
       document.querySelectorAll('a[href]').forEach(function (a) {
         if (pagePattern.test(a.getAttribute('href') || '')) {
@@ -309,6 +309,52 @@
 
 
 <!-- ═══════════════════════════════════════
+     OUR CLIENTS (moved up — appears right after hero)
+═══════════════════════════════════════ -->
+<section id="clients" class="bg-[#F5F5F3] py-20 lg:py-24 overflow-hidden">
+
+  <div class="max-w-screen-xl mx-auto px-6 lg:px-10 text-center mb-14" data-aos="fade-up">
+    <p class="text-[11px] font-semibold tracking-[0.32em] uppercase text-orange flex items-center justify-center gap-3 mb-4">
+      <span class="block w-6 h-px bg-orange"></span>Trusted By<span class="block w-6 h-px bg-orange"></span>
+    </p>
+    <h2 class="font-serif text-3xl lg:text-[48px] font-semibold text-dark">Our Clients</h2>
+    <p class="text-muted text-sm mt-3 max-w-sm mx-auto">Trusted by India's leading enterprises across sectors.</p>
+  </div>
+
+  <!-- Static 5-column grid (no animation) -->
+  <div class="max-w-screen-xl mx-auto px-6 lg:px-10">
+    <div class="clients-grid">
+      <img src="slm%20logo/MacBook%20Pro%2016_%20-%2011%402x.png" alt="Westin" class="clients-logo-img" />
+      <img src="slm%20logo/MacBook%20Pro%2016_%20-%2012%402x.png" alt="ARL Infratech" class="clients-logo-img" />
+      <img src="slm%20logo/MacBook%20Pro%2016_%20-%2013%402x.png" alt="Okaya" class="clients-logo-img" />
+      <img src="slm%20logo/MacBook%20Pro%2016_%20-%2014%402x.png" alt="JECRC University" class="clients-logo-img" />
+      <img src="slm%20logo/MacBook%20Pro%2016_%20-%2015%402x.png" alt="Okaya Infocom" class="clients-logo-img" />
+      <img src="slm%20logo/MacBook%20Pro%2016_%20-%2015%402x-1.png" alt="HRH Hotels" class="clients-logo-img" />
+      <img src="slm%20logo/MacBook%20Pro%2016_%20-%2016%402x.png" alt="Oswal Cables" class="clients-logo-img" />
+      <img src="slm%20logo/MacBook%20Pro%2016_%20-%2016%402x-1.png" alt="Mayur Uniquoters" class="clients-logo-img" />
+      <img src="slm%20logo/MacBook%20Pro%2016_%20-%2017%402x.png" alt="Hare Krishna" class="clients-logo-img" />
+      <img src="slm%20logo/MacBook%20Pro%2016_%20-%2018%402x.png" alt="Hindustan Zinc" class="clients-logo-img" />
+      <img src="slm%20logo/MacBook%20Pro%2016_%20-%2019%402x.png" alt="Universal AutoFoundry" class="clients-logo-img" />
+      <img src="slm%20logo/MacBook%20Pro%2016_%20-%2020%402x.png" alt="Shri Digambar Jain" class="clients-logo-img" />
+      <img src="slm%20logo/MacBook%20Pro%2016_%20-%2021%402x.png" alt="Sigma" class="clients-logo-img" />
+      <img src="slm%20logo/MacBook%20Pro%2016_%20-%2022%402x.png" alt="Gyan Vihar University" class="clients-logo-img" />
+      <img src="slm%20logo/MacBook%20Pro%2016_%20-%2023%402x.png" alt="KEC International" class="clients-logo-img" />
+      <img src="slm%20logo/MacBook%20Pro%2016_%20-%2024%402x.png" alt="Oberoi Hotels" class="clients-logo-img" />
+      <img src="slm%20logo/MacBook%20Pro%2016_%20-%2025%402x.png" alt="Birla Corporation" class="clients-logo-img" />
+      <img src="slm%20logo/MacBook%20Pro%2016_%20-%2026%402x.png" alt="Akshaya Patra" class="clients-logo-img" />
+      <img src="slm%20logo/MacBook%20Pro%2016_%20-%2027%402x.png" alt="Vipra Foundation" class="clients-logo-img" />
+      <img src="slm%20logo/MacBook%20Pro%2016_%20-%2028%402x.png" alt="Ramada" class="clients-logo-img" />
+      <img src="slm%20logo/MacBook%20Pro%2016_%20-%2029%402x.png" alt="REIL" class="clients-logo-img" />
+      <img src="slm%20logo/MacBook%20Pro%2016_%20-%2030%402x.png" alt="Vedanta Foundation" class="clients-logo-img" />
+      <img src="slm%20logo/MacBook%20Pro%2016_%20-%2031%402x.png" alt="Microtek" class="clients-logo-img" />
+      <img src="slm%20logo/MacBook%20Pro%2016_%20-%2032%402x.png" alt="JIMS" class="clients-logo-img" />
+    </div>
+  </div>
+
+</section>
+
+
+<!-- ═══════════════════════════════════════
      2. WE BUILD
 ═══════════════════════════════════════ -->
 <section id="we-build" class="bg-white overflow-hidden">
@@ -322,10 +368,10 @@
   </div>
 
   <div class="max-w-screen-xl mx-auto px-6 lg:px-10">
-    <div class="grid lg:grid-cols-[1fr_380px] xl:grid-cols-[1fr_420px] min-h-[520px]">
+    <div class="grid lg:grid-cols-[1fr_380px] xl:grid-cols-[1fr_420px] lg:min-h-[520px]">
 
       <!-- ── LEFT: We Build + cycling word ── -->
-      <div class="py-16 lg:py-20 pr-0 lg:pr-16 border-r-0 lg:border-r border-border flex flex-col justify-between"
+      <div class="py-10 lg:py-20 pr-0 lg:pr-16 border-r-0 lg:border-r border-border flex flex-col gap-8 lg:gap-0 lg:justify-between"
            data-aos="fade-right" data-aos-duration="800">
 
         <!-- Large heading -->
@@ -344,7 +390,7 @@
         </div>
 
         <!-- Bottom: description + since badge -->
-        <div class="mt-12 pt-8 border-t border-border">
+        <div class="pt-6 lg:mt-12 lg:pt-8 border-t border-border">
           <p class="text-muted text-[15px] leading-relaxed max-w-md mb-8">
             From towering industrial plants to luxury resorts and cultural
             landmarks, SLM delivers engineering excellence across every sector.
@@ -775,179 +821,122 @@
 
 
 <!-- ═══════════════════════════════════════
-     7. FLAGSHIP PROJECTS, SCROLL-JACKED
+     7. FLAGSHIP PROJECTS — pinned cinema reel (desktop)
+                         · stacked photo cards (mobile)
 ═══════════════════════════════════════ -->
-<section id="flagship" style="height:500vh;" class="relative">
-  <div id="fpSticky" class="sticky top-0 h-screen bg-white overflow-hidden flex flex-col">
+<section id="flagship" class="cr-section">
 
-    <!-- Top bar -->
-    <div class="flex-shrink-0 max-w-screen-xl mx-auto w-full px-6 lg:px-10 pt-10 pb-4 flex items-end justify-between">
-      <div>
-        <p class="text-[11px] font-semibold tracking-[0.32em] uppercase text-orange flex items-center gap-3 mb-3">
-          <span class="block w-6 h-px bg-orange"></span>Selected Work
-        </p>
-        <h2 class="font-serif text-2xl lg:text-[40px] font-semibold text-dark leading-none">Flagship Projects</h2>
+  <!-- Mobile-only header (hidden on desktop — desktop uses .cr-eyebrow) -->
+  <header class="cr-mhead">
+    <p class="cr-mhead-eyebrow">
+      <span class="cr-mhead-bar"></span>Selected Work
+    </p>
+    <h2 class="cr-mhead-title">Flagship Projects</h2>
+  </header>
+
+  <div class="cr-sticky">
+    <div class="cr-stage">
+
+      <!-- Desktop chrome (hidden on mobile) -->
+      <header class="cr-eyebrow">
+        <span class="cr-eyebrow-bar"></span>
+        <span class="cr-eyebrow-text">Selected Work · Flagship</span>
+      </header>
+      <div class="cr-counter" aria-hidden="true">
+        <span id="crCountNum">01</span><span class="cr-counter-sep">/</span><span class="cr-counter-total">05</span>
       </div>
-      <div class="flex items-baseline gap-2 select-none">
-        <span id="fpCurrent" class="font-serif text-5xl font-bold text-orange leading-none">01</span>
-        <span class="text-dark/20 font-serif text-2xl">/05</span>
+      <div class="cr-fade" aria-hidden="true"></div>
+      <div class="cr-rail" aria-hidden="true">
+        <div id="crRailFill" class="cr-rail-fill"></div>
+        <div class="cr-rail-ticks">
+          <span></span><span></span><span></span><span></span><span></span>
+        </div>
       </div>
+
+      <!-- 5 panels: each = image + caption + per-panel CTA.
+           Desktop: panels are absolute-stacked, cross-faded by scroll.
+           Mobile : panels are normal-flow stacked cards. -->
+      <article class="cr-panel is-active" data-idx="0">
+        <a class="cr-img" href="project.html?id=oberoi-vanyavilas" aria-label="The Oberoi Vanyavilas"
+           style="background-image:url('https://slmindia.in/wp-content/uploads/2025/09/b221a8a76143e2a24b678d9222a0b0c575b97849-scaled.jpg')"></a>
+        <div class="cr-cap">
+          <p class="cr-meta"><span class="cr-num">01</span><span class="cr-sep"></span>Hospitality · 2000</p>
+          <h3 class="cr-title">The Oberoi<br/>Vanyavilas</h3>
+          <p class="cr-info">Ranthambore, Sawai Madhopur · 65,000 sq.ft</p>
+          <a class="cr-cta" href="project.html?id=oberoi-vanyavilas">
+            <span class="cr-cta-text">View Project</span>
+            <span class="cr-cta-arrow" aria-hidden="true">
+              <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.4" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </span>
+          </a>
+        </div>
+      </article>
+
+      <article class="cr-panel" data-idx="1">
+        <a class="cr-img" href="project.html?id=hare-krishna" aria-label="Hare Krishna Cultural Complex"
+           style="background-image:url('https://slmindia.in/wp-content/uploads/2025/10/891adaad9532912464a4c2f7904de3f8fb278369.png')"></a>
+        <div class="cr-cap">
+          <p class="cr-meta"><span class="cr-num">02</span><span class="cr-sep"></span>Institutional · Cultural</p>
+          <h3 class="cr-title">Hare Krishna<br/>Cultural Complex</h3>
+          <p class="cr-info">Jagatpura, Jaipur · 2,00,000 sq.ft</p>
+          <a class="cr-cta" href="project.html?id=hare-krishna">
+            <span class="cr-cta-text">View Project</span>
+            <span class="cr-cta-arrow" aria-hidden="true">
+              <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.4" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </span>
+          </a>
+        </div>
+      </article>
+
+      <article class="cr-panel" data-idx="2">
+        <a class="cr-img" href="project.html?id=akshat-meadows-2-c" aria-label="Akshat Meadows Township II"
+           style="background-image:url('https://slmindia.in/wp-content/uploads/2025/10/83e03a8ddb90203f60a52a265e51948b36a9b68a.jpg')"></a>
+        <div class="cr-cap">
+          <p class="cr-meta"><span class="cr-num">03</span><span class="cr-sep"></span>Commercial · Township</p>
+          <h3 class="cr-title">Akshat Meadows<br/>Township II</h3>
+          <p class="cr-info">Sirsi Road, Jaipur · 3,19,000 sq.ft</p>
+          <a class="cr-cta" href="project.html?id=akshat-meadows-2-c">
+            <span class="cr-cta-text">View Project</span>
+            <span class="cr-cta-arrow" aria-hidden="true">
+              <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.4" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </span>
+          </a>
+        </div>
+      </article>
+
+      <article class="cr-panel" data-idx="3">
+        <a class="cr-img" href="project.html?id=bright-metal" aria-label="Bright Metal India Pvt. Ltd."
+           style="background-image:url('https://slmindia.in/wp-content/uploads/2025/09/beb2d05252f88d21f5be24845d680f4de012b285-scaled.jpg')"></a>
+        <div class="cr-cap">
+          <p class="cr-meta"><span class="cr-num">04</span><span class="cr-sep"></span>Industrial · 2022–23</p>
+          <h3 class="cr-title">Bright Metal<br/>India Pvt. Ltd.</h3>
+          <p class="cr-info">Sargoth, Reengus, Rajasthan · 1,50,000 sq.ft</p>
+          <a class="cr-cta" href="project.html?id=bright-metal">
+            <span class="cr-cta-text">View Project</span>
+            <span class="cr-cta-arrow" aria-hidden="true">
+              <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.4" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </span>
+          </a>
+        </div>
+      </article>
+
+      <article class="cr-panel" data-idx="4">
+        <a class="cr-img" href="project.html?id=hindustan-zinc-pw" aria-label="Hindustan Zinc Limited"
+           style="background-image:url('https://slmindia.in/wp-content/uploads/2025/10/edcf4554df9ea0c5aeeb8f89d57d54f3470ce6cd.jpg')"></a>
+        <div class="cr-cap">
+          <p class="cr-meta"><span class="cr-num">05</span><span class="cr-sep"></span>Public Works · Blue-chip</p>
+          <h3 class="cr-title">Hindustan Zinc<br/>Limited</h3>
+          <p class="cr-info">Udaipur, Rajasthan · Multiple Facilities</p>
+          <a class="cr-cta" href="project.html?id=hindustan-zinc-pw">
+            <span class="cr-cta-text">View Project</span>
+            <span class="cr-cta-arrow" aria-hidden="true">
+              <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.4" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </span>
+          </a>
+        </div>
+      </article>
+
     </div>
-
-    <!-- Horizontal cards track -->
-    <div class="flex-1 overflow-hidden min-h-0">
-      <div id="fpTrackH" class="flex h-full" style="width:500vw;">
-
-        <!-- ── Panel 1: Bright Metal ── -->
-        <div class="w-screen h-full flex-shrink-0 flex items-center px-6 lg:px-16 pb-12">
-          <div class="fp-panel grid lg:grid-cols-[1.15fr_0.85fr] items-stretch w-full max-w-screen-xl mx-auto">
-            <a href="project.html?id=bright-metal" class="fp-media-wrap relative overflow-hidden cursor-pointer block" style="aspect-ratio:16/10;">
-              <img src="https://slmindia.in/wp-content/uploads/2025/09/beb2d05252f88d21f5be24845d680f4de012b285-scaled.jpg"
-                   alt="Bright Metal India Pvt. Ltd." class="fp-media-img w-full h-full object-cover" />
-              <div class="fp-media-overlay"></div>
-              <div class="fp-media-badge">View Details →</div>
-            </a>
-            <div class="fp-panel-info border border-[#E5E7EB] border-t-2 border-t-orange bg-[#F8F8F6]">
-              <div class="font-serif text-[96px] lg:text-[120px] font-bold leading-none select-none -mb-4" style="color:#EBEBEB">01</div>
-              <h3 class="font-serif text-2xl lg:text-[34px] font-bold text-dark leading-tight mb-3">Bright Metal India Pvt. Ltd.</h3>
-              <p class="flex items-center gap-2 text-[#9CA3AF] text-sm mb-8">
-                <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17.657 16.657L13.414 20.9a2 2 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><circle cx="12" cy="11" r="3"/></svg>
-                Sargoth, Reengus, Rajasthan
-              </p>
-              <div class="border-t border-[#E5E7EB] pt-6 flex items-end justify-between gap-4 flex-wrap">
-                <p class="text-orange font-serif text-3xl font-bold leading-none">200,000 <span class="text-[#9CA3AF] text-sm font-normal">sq.ft</span></p>
-                <a href="project.html?id=bright-metal" class="fp-cta group inline-flex items-center gap-2 text-[11px] font-bold tracking-[0.2em] uppercase text-dark cursor-pointer hover:text-orange transition-colors no-underline">
-                  View Project
-                  <svg class="w-3.5 h-3.5 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-                </a>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- ── Panel 2: Oberoi ── -->
-        <div class="w-screen h-full flex-shrink-0 flex items-center px-6 lg:px-16 pb-12">
-          <div class="fp-panel grid lg:grid-cols-[1.15fr_0.85fr] items-stretch w-full max-w-screen-xl mx-auto">
-            <a href="project.html?id=oberoi-vanyavilas" class="fp-media-wrap relative overflow-hidden cursor-pointer block" style="aspect-ratio:16/10;">
-              <img src="https://slmindia.in/wp-content/uploads/2025/09/b221a8a76143e2a24b678d9222a0b0c575b97849-scaled.jpg"
-                   alt="The Oberoi Vanyavilas" class="fp-media-img w-full h-full object-cover" />
-              <div class="fp-media-overlay"></div>
-              <div class="fp-media-badge">View Details →</div>
-            </a>
-            <div class="fp-panel-info border border-[#E5E7EB] border-t-2 border-t-orange bg-[#F8F8F6]">
-              <div class="font-serif text-[96px] lg:text-[120px] font-bold leading-none select-none -mb-4" style="color:#EBEBEB">02</div>
-              <h3 class="font-serif text-2xl lg:text-[34px] font-bold text-dark leading-tight mb-3">The Oberoi Vanyavilas</h3>
-              <p class="flex items-center gap-2 text-[#9CA3AF] text-sm mb-8">
-                <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17.657 16.657L13.414 20.9a2 2 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><circle cx="12" cy="11" r="3"/></svg>
-                Ranthambore, Sawai Madhopur
-              </p>
-              <div class="border-t border-[#E5E7EB] pt-6 flex items-end justify-between gap-4 flex-wrap">
-                <p class="text-orange font-serif text-3xl font-bold leading-none">65,000 <span class="text-[#9CA3AF] text-sm font-normal">sq.ft</span></p>
-                <a href="project.html?id=oberoi-vanyavilas" class="fp-cta group inline-flex items-center gap-2 text-[11px] font-bold tracking-[0.2em] uppercase text-dark cursor-pointer hover:text-orange transition-colors no-underline">
-                  View Project
-                  <svg class="w-3.5 h-3.5 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-                </a>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- ── Panel 3: Hare Krishna ── -->
-        <div class="w-screen h-full flex-shrink-0 flex items-center px-6 lg:px-16 pb-12">
-          <div class="fp-panel grid lg:grid-cols-[1.15fr_0.85fr] items-stretch w-full max-w-screen-xl mx-auto">
-            <a href="project.html?id=hare-krishna" class="fp-media-wrap relative overflow-hidden cursor-pointer block" style="aspect-ratio:16/10;">
-              <img src="https://slmindia.in/wp-content/uploads/2025/10/891adaad9532912464a4c2f7904de3f8fb278369.png"
-                   alt="Hare Krishna Cultural Complex" class="fp-media-img w-full h-full object-cover" />
-              <div class="fp-media-overlay"></div>
-              <div class="fp-media-badge">View Details →</div>
-            </a>
-            <div class="fp-panel-info border border-[#E5E7EB] border-t-2 border-t-orange bg-[#F8F8F6]">
-              <div class="font-serif text-[96px] lg:text-[120px] font-bold leading-none select-none -mb-4" style="color:#EBEBEB">03</div>
-              <h3 class="font-serif text-2xl lg:text-[34px] font-bold text-dark leading-tight mb-3">Hare Krishna Cultural Complex</h3>
-              <p class="flex items-center gap-2 text-[#9CA3AF] text-sm mb-8">
-                <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17.657 16.657L13.414 20.9a2 2 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><circle cx="12" cy="11" r="3"/></svg>
-                Jagatpura, Jaipur
-              </p>
-              <div class="border-t border-[#E5E7EB] pt-6 flex items-end justify-between gap-4 flex-wrap">
-                <p class="text-orange font-serif text-3xl font-bold leading-none">200,000 <span class="text-[#9CA3AF] text-sm font-normal">sq.ft</span></p>
-                <a href="project.html?id=hare-krishna" class="fp-cta group inline-flex items-center gap-2 text-[11px] font-bold tracking-[0.2em] uppercase text-dark cursor-pointer hover:text-orange transition-colors no-underline">
-                  View Project
-                  <svg class="w-3.5 h-3.5 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-                </a>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- ── Panel 4: Akshat Meadows ── -->
-        <div class="w-screen h-full flex-shrink-0 flex items-center px-6 lg:px-16 pb-12">
-          <div class="fp-panel grid lg:grid-cols-[1.15fr_0.85fr] items-stretch w-full max-w-screen-xl mx-auto">
-            <a href="project.html?id=akshat-meadows-c" class="fp-media-wrap relative overflow-hidden cursor-pointer block" style="aspect-ratio:16/10;">
-              <img src="https://slmindia.in/wp-content/uploads/2025/10/83e03a8ddb90203f60a52a265e51948b36a9b68a.jpg"
-                   alt="Akshat Meadows Township" class="fp-media-img w-full h-full object-cover" />
-              <div class="fp-media-overlay"></div>
-              <div class="fp-media-badge">View Details →</div>
-            </a>
-            <div class="fp-panel-info border border-[#E5E7EB] border-t-2 border-t-orange bg-[#F8F8F6]">
-              <div class="font-serif text-[96px] lg:text-[120px] font-bold leading-none select-none -mb-4" style="color:#EBEBEB">04</div>
-              <h3 class="font-serif text-2xl lg:text-[34px] font-bold text-dark leading-tight mb-3">Akshat Meadows Township</h3>
-              <p class="flex items-center gap-2 text-[#9CA3AF] text-sm mb-8">
-                <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17.657 16.657L13.414 20.9a2 2 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><circle cx="12" cy="11" r="3"/></svg>
-                Sirsi Road, Jaipur
-              </p>
-              <div class="border-t border-[#E5E7EB] pt-6 flex items-end justify-between gap-4 flex-wrap">
-                <p class="text-orange font-serif text-3xl font-bold leading-none">319,000 <span class="text-[#9CA3AF] text-sm font-normal">sq.ft</span></p>
-                <a href="project.html?id=akshat-meadows-c" class="fp-cta group inline-flex items-center gap-2 text-[11px] font-bold tracking-[0.2em] uppercase text-dark cursor-pointer hover:text-orange transition-colors no-underline">
-                  View Project
-                  <svg class="w-3.5 h-3.5 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-                </a>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- ── Panel 5: Hindustan Zinc ── -->
-        <div class="w-screen h-full flex-shrink-0 flex items-center px-6 lg:px-16 pb-12">
-          <div class="fp-panel grid lg:grid-cols-[1.15fr_0.85fr] items-stretch w-full max-w-screen-xl mx-auto">
-            <a href="project.html?id=hindustan-zinc-pw" class="fp-media-wrap relative overflow-hidden cursor-pointer block" style="aspect-ratio:16/10;">
-              <img src="https://slmindia.in/wp-content/uploads/2025/10/edcf4554df9ea0c5aeeb8f89d57d54f3470ce6cd.jpg"
-                   alt="Hindustan Zinc Limited" class="fp-media-img w-full h-full object-cover" />
-              <div class="fp-media-overlay"></div>
-              <div class="fp-media-badge">View Details →</div>
-            </a>
-            <div class="fp-panel-info border border-[#E5E7EB] border-t-2 border-t-orange bg-[#F8F8F6]">
-              <div class="font-serif text-[96px] lg:text-[120px] font-bold leading-none select-none -mb-4" style="color:#EBEBEB">05</div>
-              <h3 class="font-serif text-2xl lg:text-[34px] font-bold text-dark leading-tight mb-3">Hindustan Zinc Limited</h3>
-              <p class="flex items-center gap-2 text-[#9CA3AF] text-sm mb-8">
-                <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17.657 16.657L13.414 20.9a2 2 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><circle cx="12" cy="11" r="3"/></svg>
-                Udaipur, Rajasthan
-              </p>
-              <div class="border-t border-[#E5E7EB] pt-6 flex items-end justify-between gap-4 flex-wrap">
-                <p class="text-orange font-serif text-3xl font-bold leading-none">Corporate <span class="text-[#9CA3AF] text-sm font-normal">Complex</span></p>
-                <a href="project.html?id=hindustan-zinc-pw" class="fp-cta group inline-flex items-center gap-2 text-[11px] font-bold tracking-[0.2em] uppercase text-dark cursor-pointer hover:text-orange transition-colors no-underline">
-                  View Project
-                  <svg class="w-3.5 h-3.5 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-                </a>
-              </div>
-            </div>
-          </div>
-        </div>
-
-      </div>
-    </div>
-
-    <!-- Bottom progress dots + hint -->
-    <div class="flex-shrink-0 max-w-screen-xl mx-auto w-full px-6 lg:px-10 pb-8 flex items-center justify-between">
-      <div class="flex gap-2">
-        <div class="fp-dot h-0.5 w-10 transition-colors duration-300" style="background:#F47721" data-index="0"></div>
-        <div class="fp-dot h-0.5 w-10 transition-colors duration-300" style="background:rgba(17,24,39,0.12)" data-index="1"></div>
-        <div class="fp-dot h-0.5 w-10 transition-colors duration-300" style="background:rgba(17,24,39,0.12)" data-index="2"></div>
-        <div class="fp-dot h-0.5 w-10 transition-colors duration-300" style="background:rgba(17,24,39,0.12)" data-index="3"></div>
-        <div class="fp-dot h-0.5 w-10 transition-colors duration-300" style="background:rgba(17,24,39,0.12)" data-index="4"></div>
-      </div>
-      <p class="text-[#9CA3AF] text-[11px] tracking-[0.25em] uppercase hidden sm:block">Scroll to explore</p>
-    </div>
-
   </div>
 </section>
 
@@ -983,84 +972,6 @@
       ></video>
     </div>
   </div>
-</section>
-
-
-<!-- ═══════════════════════════════════════
-     8. OUR CLIENTS
-═══════════════════════════════════════ -->
-<section id="clients" class="bg-[#F5F5F3] py-20 lg:py-24 overflow-hidden">
-
-  <div class="max-w-screen-xl mx-auto px-6 lg:px-10 text-center mb-14" data-aos="fade-up">
-    <p class="text-[11px] font-semibold tracking-[0.32em] uppercase text-orange flex items-center justify-center gap-3 mb-4">
-      <span class="block w-6 h-px bg-orange"></span>Trusted By<span class="block w-6 h-px bg-orange"></span>
-    </p>
-    <h2 class="font-serif text-3xl lg:text-[48px] font-semibold text-dark">Our Clients</h2>
-    <p class="text-muted text-sm mt-3 max-w-sm mx-auto">Trusted by India's leading enterprises across sectors.</p>
-  </div>
-
-  <!-- Row 1, 12 logos, scrolls left -->
-  <div class="overflow-hidden mb-px">
-    <div class="clients-strip-fwd" aria-hidden="true">
-      <img src="slm%20logo/MacBook%20Pro%2016_%20-%2011%402x.png" alt="Westin" class="clients-logo-img" />
-      <img src="slm%20logo/MacBook%20Pro%2016_%20-%2012%402x.png" alt="ARL Infratech" class="clients-logo-img" />
-      <img src="slm%20logo/MacBook%20Pro%2016_%20-%2013%402x.png" alt="Okaya" class="clients-logo-img" />
-      <img src="slm%20logo/MacBook%20Pro%2016_%20-%2014%402x.png" alt="JECRC University" class="clients-logo-img" />
-      <img src="slm%20logo/MacBook%20Pro%2016_%20-%2015%402x.png" alt="Okaya Infocom" class="clients-logo-img" />
-      <img src="slm%20logo/MacBook%20Pro%2016_%20-%2015%402x-1.png" alt="HRH Hotels" class="clients-logo-img" />
-      <img src="slm%20logo/MacBook%20Pro%2016_%20-%2016%402x.png" alt="Oswal Cables" class="clients-logo-img" />
-      <img src="slm%20logo/MacBook%20Pro%2016_%20-%2016%402x-1.png" alt="Mayur Uniquoters" class="clients-logo-img" />
-      <img src="slm%20logo/MacBook%20Pro%2016_%20-%2017%402x.png" alt="Hare Krishna" class="clients-logo-img" />
-      <img src="slm%20logo/MacBook%20Pro%2016_%20-%2018%402x.png" alt="Hindustan Zinc" class="clients-logo-img" />
-      <img src="slm%20logo/MacBook%20Pro%2016_%20-%2019%402x.png" alt="Universal AutoFoundry" class="clients-logo-img" />
-      <img src="slm%20logo/MacBook%20Pro%2016_%20-%2020%402x.png" alt="Shri Digambar Jain" class="clients-logo-img" />
-      <!-- duplicate for seamless loop -->
-      <img src="slm%20logo/MacBook%20Pro%2016_%20-%2011%402x.png" alt="" class="clients-logo-img" />
-      <img src="slm%20logo/MacBook%20Pro%2016_%20-%2012%402x.png" alt="" class="clients-logo-img" />
-      <img src="slm%20logo/MacBook%20Pro%2016_%20-%2013%402x.png" alt="" class="clients-logo-img" />
-      <img src="slm%20logo/MacBook%20Pro%2016_%20-%2014%402x.png" alt="" class="clients-logo-img" />
-      <img src="slm%20logo/MacBook%20Pro%2016_%20-%2015%402x.png" alt="" class="clients-logo-img" />
-      <img src="slm%20logo/MacBook%20Pro%2016_%20-%2015%402x-1.png" alt="" class="clients-logo-img" />
-      <img src="slm%20logo/MacBook%20Pro%2016_%20-%2016%402x.png" alt="" class="clients-logo-img" />
-      <img src="slm%20logo/MacBook%20Pro%2016_%20-%2016%402x-1.png" alt="" class="clients-logo-img" />
-      <img src="slm%20logo/MacBook%20Pro%2016_%20-%2017%402x.png" alt="" class="clients-logo-img" />
-      <img src="slm%20logo/MacBook%20Pro%2016_%20-%2018%402x.png" alt="" class="clients-logo-img" />
-      <img src="slm%20logo/MacBook%20Pro%2016_%20-%2019%402x.png" alt="" class="clients-logo-img" />
-      <img src="slm%20logo/MacBook%20Pro%2016_%20-%2020%402x.png" alt="" class="clients-logo-img" />
-    </div>
-  </div>
-
-  <!-- Row 2, 12 logos, scrolls right -->
-  <div class="overflow-hidden">
-    <div class="clients-strip-rev" aria-hidden="true">
-      <img src="slm%20logo/MacBook%20Pro%2016_%20-%2021%402x.png" alt="Sigma" class="clients-logo-img" />
-      <img src="slm%20logo/MacBook%20Pro%2016_%20-%2022%402x.png" alt="Gyan Vihar University" class="clients-logo-img" />
-      <img src="slm%20logo/MacBook%20Pro%2016_%20-%2023%402x.png" alt="KEC International" class="clients-logo-img" />
-      <img src="slm%20logo/MacBook%20Pro%2016_%20-%2024%402x.png" alt="Oberoi Hotels" class="clients-logo-img" />
-      <img src="slm%20logo/MacBook%20Pro%2016_%20-%2025%402x.png" alt="Birla Corporation" class="clients-logo-img" />
-      <img src="slm%20logo/MacBook%20Pro%2016_%20-%2026%402x.png" alt="Akshaya Patra" class="clients-logo-img" />
-      <img src="slm%20logo/MacBook%20Pro%2016_%20-%2027%402x.png" alt="Vipra Foundation" class="clients-logo-img" />
-      <img src="slm%20logo/MacBook%20Pro%2016_%20-%2028%402x.png" alt="Ramada" class="clients-logo-img" />
-      <img src="slm%20logo/MacBook%20Pro%2016_%20-%2029%402x.png" alt="REIL" class="clients-logo-img" />
-      <img src="slm%20logo/MacBook%20Pro%2016_%20-%2030%402x.png" alt="Vedanta Foundation" class="clients-logo-img" />
-      <img src="slm%20logo/MacBook%20Pro%2016_%20-%2031%402x.png" alt="Microtek" class="clients-logo-img" />
-      <img src="slm%20logo/MacBook%20Pro%2016_%20-%2032%402x.png" alt="JIMS" class="clients-logo-img" />
-      <!-- duplicate for seamless loop -->
-      <img src="slm%20logo/MacBook%20Pro%2016_%20-%2021%402x.png" alt="" class="clients-logo-img" />
-      <img src="slm%20logo/MacBook%20Pro%2016_%20-%2022%402x.png" alt="" class="clients-logo-img" />
-      <img src="slm%20logo/MacBook%20Pro%2016_%20-%2023%402x.png" alt="" class="clients-logo-img" />
-      <img src="slm%20logo/MacBook%20Pro%2016_%20-%2024%402x.png" alt="" class="clients-logo-img" />
-      <img src="slm%20logo/MacBook%20Pro%2016_%20-%2025%402x.png" alt="" class="clients-logo-img" />
-      <img src="slm%20logo/MacBook%20Pro%2016_%20-%2026%402x.png" alt="" class="clients-logo-img" />
-      <img src="slm%20logo/MacBook%20Pro%2016_%20-%2027%402x.png" alt="" class="clients-logo-img" />
-      <img src="slm%20logo/MacBook%20Pro%2016_%20-%2028%402x.png" alt="" class="clients-logo-img" />
-      <img src="slm%20logo/MacBook%20Pro%2016_%20-%2029%402x.png" alt="" class="clients-logo-img" />
-      <img src="slm%20logo/MacBook%20Pro%2016_%20-%2030%402x.png" alt="" class="clients-logo-img" />
-      <img src="slm%20logo/MacBook%20Pro%2016_%20-%2031%402x.png" alt="" class="clients-logo-img" />
-      <img src="slm%20logo/MacBook%20Pro%2016_%20-%2032%402x.png" alt="" class="clients-logo-img" />
-    </div>
-  </div>
-
 </section>
 
 

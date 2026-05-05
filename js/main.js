@@ -407,81 +407,94 @@ const countObs = new IntersectionObserver(entries => {
 document.querySelectorAll('.counter[data-target]').forEach(el => countObs.observe(el));
 
 /* ═══════════════════════════════════════
-   FLAGSHIP PROJECTS, Scroll-jacked horizontal
+   FLAGSHIP — PINNED CINEMA REEL (desktop) / stacked cards (mobile)
+   Scroll-scrubbed cross-fade between project panels with Ken-Burns
+   hold, caption swap, and orange progress rail. On mobile (< lg)
+   panels render as normal-flow cards with no scroll math.
 ═══════════════════════════════════════ */
-const fpOuter     = document.getElementById('flagship');
-const fpTrackH    = document.getElementById('fpTrackH');
-const fpCurrentEl = document.getElementById('fpCurrent');
-const fpDots      = document.querySelectorAll('.fp-dot');
-const fpPanels    = document.querySelectorAll('.fp-panel');
-const FP_TOTAL    = 5;
+(function initCinemaReel() {
+  const sec = document.getElementById('flagship');
+  if (!sec || !sec.classList.contains('cr-section')) return;
 
-if (fpOuter && fpTrackH) {
-  let fpTargetX  = 0;
-  let fpCurrentX = 0;
-  let fpRaf;
-  let fpLastActive = -1;
+  const panels = sec.querySelectorAll('.cr-panel');
+  const imgs   = sec.querySelectorAll('.cr-panel > .cr-img');
+  const fill   = document.getElementById('crRailFill');
+  const num    = document.getElementById('crCountNum');
+  const N      = panels.length;
+  if (!N) return;
 
-  function fpLerp() {
-    const dist = fpTargetX - fpCurrentX;
-    // Smoother easing: smaller step for longer distances -> gentler arrival
-    fpCurrentX += dist * 0.11;
-    fpTrackH.style.transform = `translate3d(${-fpCurrentX}vw, 0, 0)`;
-    if (Math.abs(dist) > 0.02) {
-      fpRaf = requestAnimationFrame(fpLerp);
-    } else {
-      fpCurrentX = fpTargetX;
-      fpTrackH.style.transform = `translate3d(${-fpCurrentX}vw, 0, 0)`;
+  // Section is N viewport-heights of pinned scroll. Set CSS var so the
+  // height calc stays in sync if N ever changes.
+  sec.style.setProperty('--cr-panels', N);
+
+  let lastActive = -1;
+  let raf = 0;
+  let pendingProg = 0;
+
+  function render() {
+    raf = 0;
+    const prog      = pendingProg;
+    const idxF      = Math.min(N - 1, prog * N);
+    const activeIdx = Math.min(N - 1, Math.floor(idxF));
+    const localProg = idxF - activeIdx;       // 0..1 inside the active panel
+    const FADE_AT   = 0.78;                   // last 22% of each panel = transition
+
+    for (let i = 0; i < N; i++) {
+      const img = imgs[i];
+      if (!img) continue;
+      let opacity = 0;
+      let scale   = 1;
+      if (i === activeIdx) {
+        opacity = localProg < FADE_AT ? 1 : 1 - (localProg - FADE_AT) / (1 - FADE_AT);
+        scale   = 1 + 0.045 * localProg;       // gentle Ken-Burns drift
+      } else if (i === activeIdx + 1) {
+        opacity = localProg < FADE_AT ? 0 : (localProg - FADE_AT) / (1 - FADE_AT);
+        scale   = 1.02;
+      } else if (i < activeIdx) {
+        scale = 1.045;
+      }
+      img.style.opacity   = opacity.toFixed(3);
+      img.style.transform = `scale(${scale.toFixed(4)})`;
     }
+
+    if (activeIdx !== lastActive) {
+      for (let i = 0; i < panels.length; i++) {
+        panels[i].classList.toggle('is-active', i === activeIdx);
+      }
+      if (num) num.textContent = String(activeIdx + 1).padStart(2, '0');
+      lastActive = activeIdx;
+    }
+
+    if (fill) fill.style.transform = `scaleX(${prog.toFixed(4)})`;
   }
 
-  function onFpScroll() {
-    // On mobile (< lg), panels stack vertically via CSS — skip the carousel math.
+  function clearDesktopStyles() {
+    imgs.forEach(img => { img.style.opacity = ''; img.style.transform = ''; });
+    panels.forEach(p => p.classList.remove('is-active'));
+    if (fill) fill.style.transform = '';
+  }
+
+  function onScroll() {
+    // Mobile (< lg): all panels render as plain cards. Strip any
+    // inline styles the desktop reel might have set.
     if (window.innerWidth < 1024) {
-      // Ensure every panel shows its content (no fp-active needed since no carousel)
-      if (fpLastActive !== -2) {
-        fpPanels.forEach(p => p.classList.add('fp-active'));
-        fpLastActive = -2;
-        if (fpTrackH) fpTrackH.style.transform = '';
+      if (lastActive !== -2) {
+        clearDesktopStyles();
+        lastActive = -2;
       }
       return;
     }
-    const rect   = fpOuter.getBoundingClientRect();
-    const outerH = fpOuter.offsetHeight - window.innerHeight;
-    const prog   = Math.max(0, Math.min(1, -rect.top / outerH));
-
-    fpTargetX = prog * (FP_TOTAL - 1) * 100;
-    cancelAnimationFrame(fpRaf);
-    fpRaf = requestAnimationFrame(fpLerp);
-
-    const activeIdx = Math.min(FP_TOTAL - 1, Math.round(prog * (FP_TOTAL - 1)));
-    if (fpCurrentEl) fpCurrentEl.textContent = String(activeIdx + 1).padStart(2, '0');
-    fpDots.forEach((d, i) => {
-      d.style.background = i === activeIdx ? '#F47721' : 'rgba(17,24,39,0.12)';
-    });
-
-    // Toggle .fp-active on the current panel -> triggers reveal + ken-burns
-    if (activeIdx !== fpLastActive) {
-      fpPanels.forEach((p, i) => p.classList.toggle('fp-active', i === activeIdx));
-      fpLastActive = activeIdx;
-    }
+    const r       = sec.getBoundingClientRect();
+    const totalSc = sec.offsetHeight - window.innerHeight;
+    const prog    = Math.max(0, Math.min(1, -r.top / totalSc));
+    pendingProg   = prog;
+    if (!raf) raf = requestAnimationFrame(render);
   }
 
-  window.addEventListener('scroll', onFpScroll, { passive: true });
-  // Fire once so the first panel reveals immediately on page load
-  onFpScroll();
-
-  // Click any progress dot -> smooth-scroll to that panel
-  fpDots.forEach((dot, i) => {
-    dot.style.cursor = 'pointer';
-    dot.addEventListener('click', () => {
-      const outerH = fpOuter.offsetHeight - window.innerHeight;
-      const targetProg = i / (FP_TOTAL - 1);
-      const targetScrollY = fpOuter.offsetTop + targetProg * outerH;
-      window.scrollTo({ top: targetScrollY, behavior: 'smooth' });
-    });
-  });
-}
+  window.addEventListener('scroll', onScroll, { passive: true });
+  window.addEventListener('resize', onScroll, { passive: true });
+  onScroll();
+})();
 
 /* ═══════════════════════════════════════
    FOOTER QUERY FORM
