@@ -39,8 +39,8 @@
     <ul class="hidden lg:flex items-center gap-5 list-none">
       <li><a href="${HOME || 'index.html'}" class="nav-link text-[13px] font-medium text-white/85 hover:text-white transition-colors">Home</a></li>
       <li><a href="about.html"       class="nav-link text-[13px] font-medium text-white/85 hover:text-white transition-colors">About</a></li>
-      <li><a href="${HOME}#services" class="nav-link text-[13px] font-medium text-white/85 hover:text-white transition-colors">Services</a></li>
       <li><a href="${HOME}#projects" class="nav-link text-[13px] font-medium text-white/85 hover:text-white transition-colors">Projects</a></li>
+      <li><a href="${HOME}#services" class="nav-link text-[13px] font-medium text-white/85 hover:text-white transition-colors">Services</a></li>
       <li><a href="tools.html"       class="nav-link text-[13px] font-medium text-white/85 hover:text-white transition-colors">Tools</a></li>
       <li><a href="journey.html"     class="nav-link text-[13px] font-medium text-white/85 hover:text-white transition-colors">Journey</a></li>
       <li><a href="leadership.html"  class="nav-link text-[13px] font-medium text-white/85 hover:text-white transition-colors">Leadership</a></li>
@@ -68,7 +68,6 @@
     <div class="px-6 py-4 flex flex-col">
       <a href="${HOME || 'index.html'}" class="mm-link">Home</a>
       <a href="about.html"              class="mm-link">About</a>
-      <a href="${HOME}#services"        class="mm-link">Services</a>
 
       <!-- Projects: expandable sub-menu -->
       <div class="mm-group">
@@ -86,6 +85,7 @@
         </div>
       </div>
 
+      <a href="${HOME}#services" class="mm-link">Services</a>
       <a href="tools.html"       class="mm-link">Tools &amp; Machinery</a>
       <a href="journey.html"     class="mm-link">Journey</a>
       <a href="leadership.html"  class="mm-link">Leadership</a>
