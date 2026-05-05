@@ -52,6 +52,50 @@
 
   <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet" />
   <link rel="stylesheet" href="css/style.css" />
+
+  <!-- ════════════════════ BEGIN CLIENT DEMO ════════════════════
+       TEMPORARY: on a project detail page, only the Bright Metal
+       project and Industrial sector listing remain clickable. All
+       "Related Project" cards (other industrials) and any other
+       project links get neutralized. Breadcrumb back to Industrial
+       and back to Home (index.html anchors) still work.
+       To restore: delete this entire BEGIN/END block.
+  ════════════════════════════════════════════════════════════════ -->
+  <script>
+    (function () {
+      var killPattern = /(tools|journey|leadership|projects|project)\.html/i;
+      function isAllowed(href) {
+        return /^projects\.html\?category=Industrial(\b|$)/i.test(href)
+            || /^project\.html\?id=bright-metal(\b|$)/i.test(href);
+      }
+      function urlFromOnclick(s) {
+        var m = (s || '').match(/['"]([^'"]+\.html[^'"]*)['"]/);
+        return m ? m[1] : '';
+      }
+      function neutralize() {
+        document.querySelectorAll('a[href]').forEach(function (a) {
+          var href = a.getAttribute('href') || '';
+          if (!killPattern.test(href)) return;
+          if (isAllowed(href)) return;
+          a.removeAttribute('href');
+          a.style.cursor = 'default';
+          a.addEventListener('click', function (e) { e.preventDefault(); });
+        });
+        document.querySelectorAll('[onclick]').forEach(function (el) {
+          var oc = el.getAttribute('onclick') || '';
+          if (!killPattern.test(oc)) return;
+          if (isAllowed(urlFromOnclick(oc))) return;
+          el.removeAttribute('onclick');
+          el.style.cursor = 'default';
+        });
+      }
+      function run() { neutralize(); setTimeout(neutralize, 0); }
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', run);
+      } else { run(); }
+    })();
+  </script>
+  <!-- ════════════════════ END CLIENT DEMO ══════════════════════ -->
 </head>
 
 <body class="font-sans bg-white text-dark overflow-x-hidden page-project">

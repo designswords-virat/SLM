@@ -116,22 +116,34 @@
          tasks/2026-04-30-client-demo-disable-nav/before/index.html
   ════════════════════════════════════════════════════════════════ -->
   <script>
+    /* Live demo path: Home → Industrial sector → Bright Metal project.
+       About is also unblocked (kill regex omits it). Anything else
+       matching the kill pattern (tools/journey/leadership + other
+       projects/project URLs) gets its href stripped. */
     document.addEventListener('DOMContentLoaded', function () {
-      var pagePattern = /(tools|journey|leadership|projects|project)\.html/i;
-      // Neutralize anchor links pointing to other pages
+      var killPattern = /(tools|journey|leadership|projects|project)\.html/i;
+      function isAllowed(href) {
+        return /^projects\.html\?category=Industrial(\b|$)/i.test(href)
+            || /^project\.html\?id=bright-metal(\b|$)/i.test(href);
+      }
+      function urlFromOnclick(s) {
+        var m = (s || '').match(/['"]([^'"]+\.html[^'"]*)['"]/);
+        return m ? m[1] : '';
+      }
       document.querySelectorAll('a[href]').forEach(function (a) {
-        if (pagePattern.test(a.getAttribute('href') || '')) {
-          a.removeAttribute('href');
-          a.style.cursor = 'default';
-          a.addEventListener('click', function (e) { e.preventDefault(); });
-        }
+        var href = a.getAttribute('href') || '';
+        if (!killPattern.test(href)) return;
+        if (isAllowed(href)) return;
+        a.removeAttribute('href');
+        a.style.cursor = 'default';
+        a.addEventListener('click', function (e) { e.preventDefault(); });
       });
-      // Neutralize inline onclick handlers that navigate to other pages
       document.querySelectorAll('[onclick]').forEach(function (el) {
-        if (pagePattern.test(el.getAttribute('onclick') || '')) {
-          el.removeAttribute('onclick');
-          el.style.cursor = 'default';
-        }
+        var oc = el.getAttribute('onclick') || '';
+        if (!killPattern.test(oc)) return;
+        if (isAllowed(urlFromOnclick(oc))) return;
+        el.removeAttribute('onclick');
+        el.style.cursor = 'default';
       });
     });
   </script>
