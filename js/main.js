@@ -497,6 +497,23 @@ document.querySelectorAll('.counter[data-target]').forEach(el => countObs.observ
 })();
 
 /* ═══════════════════════════════════════
+   CLIENTS CAROUSEL — 2 slides, dot navigation, no auto-rotate
+═══════════════════════════════════════ */
+(function initClientsCarousel() {
+  const root = document.getElementById('clientsCarousel');
+  if (!root) return;
+  const slides = root.querySelectorAll('.clients-slide');
+  const dots   = root.querySelectorAll('.clients-dot');
+  if (!slides.length || !dots.length) return;
+
+  function activate(idx) {
+    slides.forEach((s, i) => s.classList.toggle('is-active', i === idx));
+    dots.forEach((d, i)   => d.classList.toggle('is-active', i === idx));
+  }
+  dots.forEach((dot, i) => dot.addEventListener('click', () => activate(i)));
+})();
+
+/* ═══════════════════════════════════════
    FOOTER QUERY FORM
 ═══════════════════════════════════════ */
 const form    = document.getElementById('queryForm');
@@ -1018,16 +1035,6 @@ function renderProjectPage(id) {
   ];
 
   content.innerHTML = `
-    <!-- Breadcrumb / Back strip -->
-    <nav class="prj-crumb" aria-label="Breadcrumb">
-      <a href="projects.html?category=${encodeURIComponent(p.category)}" class="prj-back">
-        <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
-        Back to ${p.category}
-      </a>
-      <span class="prj-crumb-sep">/</span>
-      <span class="prj-crumb-current">${p.name}</span>
-    </nav>
-
     <!-- Hero -->
     <section class="prj-hero">
       <div class="prj-hero-img" style="background-image:url('${p.img}')" role="img" aria-label="${p.name}"></div>

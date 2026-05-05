@@ -333,33 +333,47 @@
     <p class="text-muted text-sm mt-3 max-w-sm mx-auto">Trusted by India's leading enterprises across sectors.</p>
   </div>
 
-  <!-- Static 5-column grid (no animation) -->
+  <!-- 2-slide carousel (12 logos per slide, dots to switch) -->
   <div class="max-w-screen-xl mx-auto px-6 lg:px-10">
-    <div class="clients-grid">
-      <img src="slm%20logo/MacBook%20Pro%2016_%20-%2011%402x.png" alt="Westin" class="clients-logo-img" />
-      <img src="slm%20logo/MacBook%20Pro%2016_%20-%2012%402x.png" alt="ARL Infratech" class="clients-logo-img" />
-      <img src="slm%20logo/MacBook%20Pro%2016_%20-%2013%402x.png" alt="Okaya" class="clients-logo-img" />
-      <img src="slm%20logo/MacBook%20Pro%2016_%20-%2014%402x.png" alt="JECRC University" class="clients-logo-img" />
-      <img src="slm%20logo/MacBook%20Pro%2016_%20-%2015%402x.png" alt="Okaya Infocom" class="clients-logo-img" />
-      <img src="slm%20logo/MacBook%20Pro%2016_%20-%2015%402x-1.png" alt="HRH Hotels" class="clients-logo-img" />
-      <img src="slm%20logo/MacBook%20Pro%2016_%20-%2016%402x.png" alt="Oswal Cables" class="clients-logo-img" />
-      <img src="slm%20logo/MacBook%20Pro%2016_%20-%2016%402x-1.png" alt="Mayur Uniquoters" class="clients-logo-img" />
-      <img src="slm%20logo/MacBook%20Pro%2016_%20-%2017%402x.png" alt="Hare Krishna" class="clients-logo-img" />
-      <img src="slm%20logo/MacBook%20Pro%2016_%20-%2018%402x.png" alt="Hindustan Zinc" class="clients-logo-img" />
-      <img src="slm%20logo/MacBook%20Pro%2016_%20-%2019%402x.png" alt="Universal AutoFoundry" class="clients-logo-img" />
-      <img src="slm%20logo/MacBook%20Pro%2016_%20-%2020%402x.png" alt="Shri Digambar Jain" class="clients-logo-img" />
-      <img src="slm%20logo/MacBook%20Pro%2016_%20-%2021%402x.png" alt="Sigma" class="clients-logo-img" />
-      <img src="slm%20logo/MacBook%20Pro%2016_%20-%2022%402x.png" alt="Gyan Vihar University" class="clients-logo-img" />
-      <img src="slm%20logo/MacBook%20Pro%2016_%20-%2023%402x.png" alt="KEC International" class="clients-logo-img" />
-      <img src="slm%20logo/MacBook%20Pro%2016_%20-%2024%402x.png" alt="Oberoi Hotels" class="clients-logo-img" />
-      <img src="slm%20logo/MacBook%20Pro%2016_%20-%2025%402x.png" alt="Birla Corporation" class="clients-logo-img" />
-      <img src="slm%20logo/MacBook%20Pro%2016_%20-%2026%402x.png" alt="Akshaya Patra" class="clients-logo-img" />
-      <img src="slm%20logo/MacBook%20Pro%2016_%20-%2027%402x.png" alt="Vipra Foundation" class="clients-logo-img" />
-      <img src="slm%20logo/MacBook%20Pro%2016_%20-%2028%402x.png" alt="Ramada" class="clients-logo-img" />
-      <img src="slm%20logo/MacBook%20Pro%2016_%20-%2029%402x.png" alt="REIL" class="clients-logo-img" />
-      <img src="slm%20logo/MacBook%20Pro%2016_%20-%2030%402x.png" alt="Vedanta Foundation" class="clients-logo-img" />
-      <img src="slm%20logo/MacBook%20Pro%2016_%20-%2031%402x.png" alt="Microtek" class="clients-logo-img" />
-      <img src="slm%20logo/MacBook%20Pro%2016_%20-%2032%402x.png" alt="JIMS" class="clients-logo-img" />
+    <div id="clientsCarousel" class="clients-carousel">
+      <div class="clients-track">
+
+        <div class="clients-slide is-active" data-slide="0">
+          <img src="slm%20logo/MacBook%20Pro%2016_%20-%2011%402x.png" alt="Westin" class="clients-logo-img" />
+          <img src="slm%20logo/MacBook%20Pro%2016_%20-%2012%402x.png" alt="ARL Infratech" class="clients-logo-img" />
+          <img src="slm%20logo/MacBook%20Pro%2016_%20-%2013%402x.png" alt="Okaya" class="clients-logo-img" />
+          <img src="slm%20logo/MacBook%20Pro%2016_%20-%2014%402x.png" alt="JECRC University" class="clients-logo-img" />
+          <img src="slm%20logo/MacBook%20Pro%2016_%20-%2015%402x.png" alt="Okaya Infocom" class="clients-logo-img" />
+          <img src="slm%20logo/MacBook%20Pro%2016_%20-%2015%402x-1.png" alt="HRH Hotels" class="clients-logo-img" />
+          <img src="slm%20logo/MacBook%20Pro%2016_%20-%2016%402x.png" alt="Oswal Cables" class="clients-logo-img" />
+          <img src="slm%20logo/MacBook%20Pro%2016_%20-%2016%402x-1.png" alt="Mayur Uniquoters" class="clients-logo-img" />
+          <img src="slm%20logo/MacBook%20Pro%2016_%20-%2017%402x.png" alt="Hare Krishna" class="clients-logo-img" />
+          <img src="slm%20logo/MacBook%20Pro%2016_%20-%2018%402x.png" alt="Hindustan Zinc" class="clients-logo-img" />
+          <img src="slm%20logo/MacBook%20Pro%2016_%20-%2019%402x.png" alt="Universal AutoFoundry" class="clients-logo-img" />
+          <img src="slm%20logo/MacBook%20Pro%2016_%20-%2020%402x.png" alt="Shri Digambar Jain" class="clients-logo-img" />
+        </div>
+
+        <div class="clients-slide" data-slide="1">
+          <img src="slm%20logo/MacBook%20Pro%2016_%20-%2021%402x.png" alt="Sigma" class="clients-logo-img" />
+          <img src="slm%20logo/MacBook%20Pro%2016_%20-%2022%402x.png" alt="Gyan Vihar University" class="clients-logo-img" />
+          <img src="slm%20logo/MacBook%20Pro%2016_%20-%2023%402x.png" alt="KEC International" class="clients-logo-img" />
+          <img src="slm%20logo/MacBook%20Pro%2016_%20-%2024%402x.png" alt="Oberoi Hotels" class="clients-logo-img" />
+          <img src="slm%20logo/MacBook%20Pro%2016_%20-%2025%402x.png" alt="Birla Corporation" class="clients-logo-img" />
+          <img src="slm%20logo/MacBook%20Pro%2016_%20-%2026%402x.png" alt="Akshaya Patra" class="clients-logo-img" />
+          <img src="slm%20logo/MacBook%20Pro%2016_%20-%2027%402x.png" alt="Vipra Foundation" class="clients-logo-img" />
+          <img src="slm%20logo/MacBook%20Pro%2016_%20-%2028%402x.png" alt="Ramada" class="clients-logo-img" />
+          <img src="slm%20logo/MacBook%20Pro%2016_%20-%2029%402x.png" alt="REIL" class="clients-logo-img" />
+          <img src="slm%20logo/MacBook%20Pro%2016_%20-%2030%402x.png" alt="Vedanta Foundation" class="clients-logo-img" />
+          <img src="slm%20logo/MacBook%20Pro%2016_%20-%2031%402x.png" alt="Microtek" class="clients-logo-img" />
+          <img src="slm%20logo/MacBook%20Pro%2016_%20-%2032%402x.png" alt="JIMS" class="clients-logo-img" />
+        </div>
+
+      </div>
+
+      <div class="clients-dots" role="tablist" aria-label="Clients carousel">
+        <button type="button" class="clients-dot is-active" data-slide="0" aria-label="Show clients 1–12"></button>
+        <button type="button" class="clients-dot"           data-slide="1" aria-label="Show clients 13–24"></button>
+      </div>
     </div>
   </div>
 
