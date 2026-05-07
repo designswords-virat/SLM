@@ -1905,14 +1905,23 @@ button.bg-orange:hover,
   outline-offset: 4px;
 }
 
-/* Tablet + mobile (< lg): 3 columns × 3 rows. 8 logos fill the
-   first 2 rows + first 2 cells of row 3 — a tight, balanced grid. */
+/* Tablet + mobile (< lg): switch grid -> flex so 8 logos in 3 columns
+   show as rows of 3+3+2, with the trailing 2-logo row centered (no
+   visual "empty cell" on the right). */
 @media (max-width: 1023px) {
   .clients-slide {
-    grid-template-columns: repeat(3, 1fr);
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-content: center;
     gap: 32px 20px;
   }
-  .clients-slide .clients-logo-img { height: 56px; }
+  .clients-slide .clients-logo-img {
+    flex: 0 0 calc((100% - 40px) / 3);   /* 3 cols, accounting for 2 × 20px gaps */
+    max-width: calc((100% - 40px) / 3);
+    height: 56px;
+    object-fit: contain;
+  }
   .clients-dots { margin-top: 28px; }
   .clients-dot { width: 28px; }
   .clients-dot.is-active { width: 44px; }
@@ -1921,7 +1930,11 @@ button.bg-orange:hover,
 /* Phone: a hair tighter so the logos read well on narrow screens */
 @media (max-width: 480px) {
   .clients-slide { gap: 26px 12px; }
-  .clients-slide .clients-logo-img { height: 44px; }
+  .clients-slide .clients-logo-img {
+    flex: 0 0 calc((100% - 24px) / 3);
+    max-width: calc((100% - 24px) / 3);
+    height: 44px;
+  }
 }
 
 /* ── Clients logo strips (legacy — replaced by .clients-grid) ── */
@@ -4522,7 +4535,12 @@ body.has-prj-sticky-bar { padding-bottom: 60px; }
 [data-theme="dark"] .prj-crumb      { background: rgba(11, 18, 32, 0.92); color: #9CA3AF; border-bottom-color: #1F2937; }
 [data-theme="dark"] .prj-crumb-current,
 [data-theme="dark"] .prj-back        { color: #F9FAFB !important; }
-[data-theme="dark"] .prj-hero-content { background: #0B1220; }
+/* Mobile-only: dark plate sits below the hero image, so it needs a
+   matching dark backdrop for type legibility. On desktop the content
+   floats over the image (transparent), so DON'T set a dark plate. */
+@media (max-width: 1023px) {
+  [data-theme="dark"] .prj-hero-content { background: #0B1220; }
+}
 [data-theme="dark"] .prj-hero-title  { color: #F9FAFB; }
 [data-theme="dark"] .prj-hero-lead   { color: #9CA3AF; }
 [data-theme="dark"] .prj-facts-grid,

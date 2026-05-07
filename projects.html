@@ -104,9 +104,16 @@
 
 <!-- SITE LOADER -->
 <div id="siteLoader" class="site-loader" aria-hidden="true">
-  <video class="loader-video" autoplay muted playsinline preload="auto" disableremoteplayback>
-    <source src="video/slm-loader.mp4" type="video/mp4" />
-  </video>
+  <video id="siteLoaderVideo" class="loader-video" autoplay muted playsinline preload="auto" disableremoteplayback></video>
+  <script>
+    (function(){
+      var v = document.getElementById('siteLoaderVideo');
+      if (!v) return;
+      v.src = window.matchMedia('(max-width: 1023px)').matches
+        ? 'video/logo-reveal.mp4'
+        : 'video/slm-loader.mp4';
+    })();
+  </script>
 </div>
 
 <div id="nav-slot"></div>

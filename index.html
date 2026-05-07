@@ -154,9 +154,16 @@
 
 <!-- SITE LOADER -->
 <div id="siteLoader" class="site-loader" aria-hidden="true">
-  <video class="loader-video" autoplay muted playsinline preload="auto" disableremoteplayback>
-    <source src="video/slm-loader.mp4" type="video/mp4" />
-  </video>
+  <video id="siteLoaderVideo" class="loader-video" autoplay muted playsinline preload="auto" disableremoteplayback></video>
+  <script>
+    (function(){
+      var v = document.getElementById('siteLoaderVideo');
+      if (!v) return;
+      v.src = window.matchMedia('(max-width: 1023px)').matches
+        ? 'video/logo-reveal.mp4'
+        : 'video/slm-loader.mp4';
+    })();
+  </script>
 </div>
 
 <!-- ═══════════════════════════════════════
@@ -550,19 +557,10 @@
           a multidisciplinary firm delivering 200+ projects across Industrial, Commercial,
           Institutional, Hospitality, and Residential sectors.
         </p>
-        <p class="text-muted text-[15px] leading-relaxed mb-10">
+        <p class="text-muted text-[15px] leading-relaxed">
           Our legacy is built on values of trust, integrity, and craftsmanship, creating
           landmarks that endure and relationships that last.
         </p>
-
-        <!-- Founder card -->
-        <div class="flex items-center gap-5 p-5 bg-white border-l-[3px] border-orange shadow-sm">
-          <div>
-            <p class="font-serif text-base font-semibold text-dark">Late Shri Sohan Lal Mathur</p>
-            <p class="text-muted text-xs mt-1">Founder &nbsp;·&nbsp; 1954 &nbsp;·&nbsp; Jaipur, Rajasthan</p>
-            <p class="text-orange text-xs font-semibold tracking-wide mt-1.5 italic">"We Build Trust"</p>
-          </div>
-        </div>
 
       </div>
     </div>
