@@ -643,35 +643,35 @@ const PROJECTS_DATA = [
   //  INDUSTRIAL  (19 projects)
   // ════════════════════════════════
   { id:'bright-metal', category:'Industrial', name:'Bright Metal India Pvt. Ltd.', client:'Bright Metal India (P) Ltd.', location:'Sargoth, Reengus, Rajasthan', area:'1,50,000 sq.ft', year:'2022–23',
-    img:'https://slmindia.in/wp-content/uploads/2025/09/beb2d05252f88d21f5be24845d680f4de012b285-1-1024x576.jpg',
+    img:'Images/Projects/Bright%20Metal%20India%20Pvt.%20Ltd..JPG',
     desc:'Complete civil development of industrial sheds for production operations, administrative blocks, utility structures and site-wide infrastructure for a non-ferrous metal production facility at Sargoth, Reengus.' },
 
   { id:'hi-growth', category:'Industrial', name:'Hi-Growth International', client:'Hi-Growth International', location:'Kalwada, Mahindra SEZ', area:'Industrial Facility', year:'2024–25',
-    img:'https://slmindia.in/wp-content/uploads/2025/10/3a45abe3b0ddf6c8c0aae733cf4f95c6b88b097a-1024x555.png',
+    img:'Images/Projects/Hi-Growth%20International.JPG',
     desc:'Cold storage and industrial facility construction with structural works for manufacturing and administrative areas within the Mahindra SEZ at Kalwada.' },
 
   { id:'universal-auto-iii', category:'Industrial', name:'Universal Autofoundry Unit-III', client:'Universal Autofoundry Ltd.', location:'Sargoth, Reengus, Rajasthan', area:'Industrial Facility', year:'2023–24',
-    img:'https://slmindia.in/wp-content/uploads/2025/10/8662056b3f180718e399fe21fa134d44d6074e7b-1024x556.png',
+    img:'Images/Projects/Universal%20Autofoundry%20Unit-III.JPG',
     desc:'Complete civil construction of production sheds, utility structures and site infrastructure for auto component manufacturing at Sargoth, Reengus.' },
 
   { id:'paavan-products', category:'Industrial', name:'Paavan Products Bichoon Unit', client:'Paavan Products Pvt. Ltd.', location:'Bichoon, Rajasthan', area:'Industrial Shed', year:'2023–24',
-    img:'https://slmindia.in/wp-content/uploads/2025/10/a359075677c331a13d5c54e7a862d918dcf4e0be-1024x556.png',
+    img:'Images/Projects/Paavan%20Products%20Bichoon%20Unit.JPG',
     desc:'Industrial shed for production and storage with administrative spaces and complete site development for manufacturing operations at Bichoon.' },
 
   { id:'precision-auto', category:'Industrial', name:'Precision Autocastings Unit II', client:'Precision Autocastings Pvt. Ltd.', location:'Kaladera, Chomu, Rajasthan', area:'2,00,000 sq.ft', year:'2023–24',
-    img:'https://slmindia.in/wp-content/uploads/2025/10/0c0bc81c21f8fff393aa34cb0c698846e72eda08-scaled-1-1024x556.png',
+    img:'Images/Projects/Precision%20Autocastings%20Unit%20II.JPG',
     desc:'Complete civil development of large-scale production sheds for foundry operations, utility structures and site infrastructure spanning 2,00,000 sq.ft at Kaladera, Chomu.' },
 
   { id:'oswal-cables', category:'Industrial', name:'Oswal Cables Bagru Unit', client:'Oswal Cables', location:'Bagru Extension II, Jaipur', area:'Industrial Complex', year:'2019–20',
-    img:'https://slmindia.in/wp-content/uploads/2025/10/ff837b04dd9ae936b26065d49128bc7da4414bc5-1024x556.png',
+    img:'Images/Projects/Oswal%20Cables%20Bagru%20Unit.JPG',
     desc:'Complete civil development of industrial sheds for cable manufacturing, office block and internal infrastructure at Bagru Extension II, Jaipur.' },
 
   { id:'universal-auto-ii', category:'Industrial', name:'Universal Autofoundry Unit-II', client:'Universal Autofoundry Ltd.', location:'SKS Industrial Area, Reengus', area:'Industrial Facility', year:'2018–19',
-    img:'https://slmindia.in/wp-content/uploads/2025/10/76751cac89b445550e19c979eebeb14c5a6c58bc-1024x556.png',
+    img:'Images/Projects/Universal%20Autofoundry%20Unit-II.JPG',
     desc:'Full civil development with heavy-duty production sheds, administrative areas and comprehensive site infrastructure for auto component foundry operations at Reengus.' },
 
   { id:'arl-infratech', category:'Industrial', name:'ARL Infratech', client:'ARL Infratech Ltd.', location:'Bagru, Jaipur', area:'Manufacturing Facility', year:'2011–12',
-    img:'https://slmindia.in/wp-content/uploads/2025/10/05d4c1abf517bab682af11ba4e70c2c5f665caf2-1024x556.png',
+    img:'Images/Projects/ARL%20Infratech.JPG',
     desc:'Cement sheet and pipe manufacturing facility with industrial sheds, utility blocks and site infrastructure for a building materials manufacturer at Bagru, Jaipur.' },
 
   { id:'sigma-j1', category:'Industrial', name:'Sigma Engineered Solutions J1 Unit', client:'Ultratech Metals (India) Pvt. Ltd.', location:'VKIA Industrial Area, Jaipur', area:'Factory Shed', year:'2005–06',
@@ -679,7 +679,7 @@ const PROJECTS_DATA = [
     desc:'Factory shed construction for precision manufacturing with structural framework and complete utility infrastructure at VKIA Industrial Area, Jaipur.' },
 
   { id:'mayur-uniquoters-ind', category:'Industrial', name:'Mayur Uniquoters', client:'Mayur Uniquoters Ltd.', location:'Jaitpura, Jaipur', area:'Manufacturing Facility', year:'1993–94',
-    img:'https://slmindia.in/wp-content/uploads/2025/10/a0af4c45cb47802a5b29085a954974f082735b94-1024x556.png',
+    img:'Images/Projects/Mayur%20Uniquoters.JPG',
     desc:'Manufacturing sheds and godowns for synthetic leather production facility at Jaitpura, one of SLM\'s long-standing industrial partnerships spanning three decades.' },
 
   { id:'ankit-roofing', category:'Industrial', name:'Ankit Roofing Unit', client:'ARL Infratech Ltd.', location:'Bagru, Jaipur', area:'Industrial Shed', year:'2005–06',
@@ -699,7 +699,7 @@ const PROJECTS_DATA = [
     desc:'Granite processing plant with specialised heavy-duty foundations for large machinery at RIICO Industrial Area, Sukher, Udaipur.' },
 
   { id:'reil-kanakpura', category:'Industrial', name:'REIL Kanakpura', client:'Rajasthan Electronics & Instruments Ltd.', location:'Kanakpura, Jaipur', area:'Electronics Facility', year:'1983–89',
-    img:'https://slmindia.in/wp-content/uploads/2025/10/ccbbd6e7063035db0b9e9384e5b9c461f316d69c-1024x556.png',
+    img:'Images/Projects/REIL%20Kanakpura.JPG',
     desc:'Electronics manufacturing sheds, utility structures and site infrastructure for REIL at Kanakpura, one of SLM\'s earliest large-scale industrial assignments, spanning six years from 1983 to 1989.' },
 
   { id:'microtek-sitapura', category:'Industrial', name:'Microtek International (Sitapura)', client:'Microtek International', location:'Sitapura, Jaipur', area:'Manufacturing Unit', year:',',

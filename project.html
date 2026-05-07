@@ -64,9 +64,12 @@
   <script>
     (function () {
       var killPattern = /(tools|journey|leadership|projects|project)\.html/i;
+      // All Industrial projects are live: any project.html?id=... URL
+      // passes so "Related Projects" cards (same-category siblings) work,
+      // plus the breadcrumb back to the Industrial sector listing.
       function isAllowed(href) {
-        return /^projects\.html\?category=Industrial(\b|$)/i.test(href)
-            || /^project\.html\?id=bright-metal(\b|$)/i.test(href);
+        return /^project\.html\?id=/i.test(href)
+            || /^projects\.html\?category=Industrial(\b|$)/i.test(href);
       }
       function urlFromOnclick(s) {
         var m = (s || '').match(/['"]([^'"]+\.html[^'"]*)['"]/);

@@ -25,3 +25,7 @@ video/slm 16_9 logo.gif
 
 # Original client logo PNGs (pre-transparency backup, local-only)
 slm logo/_originals/
+
+# Full-resolution project photos (source files, optimized copies live in
+# Images/Projects/ and ship; originals stay local-only)
+Images/Projects/_originals/

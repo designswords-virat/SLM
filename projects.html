@@ -66,8 +66,11 @@
   <script>
     (function () {
       var killPattern = /(tools|journey|leadership|projects|project)\.html/i;
+      // All Industrial project pages are live: any project.html?id=... URL
+      // passes (the projects.html grid only renders industrials in this
+      // sector). Industrial sector listing reload also stays open.
       function isAllowed(href) {
-        return /^project\.html\?id=bright-metal(\b|$)/i.test(href)
+        return /^project\.html\?id=/i.test(href)
             || /^projects\.html\?category=Industrial(\b|$)/i.test(href);
       }
       function urlFromOnclick(s) {
