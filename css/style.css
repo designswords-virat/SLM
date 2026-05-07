@@ -1886,28 +1886,29 @@ button.bg-orange:hover,
   .wb-heading .wb-word { display: block; }
 }
 
-/* ── Clients 2-slide carousel ── */
+/* ── Clients 3-slide carousel.
+   Track is a single grid cell that contains all 3 slides stacked
+   on top of each other (grid-area: 1/1). The cell sizes to the
+   largest slide (9 logos / 3 rows) so the section height is
+   constant across slides — the 6-logo slide doesn't shrink it. */
 .clients-carousel { position: relative; }
-.clients-track    { position: relative; }
-
-/* Each slide overlays the next; only .is-active is visible.
-   Layout: 3 columns. Slides 1+2 fill 3 rows (9 logos), slide 3 is
-   2 rows (6 logos) — flex with center keeps the short slide tidy. */
+.clients-track {
+  display: grid;
+  grid-template-columns: 1fr;
+}
 .clients-slide {
+  grid-area: 1 / 1;       /* stack all slides in the same cell */
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
   align-content: center;
   gap: 48px 40px;
-  position: absolute;
-  inset: 0;
   opacity: 0;
   visibility: hidden;
   pointer-events: none;
   transition: opacity 0.45s cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 .clients-slide.is-active {
-  position: relative;
   opacity: 1;
   visibility: visible;
   pointer-events: auto;
