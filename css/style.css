@@ -137,6 +137,14 @@
   object-fit: cover;
   display: block;
 }
+/* Mobile: contain (show the full 16:9 video, letterbox top/bottom) so
+   nothing is cropped on portrait phones. */
+@media (max-width: 1023px) {
+  .loader-video {
+    object-fit: contain;
+    background: #0B1220;
+  }
+}
 
 /* Stage fades + lifts up on exit */
 .loader-stage {
@@ -1843,10 +1851,12 @@ button.bg-orange:hover,
 .clients-carousel { position: relative; }
 .clients-track    { position: relative; }
 
-/* Each slide overlays the next; only .is-active is visible */
+/* Each slide overlays the next; only .is-active is visible.
+   Desktop: 4 cols × 2 rows = 8 logos. */
 .clients-slide {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
+  grid-auto-rows: 1fr;
   gap: 48px 40px;
   align-items: center;
   justify-items: center;
@@ -1895,19 +1905,23 @@ button.bg-orange:hover,
   outline-offset: 4px;
 }
 
-/* Tablet: 3 columns × 4 rows */
+/* Tablet + mobile (< lg): 3 columns × 3 rows. 8 logos fill the
+   first 2 rows + first 2 cells of row 3 — a tight, balanced grid. */
 @media (max-width: 1023px) {
-  .clients-slide { grid-template-columns: repeat(3, 1fr); gap: 36px 28px; }
-  .clients-slide .clients-logo-img { height: 64px; }
-}
-
-/* Mobile: 2 columns × 6 rows */
-@media (max-width: 640px) {
-  .clients-slide { grid-template-columns: repeat(2, 1fr); gap: 28px 16px; }
-  .clients-slide .clients-logo-img { height: 52px; }
+  .clients-slide {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 32px 20px;
+  }
+  .clients-slide .clients-logo-img { height: 56px; }
   .clients-dots { margin-top: 28px; }
   .clients-dot { width: 28px; }
   .clients-dot.is-active { width: 44px; }
+}
+
+/* Phone: a hair tighter so the logos read well on narrow screens */
+@media (max-width: 480px) {
+  .clients-slide { gap: 26px 12px; }
+  .clients-slide .clients-logo-img { height: 44px; }
 }
 
 /* ── Clients logo strips (legacy — replaced by .clients-grid) ── */

@@ -174,14 +174,16 @@
 })();
 
 /* ═══════════════════════════════════════
-   SITE LOADER — shows once per session on first page load,
-   stays for min 1.3s so the animation reads, then fades out
+   SITE LOADER — shows once per session on first page load.
+   Plays the brand video full-length, then fades out.
+   Hides on the <video> ended event; hard 12s fallback in case the
+   video stalls or autoplay is blocked.
 ═══════════════════════════════════════ */
 (function siteLoader() {
   const loader = document.getElementById('siteLoader');
   if (!loader) return;
 
-  // If already shown in this session, skip immediately
+  // If already shown in this session, skip immediately.
   try {
     if (sessionStorage.getItem('slm-loader-done') === '1') {
       loader.classList.add('no-show');
@@ -189,28 +191,34 @@
     }
   } catch (_) { /* sessionStorage blocked; just show it */ }
 
-  const MIN_SHOW = 1300;
-  const start = performance.now();
   let hidden = false;
-
   function hide() {
     if (hidden) return;
-    const elapsed = performance.now() - start;
-    const wait = Math.max(0, MIN_SHOW - elapsed);
-    setTimeout(() => {
-      if (hidden) return;
-      hidden = true;
-      loader.classList.add('is-hidden');
-      try { sessionStorage.setItem('slm-loader-done', '1'); } catch (_) {}
-      setTimeout(() => loader.remove(), 700);
-    }, wait);
+    hidden = true;
+    loader.classList.add('is-hidden');
+    try { sessionStorage.setItem('slm-loader-done', '1'); } catch (_) {}
+    setTimeout(() => loader.remove(), 700);
   }
 
-  if (document.readyState === 'complete') hide();
-  else window.addEventListener('load', hide);
+  const video = loader.querySelector('video');
+  if (video) {
+    // Play through fully, then fade out
+    video.addEventListener('ended', hide, { once: true });
+    // If autoplay is blocked or the file errors, fall back to a short window
+    video.addEventListener('error', () => setTimeout(hide, 1500), { once: true });
+    // Try to start playback (some browsers need an explicit play() after JS loads)
+    const playPromise = video.play && video.play();
+    if (playPromise && typeof playPromise.catch === 'function') {
+      playPromise.catch(() => setTimeout(hide, 1500));
+    }
+  } else {
+    // No video element — just hide after window load
+    if (document.readyState === 'complete') setTimeout(hide, 1300);
+    else window.addEventListener('load', () => setTimeout(hide, 1300));
+  }
 
   // Hard fallback: don't hold visitors hostage if something stalls
-  setTimeout(hide, 5000);
+  setTimeout(hide, 12000);
 })();
 
 // ── AOS
@@ -507,7 +515,7 @@ document.querySelectorAll('.counter[data-target]').forEach(el => countObs.observ
   const dots   = root.querySelectorAll('.clients-dot');
   if (!slides.length || !dots.length) return;
 
-  const INTERVAL = 4500;
+  const INTERVAL = 3000;
   let current = 0;
   let timer   = null;
 
