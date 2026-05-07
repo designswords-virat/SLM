@@ -17,3 +17,8 @@ Thumbs.db
 npm-debug.log*
 
 .vercel
+
+# Large source assets that exceed GitHub's 100MB single-file limit
+# (the loader uses video/slm-loader.mp4, which is the small reencoded copy)
+GIF/
+video/slm 16_9 logo.gif

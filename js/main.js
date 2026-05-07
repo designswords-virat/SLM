@@ -497,7 +497,8 @@ document.querySelectorAll('.counter[data-target]').forEach(el => countObs.observ
 })();
 
 /* ═══════════════════════════════════════
-   CLIENTS CAROUSEL — 2 slides, dot navigation, no auto-rotate
+   CLIENTS CAROUSEL — 2 slides, auto-rotate every 4.5s,
+   pause on hover/focus, click a dot to jump (resets the timer).
 ═══════════════════════════════════════ */
 (function initClientsCarousel() {
   const root = document.getElementById('clientsCarousel');
@@ -506,11 +507,36 @@ document.querySelectorAll('.counter[data-target]').forEach(el => countObs.observ
   const dots   = root.querySelectorAll('.clients-dot');
   if (!slides.length || !dots.length) return;
 
+  const INTERVAL = 4500;
+  let current = 0;
+  let timer   = null;
+
   function activate(idx) {
+    current = idx;
     slides.forEach((s, i) => s.classList.toggle('is-active', i === idx));
     dots.forEach((d, i)   => d.classList.toggle('is-active', i === idx));
   }
-  dots.forEach((dot, i) => dot.addEventListener('click', () => activate(i)));
+  function next() { activate((current + 1) % slides.length); }
+  function start() { stop(); timer = setInterval(next, INTERVAL); }
+  function stop()  { if (timer) { clearInterval(timer); timer = null; } }
+
+  dots.forEach((dot, i) => dot.addEventListener('click', () => {
+    activate(i);
+    if (timer) start(); // restart timer so the user has a full beat to read
+  }));
+
+  // Pause on hover / focus, resume on leave
+  root.addEventListener('mouseenter', stop);
+  root.addEventListener('mouseleave', start);
+  root.addEventListener('focusin',    stop);
+  root.addEventListener('focusout',   start);
+
+  // Pause when the tab is hidden (battery + visual sanity)
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden) stop(); else start();
+  });
+
+  start();
 })();
 
 /* ═══════════════════════════════════════

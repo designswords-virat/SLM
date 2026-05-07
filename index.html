@@ -154,12 +154,9 @@
 
 <!-- SITE LOADER -->
 <div id="siteLoader" class="site-loader" aria-hidden="true">
-  <div class="loader-stage">
-    <div class="loader-mark-wrap">
-      <img src="SLM Main logos/logo 1.png" class="loader-mark" alt="SLM" onerror="this.style.display='none'" />
-    </div>
-    <div class="loader-bar"></div>
-  </div>
+  <video class="loader-video" autoplay muted playsinline preload="auto" disableremoteplayback>
+    <source src="video/slm-loader.mp4" type="video/mp4" />
+  </video>
 </div>
 
 <!-- ═══════════════════════════════════════
@@ -400,19 +397,16 @@
       <div class="py-10 lg:py-20 pr-0 lg:pr-16 border-r-0 lg:border-r border-border flex flex-col gap-8 lg:gap-0 lg:justify-between"
            data-aos="fade-right" data-aos-duration="800">
 
-        <!-- Large heading -->
-        <div>
-          <div class="font-serif font-bold text-dark leading-[0.9] select-none"
-               style="font-size: clamp(36px, 5vw, 68px)">
-            <div>We</div>
-            <div>Build</div>
-          </div>
-
-          <!-- Cycling word, NO overflow hidden, animate with inline styles -->
-          <div class="font-serif font-bold text-orange mt-1 leading-[0.9]"
-               style="font-size: clamp(36px, 5vw, 68px)">
+        <!-- Large heading
+             Mobile  : "We Build [Word]" on a single line.
+             Desktop : 3 stacked lines (We / Build / [Word]). -->
+        <div class="wb-heading font-serif font-bold leading-[0.9] select-none"
+             style="font-size: clamp(28px, 5vw, 68px)">
+          <span class="wb-word text-dark">We</span>
+          <span class="wb-word text-dark">Build</span>
+          <span class="wb-word text-orange">
             <span id="cyclingWord" style="display:inline-block; will-change:transform,opacity;">Industrial</span>
-          </div>
+          </span>
         </div>
 
         <!-- Bottom: description + since badge -->
@@ -574,10 +568,10 @@
 <!-- ═══════════════════════════════════════
      4. FACTS AND FIGURES
 ═══════════════════════════════════════ -->
-<section id="facts" class="bg-[#F5F5F3] py-20 lg:py-24">
+<section id="facts" class="bg-[#F5F5F3] py-10 lg:py-24">
   <div class="max-w-screen-xl mx-auto px-6 lg:px-10">
 
-    <div class="text-center mb-14" data-aos="fade-up">
+    <div class="text-center mb-8 lg:mb-14" data-aos="fade-up">
       <p class="text-[11px] font-semibold tracking-[0.32em] uppercase text-orange flex items-center justify-center gap-3 mb-4">
         <span class="block w-6 h-px bg-orange"></span>By The Numbers<span class="block w-6 h-px bg-orange"></span>
       </p>
