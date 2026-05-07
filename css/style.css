@@ -1257,8 +1257,9 @@ img[loading="lazy"].is-loaded {
   background: #FFFFFF;
 }
 
-/* Mobile-only header (hidden on desktop) */
-.cr-mhead { display: none; }
+/* Mobile-only chrome (hidden on desktop) */
+.cr-mhead,
+.cr-mdots { display: none; }
 
 /* Each panel: absolute-stacked over the stage on desktop. Holds its
    own image, caption, and CTA so the mobile fallback can flow them. */
@@ -1500,7 +1501,35 @@ img[loading="lazy"].is-loaded {
   .cr-stage {
     background: #FFFFFF;
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    scroll-behavior: smooth;
+    scrollbar-width: none;
+  }
+  .cr-stage::-webkit-scrollbar { display: none; }
+
+  /* Mobile dots track (rendered by JS) */
+  .cr-mdots {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    padding: 22px 24px 8px;
+  }
+  .cr-mdot {
+    width: 28px;
+    height: 3px;
+    padding: 0;
+    background: rgba(17,24,39,0.18);
+    border: 0;
+    cursor: pointer;
+    transition: background 0.25s ease, width 0.25s ease;
+  }
+  .cr-mdot.is-active {
+    background: #F47721;
+    width: 44px;
   }
 
   /* Hide desktop-only chrome on mobile */
@@ -1540,17 +1569,19 @@ img[loading="lazy"].is-loaded {
     letter-spacing: -0.01em;
   }
 
-  /* Each panel becomes a stacked card */
+  /* Each panel = one slide in the horizontal scroll-snap track */
   .cr-panel {
     position: relative;
     inset: auto;
+    flex: 0 0 100%;
     width: 100%;
     height: auto;
     display: flex;
     flex-direction: column;
-    border-bottom: 1px solid #E5E7EB;
+    scroll-snap-align: start;
+    scroll-snap-stop: always;
+    border-bottom: 0;
   }
-  .cr-panel:last-of-type { border-bottom: 0; }
 
   /* Image: regular block at top of card (~50vh tall, never wider than viewport) */
   .cr-img {

@@ -530,6 +530,27 @@ document.querySelectorAll('.counter[data-target]').forEach(el => countObs.observ
   window.addEventListener('scroll', onScroll, { passive: true });
   window.addEventListener('resize', onScroll, { passive: true });
   onScroll();
+
+  /* ── Mobile horizontal carousel: dots follow scroll position ── */
+  const stage = sec.querySelector('.cr-stage');
+  const mdots = sec.querySelectorAll('.cr-mdot');
+  if (stage && mdots.length) {
+    let mActive = -1;
+    function onStageScroll() {
+      if (window.innerWidth >= 1024) return;     // dots only on mobile
+      const w = stage.clientWidth;
+      if (!w) return;
+      const idx = Math.round(stage.scrollLeft / w);
+      if (idx === mActive) return;
+      mActive = idx;
+      mdots.forEach((d, i) => d.classList.toggle('is-active', i === idx));
+    }
+    stage.addEventListener('scroll', onStageScroll, { passive: true });
+    mdots.forEach((dot, i) => dot.addEventListener('click', () => {
+      stage.scrollTo({ left: i * stage.clientWidth, behavior: 'smooth' });
+    }));
+    onStageScroll();
+  }
 })();
 
 /* ═══════════════════════════════════════
@@ -543,7 +564,7 @@ document.querySelectorAll('.counter[data-target]').forEach(el => countObs.observ
   const dots   = root.querySelectorAll('.clients-dot');
   if (!slides.length || !dots.length) return;
 
-  const INTERVAL = 3000;
+  const INTERVAL = 2000;
   let current = 0;
   let timer   = null;
 
