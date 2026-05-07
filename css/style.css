@@ -1511,25 +1511,29 @@ img[loading="lazy"].is-loaded {
   }
   .cr-stage::-webkit-scrollbar { display: none; }
 
-  /* Mobile dots track (rendered by JS) */
+  /* Mobile dots — matched to the .sv-dots style on the
+     Services & Expertise section: 6px circles that expand into a
+     20px orange pill when active. */
   .cr-mdots {
     display: flex;
     justify-content: center;
-    gap: 10px;
-    padding: 22px 24px 8px;
+    gap: 6px;
+    padding: 18px 24px 4px;
   }
   .cr-mdot {
-    width: 28px;
-    height: 3px;
+    width: 6px;
+    height: 6px;
     padding: 0;
-    background: rgba(17,24,39,0.18);
+    background: var(--c-border);
     border: 0;
+    border-radius: 50%;
     cursor: pointer;
-    transition: background 0.25s ease, width 0.25s ease;
+    transition: background 0.25s, width 0.25s, border-radius 0.25s;
   }
   .cr-mdot.is-active {
-    background: #F47721;
-    width: 44px;
+    background: var(--c-orange);
+    width: 20px;
+    border-radius: 3px;
   }
 
   /* Hide desktop-only chrome on mobile */
@@ -1583,12 +1587,12 @@ img[loading="lazy"].is-loaded {
     border-bottom: 0;
   }
 
-  /* Image: regular block at top of card (~50vh tall, never wider than viewport) */
+  /* Image: shorter block at top of card so the caption sits closer */
   .cr-img {
     position: relative;
     inset: auto;
     width: 100%;
-    height: clamp(240px, 52vh, 460px);
+    height: clamp(180px, 36vh, 300px);
     opacity: 1 !important;
     transform: none !important;
     transition: none !important;
