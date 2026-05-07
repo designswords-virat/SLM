@@ -22,3 +22,6 @@ npm-debug.log*
 # (the loader uses video/slm-loader.mp4, which is the small reencoded copy)
 GIF/
 video/slm 16_9 logo.gif
+
+# Original client logo PNGs (pre-transparency backup, local-only)
+slm logo/_originals/

@@ -324,12 +324,17 @@ if (mobileMenu) {
 
 /* ═══════════════════════════════════════
    CYCLING WORD, "We Build [X]"
-   Uses inline style transitions, no CSS class conflicts
+   Uses inline style transitions, no CSS class conflicts.
+   Robust against tab-switching: tracks pending timers and resets the
+   element to a clean visible state when the tab regains focus, so
+   the animation never gets "stuck" mid-transition.
 ═══════════════════════════════════════ */
 const WORDS   = ['Industrial', 'Hospitality', 'Institutional', 'Commercial', 'Residential', 'Public Works', 'Trust'];
 const wordEl  = document.getElementById('cyclingWord');
 const catRows = document.querySelectorAll('.cat-row');
 let   wordIdx = 0;
+let   wbStepTimer = 0;
+let   wbOutTimer  = 0;
 
 // Map word index → cat row index (Trust has no row, maps to -1 = all off)
 const CAT_MAP = [0, 1, 2, 3, 4, 5, -1];
@@ -346,7 +351,8 @@ function cycleOut(done) {
   setTransition(wordEl, 'transform 0.32s cubic-bezier(0.4,0,1,1), opacity 0.28s ease');
   wordEl.style.transform = 'translateY(-55px)';
   wordEl.style.opacity   = '0';
-  setTimeout(done, 330);
+  clearTimeout(wbOutTimer);
+  wbOutTimer = setTimeout(done, 330);
 }
 
 function cycleIn() {
@@ -365,8 +371,9 @@ function cycleIn() {
 }
 
 function scheduleNext() {
+  clearTimeout(wbStepTimer);
   const isTrust = WORDS[wordIdx] === 'Trust';
-  setTimeout(step, isTrust ? 2800 : 1900);
+  wbStepTimer = setTimeout(step, isTrust ? 2800 : 1900);
 }
 
 function step() {
@@ -379,12 +386,33 @@ function step() {
   });
 }
 
-// Initial state, show first word, highlight first cat
-if (wordEl) {
+// Reset to a clean visible state and restart the cycle from the
+// current word. Used on init and after the tab regains focus.
+function wbResume() {
+  if (!wordEl) return;
+  clearTimeout(wbStepTimer);
+  clearTimeout(wbOutTimer);
+  setTransition(wordEl, 'none');
+  wordEl.textContent     = WORDS[wordIdx];
   wordEl.style.transform = 'translateY(0)';
   wordEl.style.opacity   = '1';
-  highlightCat(0);
-  setTimeout(step, 2000);
+  void wordEl.offsetHeight;
+  highlightCat(CAT_MAP[wordIdx]);
+  scheduleNext();
+}
+
+if (wordEl) {
+  wbResume();
+  // If the tab is hidden and comes back, animations + setTimeout drift
+  // can leave the word stuck (translateY(-55px), opacity 0, etc.). Reset.
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden) {
+      clearTimeout(wbStepTimer);
+      clearTimeout(wbOutTimer);
+    } else {
+      wbResume();
+    }
+  });
 }
 
 /* ═══════════════════════════════════════
