@@ -29,3 +29,7 @@ slm logo/_originals/
 # Full-resolution project photos (source files, optimized copies live in
 # Images/Projects/ and ship; originals stay local-only)
 Images/Projects/_originals/
+
+# Source assets dropped here for ad-hoc uploads. Optimized copies are
+# committed under Images/About/, Images/Projects/, etc.
+flagship/
