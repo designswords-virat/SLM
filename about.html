@@ -80,49 +80,6 @@
 
   <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet" />
   <link rel="stylesheet" href="css/style.css" />
-
-  <!-- ════════════════════ BEGIN CLIENT DEMO ════════════════════
-       TEMPORARY: disables navigation away from this page to
-       Tools / Journey / Leadership / Projects / Project. The Home
-       tab and Home-anchor links (#services, #projects, #contact)
-       still work, so the client can return to the home page.
-       Runs after chrome.js injects the shared nav (so it can
-       neutralize injected links too).
-       To restore full site navigation: delete this entire block.
-  ════════════════════════════════════════════════════════════════ -->
-  <script>
-    (function () {
-      var pagePattern = /(tools|journey|leadership|projects|project)\.html/i;
-      function neutralize() {
-        document.querySelectorAll('a[href]').forEach(function (a) {
-          if (pagePattern.test(a.getAttribute('href') || '')) {
-            a.removeAttribute('href');
-            a.style.cursor = 'default';
-            a.addEventListener('click', function (e) { e.preventDefault(); });
-          }
-        });
-        document.querySelectorAll('[onclick]').forEach(function (el) {
-          if (pagePattern.test(el.getAttribute('onclick') || '')) {
-            el.removeAttribute('onclick');
-            el.style.cursor = 'default';
-          }
-        });
-      }
-      // Run once after chrome.js has injected nav/footer (DOMContentLoaded
-      // fires after inline scripts at end of body), then again on the next
-      // tick to catch any late-rendered links.
-      if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', function () {
-          neutralize();
-          setTimeout(neutralize, 0);
-        });
-      } else {
-        neutralize();
-        setTimeout(neutralize, 0);
-      }
-    })();
-  </script>
-  <!-- ════════════════════ END CLIENT DEMO ══════════════════════ -->
 </head>
 
 <body class="font-sans bg-white text-dark overflow-x-hidden page-about">
