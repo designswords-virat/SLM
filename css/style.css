@@ -847,9 +847,7 @@ img[loading="lazy"].is-loaded {
    reads as a polished poster rather than a full-bleed banner. */
 .home-reel {
   margin: 0;
-  padding: 64px 20px 32px;     /* extra top gap on mobile so the
-                                  flagship dots above don't crowd
-                                  the "Seven Decades on Film" eyebrow */
+  padding: 48px 20px;          /* symmetric top + bottom on mobile */
   background: #F5F5F3;         /* soft tonal break from the white
                                   flagship section above */
   position: relative;
@@ -1503,7 +1501,8 @@ img[loading="lazy"].is-loaded {
     display: flex;
     justify-content: center;
     gap: 6px;
-    padding: 18px 24px 4px;
+    padding: 18px 24px 36px;   /* extra bottom so the dots don't
+                                  butt up against the next section */
   }
   .cr-mdot {
     width: 6px;
