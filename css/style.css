@@ -850,7 +850,8 @@ img[loading="lazy"].is-loaded {
   padding: 64px 20px 32px;     /* extra top gap on mobile so the
                                   flagship dots above don't crowd
                                   the "Seven Decades on Film" eyebrow */
-  background: #FFFFFF;
+  background: #F5F5F3;         /* soft tonal break from the white
+                                  flagship section above */
   position: relative;
   overflow: hidden;
   width: 100%;
