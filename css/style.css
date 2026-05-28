@@ -1700,6 +1700,58 @@ img[loading="lazy"].is-loaded {
   color: rgba(255,255,255,0.4);
   margin-bottom: 7px;
 }
+/* Office location map block in the footer.
+   Wrapper is an <a> that opens Google Maps in a new tab. The iframe
+   inside has pointer-events disabled so the click always hits the
+   wrapper — keeps interaction simple and consistent on touch. */
+.footer-map {
+  display: block;
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  border: 1px solid rgba(255,255,255,0.10);
+  background: rgba(255,255,255,0.04);
+  overflow: hidden;
+  margin: 0 0 32px;
+  text-decoration: none;
+  transition: border-color 0.25s ease, transform 0.4s cubic-bezier(0.2,0.8,0.2,1);
+}
+.footer-map iframe {
+  width: 100%;
+  height: 100%;
+  border: 0;
+  display: block;
+  pointer-events: none;
+  filter: grayscale(20%) contrast(95%);
+  transition: filter 0.4s ease;
+}
+.footer-map-overlay {
+  position: absolute;
+  left: 12px;
+  bottom: 12px;
+  font-family: 'Inter', sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: #FFFFFF;
+  background: rgba(11,18,32,0.78);
+  padding: 8px 14px;
+  border-left: 2px solid #F47721;
+  pointer-events: none;
+  opacity: 0;
+  transform: translateY(6px);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+.footer-map:hover {
+  border-color: rgba(244,119,33,0.55);
+}
+.footer-map:hover iframe { filter: grayscale(0) contrast(100%); }
+.footer-map:hover .footer-map-overlay {
+  opacity: 1;
+  transform: translateY(0);
+}
+
 .footer-input {
   width: 100%;
   padding: 12px 14px;
