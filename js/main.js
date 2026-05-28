@@ -222,6 +222,16 @@
 })();
 
 // ── AOS
+// On mobile (< lg), swap any horizontal slide animations
+// (fade-right / fade-left) to fade-up so the on-scroll reveals match
+// the rest of the site instead of feeling sideways-jumpy on narrow
+// screens. Runs before AOS.init() so the swapped attribute is what
+// AOS reads when it indexes elements.
+if (window.matchMedia('(max-width: 1023px)').matches) {
+  document
+    .querySelectorAll('[data-aos="fade-right"], [data-aos="fade-left"]')
+    .forEach(el => el.setAttribute('data-aos', 'fade-up'));
+}
 AOS.init({ once: true, duration: 680, easing: 'ease-out-quad', offset: 55 });
 
 /* ═══════════════════════════════════════
