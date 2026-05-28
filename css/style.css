@@ -847,7 +847,9 @@ img[loading="lazy"].is-loaded {
    reads as a polished poster rather than a full-bleed banner. */
 .home-reel {
   margin: 0;
-  padding: 32px 20px;
+  padding: 64px 20px 32px;     /* extra top gap on mobile so the
+                                  flagship dots above don't crowd
+                                  the "Seven Decades on Film" eyebrow */
   background: #FFFFFF;
   position: relative;
   overflow: hidden;
