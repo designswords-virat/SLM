@@ -564,8 +564,8 @@ document.querySelectorAll('.counter[data-target]').forEach(el => countObs.observ
 })();
 
 /* ═══════════════════════════════════════
-   CLIENTS CAROUSEL — auto-rotate every 2s, click a dot to jump.
-   Always-on: only pauses when the tab is hidden (battery saver).
+   CLIENTS CAROUSEL — drag/swipe to change slide, click a dot to jump.
+   No auto-rotation: visitor controls the pace.
 ═══════════════════════════════════════ */
 (function initClientsCarousel() {
   const root = document.getElementById('clientsCarousel');
@@ -574,30 +574,47 @@ document.querySelectorAll('.counter[data-target]').forEach(el => countObs.observ
   const dots   = root.querySelectorAll('.clients-dot');
   if (!slides.length || !dots.length) return;
 
-  const INTERVAL = 2000;
   let current = 0;
-  let timer   = null;
 
   function activate(idx) {
+    if (idx < 0 || idx >= slides.length || idx === current) return;
     current = idx;
     slides.forEach((s, i) => s.classList.toggle('is-active', i === idx));
     dots.forEach((d, i)   => d.classList.toggle('is-active', i === idx));
   }
-  function next()  { activate((current + 1) % slides.length); }
-  function stop()  { if (timer) { clearInterval(timer); timer = null; } }
-  function start() { stop(); timer = setInterval(next, INTERVAL); }
+  function prev() { activate(current === 0 ? slides.length - 1 : current - 1); }
+  function next() { activate((current + 1) % slides.length); }
 
-  dots.forEach((dot, i) => dot.addEventListener('click', () => {
-    activate(i);
-    start();   // restart the timer so the user has a full beat to read
-  }));
+  dots.forEach((dot, i) => dot.addEventListener('click', () => activate(i)));
 
-  // Pause only when the tab is hidden (saves battery, no visual freeze)
-  document.addEventListener('visibilitychange', () => {
-    if (document.hidden) stop(); else start();
+  /* Pointer-driven drag/swipe. Threshold of 50px so accidental
+     micro-drags don't trigger a slide change. Works for mouse,
+     touch and pen via the unified pointer events. */
+  const SWIPE_THRESHOLD = 50;
+  let pointerDown = false;
+  let startX = 0;
+  let startY = 0;
+
+  root.addEventListener('pointerdown', e => {
+    pointerDown = true;
+    startX = e.clientX;
+    startY = e.clientY;
   });
-
-  start();
+  root.addEventListener('pointerup', e => {
+    if (!pointerDown) return;
+    pointerDown = false;
+    const dx = e.clientX - startX;
+    const dy = e.clientY - startY;
+    // Only act on mostly-horizontal drags
+    if (Math.abs(dx) > SWIPE_THRESHOLD && Math.abs(dx) > Math.abs(dy)) {
+      if (dx < 0) next(); else prev();
+    }
+  });
+  root.addEventListener('pointercancel', () => { pointerDown = false; });
+  // Prevent the browser from interpreting drag as image-drag/text-select
+  root.addEventListener('dragstart', e => e.preventDefault());
+  root.style.touchAction = 'pan-y';   // allow vertical page scroll, capture horizontal
+  root.style.cursor = 'grab';
 })();
 
 /* ═══════════════════════════════════════

@@ -1956,6 +1956,26 @@ button.bg-orange:hover,
   object-fit: contain;
 }
 
+/* "NA" placeholder for a missing client logo — matches the logo slot
+   footprint so the 3×3 grid keeps a clean alignment. */
+.clients-logo-na {
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  color: rgba(17, 24, 39, 0.32);
+  border: 1px dashed rgba(17, 24, 39, 0.18);
+  background: transparent;
+  user-select: none;
+}
+[data-theme="dark"] .clients-logo-na {
+  color: rgba(255, 255, 255, 0.32);
+  border-color: rgba(255, 255, 255, 0.18);
+}
+
 /* Dots */
 .clients-dots {
   display: flex;
