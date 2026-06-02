@@ -1934,11 +1934,20 @@ button.bg-orange:hover,
 }
 .clients-slide {
   grid-area: 1 / 1;       /* stack all slides in the same cell */
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  align-content: center;
-  gap: 48px 40px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);   /* 3 × 3 logo grid */
+  gap: 0;
+  /* Hairline grid drawn on the container (not the cells): the logos carry a
+     CSS filter that would recolor any border on the img itself, so the lines
+     live here instead. Outer frame = border; interior rules = two gradients
+     placing a 1px line at the right/bottom edge of every 1/3 tile. */
+  border: 1px solid var(--c-border);
+  background-image:
+    linear-gradient(to right,  transparent calc(100% - 1px), var(--c-border) calc(100% - 1px)),
+    linear-gradient(to bottom, transparent calc(100% - 1px), var(--c-border) calc(100% - 1px));
+  background-size: calc(100% / 3) 100%, 100% calc(100% / 3);
+  background-origin: padding-box;
+  background-clip: padding-box;
   opacity: 0;
   visibility: hidden;
   pointer-events: none;
@@ -1949,10 +1958,19 @@ button.bg-orange:hover,
   visibility: visible;
   pointer-events: auto;
 }
+/* Dark mode: the section flips to a dark plate, so render the grid as a
+   faint white hairline instead of the light-grey --c-border. */
+[data-theme="dark"] .clients-slide {
+  border-color: rgba(255, 255, 255, 0.12);
+  background-image:
+    linear-gradient(to right,  transparent calc(100% - 1px), rgba(255, 255, 255, 0.12) calc(100% - 1px)),
+    linear-gradient(to bottom, transparent calc(100% - 1px), rgba(255, 255, 255, 0.12) calc(100% - 1px));
+}
 .clients-slide .clients-logo-img {
-  flex: 0 0 calc((100% - 80px) / 3);    /* 3 cols, 2 × 40px gaps */
-  max-width: calc((100% - 80px) / 3);
-  height: 80px;
+  width: 100%;
+  height: 104px;          /* uniform cell; padding leaves ~64px for the logo */
+  padding: 20px 30px;
+  box-sizing: border-box;
   object-fit: contain;
 }
 
@@ -2002,15 +2020,11 @@ button.bg-orange:hover,
   outline-offset: 4px;
 }
 
-/* Tablet + mobile (< lg): tighten gaps + logo height. */
+/* Tablet + mobile (< lg): shorter grid cells. */
 @media (max-width: 1023px) {
-  .clients-slide {
-    gap: 32px 20px;
-  }
   .clients-slide .clients-logo-img {
-    flex: 0 0 calc((100% - 40px) / 3);   /* 3 cols, 2 × 20px gaps */
-    max-width: calc((100% - 40px) / 3);
-    height: 56px;
+    height: 84px;
+    padding: 16px 18px;
   }
   .clients-dots { margin-top: 28px; }
   .clients-dot { width: 28px; }
@@ -2019,11 +2033,9 @@ button.bg-orange:hover,
 
 /* Phone: a hair tighter so the logos read well on narrow screens */
 @media (max-width: 480px) {
-  .clients-slide { gap: 26px 12px; }
   .clients-slide .clients-logo-img {
-    flex: 0 0 calc((100% - 24px) / 3);
-    max-width: calc((100% - 24px) / 3);
-    height: 44px;
+    height: 64px;
+    padding: 12px 10px;
   }
 }
 
@@ -2055,6 +2067,15 @@ button.bg-orange:hover,
 }
 [data-theme="dark"] .clients-logo-img:not([src*="MacBook"]) {
   filter: invert(1) grayscale(100%) contrast(1.1);
+}
+/* Light-ink logos (white/pale artwork built for dark plates) — invert so they
+   read as dark ink in light mode, leave as-is on the dark plate. Must follow the
+   :not([src*="MacBook"]) rules above to win on equal specificity. */
+.clients-logo-img.clients-logo-inv {
+  filter: invert(1) grayscale(100%) contrast(1.1);
+}
+[data-theme="dark"] .clients-logo-img.clients-logo-inv {
+  filter: grayscale(100%);
 }
 .clients-strip-fwd {
   display: flex;

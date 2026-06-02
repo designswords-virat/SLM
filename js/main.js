@@ -564,8 +564,8 @@ document.querySelectorAll('.counter[data-target]').forEach(el => countObs.observ
 })();
 
 /* ═══════════════════════════════════════
-   CLIENTS CAROUSEL — drag/swipe to change slide, click a dot to jump.
-   No auto-rotation: visitor controls the pace.
+   CLIENTS CAROUSEL — auto-rotates; drag/swipe or click a dot to take over.
+   Autoplay pauses on hover/drag and while the tab is hidden.
 ═══════════════════════════════════════ */
 (function initClientsCarousel() {
   const root = document.getElementById('clientsCarousel');
@@ -585,7 +585,30 @@ document.querySelectorAll('.counter[data-target]').forEach(el => countObs.observ
   function prev() { activate(current === 0 ? slides.length - 1 : current - 1); }
   function next() { activate((current + 1) % slides.length); }
 
-  dots.forEach((dot, i) => dot.addEventListener('click', () => activate(i)));
+  /* ── Autoplay ──────────────────────────────────────────────── */
+  const AUTOPLAY_MS = 4500;
+  let timer = null;
+  let paused = false;   // true while hovered or dragging
+
+  function tick() { activate((current + 1) % slides.length); }
+  function startAutoplay() {
+    if (timer || paused || document.hidden) return;
+    timer = setInterval(tick, AUTOPLAY_MS);
+  }
+  function stopAutoplay() {
+    if (timer) { clearInterval(timer); timer = null; }
+  }
+  // Restart the countdown after any manual change so it doesn't jump instantly.
+  function restartAutoplay() { stopAutoplay(); startAutoplay(); }
+
+  dots.forEach((dot, i) => dot.addEventListener('click', () => {
+    activate(i);
+    restartAutoplay();
+  }));
+
+  // Pause while the pointer is over the carousel.
+  root.addEventListener('mouseenter', () => { paused = true; stopAutoplay(); });
+  root.addEventListener('mouseleave', () => { paused = false; startAutoplay(); });
 
   /* Pointer-driven drag/swipe. Threshold of 50px so accidental
      micro-drags don't trigger a slide change. Works for mouse,
@@ -599,6 +622,8 @@ document.querySelectorAll('.counter[data-target]').forEach(el => countObs.observ
     pointerDown = true;
     startX = e.clientX;
     startY = e.clientY;
+    paused = true;            // hold autoplay during the drag
+    stopAutoplay();
   });
   root.addEventListener('pointerup', e => {
     if (!pointerDown) return;
@@ -609,12 +634,25 @@ document.querySelectorAll('.counter[data-target]').forEach(el => countObs.observ
     if (Math.abs(dx) > SWIPE_THRESHOLD && Math.abs(dx) > Math.abs(dy)) {
       if (dx < 0) next(); else prev();
     }
+    paused = false;
+    restartAutoplay();        // fresh countdown after the interaction
   });
-  root.addEventListener('pointercancel', () => { pointerDown = false; });
+  root.addEventListener('pointercancel', () => {
+    pointerDown = false;
+    paused = false;
+    restartAutoplay();
+  });
   // Prevent the browser from interpreting drag as image-drag/text-select
   root.addEventListener('dragstart', e => e.preventDefault());
   root.style.touchAction = 'pan-y';   // allow vertical page scroll, capture horizontal
   root.style.cursor = 'grab';
+
+  // Don't rotate in a background tab; resume when it's visible again.
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden) stopAutoplay(); else startAutoplay();
+  });
+
+  startAutoplay();
 })();
 
 /* ═══════════════════════════════════════
