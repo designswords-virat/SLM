@@ -2027,26 +2027,32 @@ button.bg-orange:hover,
   }
 }
 
-/* ── Clients logos.
-   PNGs have transparent backgrounds (black was made alpha via ffmpeg).
-   Source ink is light/white, so light mode inverts to make it dark
-   on the light section. Dark mode shows the original light ink.
-   JPEG logos (added later) have white backgrounds + dark ink — no
-   filter in light mode, invert in dark mode. */
+/* ── Clients logos — uniform monochrome treatment.
+   Light mode: every logo renders as pure black-on-light.
+     • PNGs (transparent bg + white ink) invert to black ink on
+       transparent, then grayscale strips any residual tint.
+     • JPEGs (white bg + color ink) just get grayscale + contrast
+       so coloured marks (Stardom red, SKNAU green, Jaipur gold,
+       etc.) read as black on white.
+   Dark mode: same treatment flipped — every logo renders as pure
+   white-on-dark. */
 .clients-logo-img {
   height: 110px;
   width: auto;
   flex-shrink: 0;
   display: block;
-  filter: invert(1);
+  filter: invert(1) grayscale(100%);
 }
 .clients-logo-img[src$=".jpg"],
 .clients-logo-img[src$=".jpeg"] {
-  filter: none;
+  filter: grayscale(100%) contrast(1.1);
+}
+[data-theme="dark"] .clients-logo-img {
+  filter: grayscale(100%);
 }
 [data-theme="dark"] .clients-logo-img[src$=".jpg"],
 [data-theme="dark"] .clients-logo-img[src$=".jpeg"] {
-  filter: invert(1);
+  filter: invert(1) grayscale(100%) contrast(1.1);
 }
 .clients-strip-fwd {
   display: flex;
