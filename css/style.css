@@ -2030,12 +2030,22 @@ button.bg-orange:hover,
 /* ── Clients logos.
    PNGs have transparent backgrounds (black was made alpha via ffmpeg).
    Source ink is light/white, so light mode inverts to make it dark
-   on the light section. Dark mode shows the original light ink. */
+   on the light section. Dark mode shows the original light ink.
+   JPEG logos (added later) have white backgrounds + dark ink — no
+   filter in light mode, invert in dark mode. */
 .clients-logo-img {
   height: 110px;
   width: auto;
   flex-shrink: 0;
   display: block;
+  filter: invert(1);
+}
+.clients-logo-img[src$=".jpg"],
+.clients-logo-img[src$=".jpeg"] {
+  filter: none;
+}
+[data-theme="dark"] .clients-logo-img[src$=".jpg"],
+[data-theme="dark"] .clients-logo-img[src$=".jpeg"] {
   filter: invert(1);
 }
 .clients-strip-fwd {
