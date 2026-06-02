@@ -2028,14 +2028,18 @@ button.bg-orange:hover,
 }
 
 /* ── Clients logos — uniform monochrome treatment.
-   Light mode: every logo renders as pure black-on-light.
-     • PNGs (transparent bg + white ink) invert to black ink on
-       transparent, then grayscale strips any residual tint.
-     • JPEGs (white bg + color ink) just get grayscale + contrast
-       so coloured marks (Stardom red, SKNAU green, Jaipur gold,
-       etc.) read as black on white.
-   Dark mode: same treatment flipped — every logo renders as pure
-   white-on-dark. */
+   Two source families, both rendered as pure black-on-light /
+   white-on-dark:
+     1. Original macbook-exported PNGs (transparent bg + LIGHT ink)
+        → light mode: invert(1) flips ink to dark, grayscale removes
+          any residual hue.
+        → dark mode: grayscale only.
+     2. Logos exported via ffmpeg colorkey from JPG sources
+        (transparent bg + DARK ink, optionally colored). Identified
+        by the absence of "MacBook" in the src path.
+        → light mode: grayscale + contrast only (no invert).
+        → dark mode: add invert(1) so dark ink reads on dark plate.
+*/
 .clients-logo-img {
   height: 110px;
   width: auto;
@@ -2043,15 +2047,13 @@ button.bg-orange:hover,
   display: block;
   filter: invert(1) grayscale(100%);
 }
-.clients-logo-img[src$=".jpg"],
-.clients-logo-img[src$=".jpeg"] {
+.clients-logo-img:not([src*="MacBook"]) {
   filter: grayscale(100%) contrast(1.1);
 }
 [data-theme="dark"] .clients-logo-img {
   filter: grayscale(100%);
 }
-[data-theme="dark"] .clients-logo-img[src$=".jpg"],
-[data-theme="dark"] .clients-logo-img[src$=".jpeg"] {
+[data-theme="dark"] .clients-logo-img:not([src*="MacBook"]) {
   filter: invert(1) grayscale(100%) contrast(1.1);
 }
 .clients-strip-fwd {
