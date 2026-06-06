@@ -4265,12 +4265,13 @@ button.bg-orange,
 }
 .proj-thumb-img {
   transition: transform 1.1s cubic-bezier(0.22, 1, 0.36, 1);   /* smooth, eased zoom */
+  will-change: transform;
   width: 100%;
   height: 100%;
   object-fit: cover;
   display: block;
 }
-.proj-thumb-card:hover .proj-thumb-img { transform: scale(1.05); }
+.proj-thumb-card:hover .proj-thumb-img { transform: scale(1.05) translateZ(0); }
 
 /* Project detail layout (legacy - kept for safety) */
 .proj-detail-grid {
