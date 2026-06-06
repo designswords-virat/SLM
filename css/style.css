@@ -1404,11 +1404,27 @@ img[loading="lazy"].is-loaded {
   .ph-wrap { height: auto; }
   .ph-stage { position: static; height: auto; padding-top: 56px; }
   .ph-head { padding: 0 24px; margin-bottom: 24px; }
-  .ph-track { overflow-x: auto; -webkit-overflow-scrolling: touch; transform: none !important; gap: 16px; padding: 0 24px 20px; }
-  .ph-card { width: 82vw; height: auto; aspect-ratio: 4 / 3; }
+  .ph-track {
+    overflow-x: auto; -webkit-overflow-scrolling: touch; transform: none !important;
+    gap: 16px; padding: 0 24px 20px;
+    align-items: flex-start;          /* don't stretch cards to the tallest — keep uniform */
+    scroll-snap-type: x mandatory; scroll-padding: 24px;
+  }
+  .ph-card { width: 82vw; height: auto; aspect-ratio: 4 / 3; scroll-snap-align: start; }
   /* show the whole cover (fill width, no vertical crop) instead of cover-crop */
   .ph-card-img { background-size: contain; background-repeat: no-repeat; background-color: #161816; }
-  .ph-dots { display: none; }
+
+  /* Progress dots — matches the Services & Expertise carousel */
+  .ph-dots {
+    display: flex; justify-content: center; gap: 6px; margin-top: 16px;
+    position: static; transform: none;
+  }
+  .ph-dot {
+    width: 6px; height: 6px; padding: 0; border: 0; border-radius: 50%;
+    background: var(--c-border);
+    transition: background 0.25s, width 0.25s, border-radius 0.25s;
+  }
+  .ph-dot.is-active { background: var(--c-orange); width: 20px; border-radius: 3px; }
 }
 .sr-head > * {
   max-width: var(--hero-max-w);
@@ -4264,14 +4280,13 @@ button.bg-orange,
   border-color: var(--c-orange-40);
 }
 .proj-thumb-img {
-  transition: transform 1.1s cubic-bezier(0.22, 1, 0.36, 1);   /* smooth, eased zoom */
-  will-change: transform;
+  transition: transform 1.4s ease;   /* slow, even, smooth zoom (no fast/jerky start) */
   width: 100%;
   height: 100%;
   object-fit: cover;
   display: block;
 }
-.proj-thumb-card:hover .proj-thumb-img { transform: scale(1.05) translateZ(0); }
+.proj-thumb-card:hover .proj-thumb-img { transform: scale(1.06); }
 
 /* Project detail layout (legacy - kept for safety) */
 .proj-detail-grid {
@@ -7071,3 +7086,10 @@ em, i, .italic { font-style: normal !important; }
 .proj-cat-img { transition: transform 1.1s cubic-bezier(0.22, 1, 0.36, 1); will-change: transform; }
 .proj-cat-card:hover .proj-cat-img { transform: scale(1.05); }
 .proj-cat-img[data-parallax-pos] { object-position: center calc(50% + var(--ppos, 0px)); }
+
+/* ═══ Remove decorative orange eyebrow / accent lines site-wide ═══ */
+.ab-intro-bar, .ab-mv-bar, .ab-eyebrow-bar,
+.dir-eyebrow-bar, .tm-eyebrow-bar,
+.sr-bar, .cr-eyebrow-bar, .cr-mhead-bar,
+.home-reel-bar, .prj-rel-bar, .service-item-bar,
+.jn-hero-eyebrow .w-8 { display: none !important; }

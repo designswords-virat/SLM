@@ -504,12 +504,29 @@ document.querySelectorAll('.counter[data-target]').forEach(el => countObs.observ
       dots.forEach((d, i) => d.classList.toggle('is-active', i === idx));
     }
   }
-  // click a dot → smooth-scroll to that card's position in the pin
+  // click a dot → smooth-scroll to that card (mobile: scroll the track; desktop: scroll the pin)
   dots.forEach((d, i) => d.addEventListener('click', () => {
+    if (isMobile()) {
+      const card = track.children[i];
+      if (card) track.scrollTo({ left: card.offsetLeft - 24, behavior: 'smooth' });
+      return;
+    }
     const total = wrap.offsetHeight - window.innerHeight;
     const targetP = N > 1 ? i / (N - 1) : 0;
     window.scrollTo({ top: wrap.offsetTop + targetP * total, behavior: 'smooth' });
   }));
+  // mobile: sync the active dot to the native horizontal swipe position
+  track.addEventListener('scroll', () => {
+    if (!isMobile()) return;
+    const card = track.firstElementChild;
+    if (!card) return;
+    const w = card.getBoundingClientRect().width + 16;   // card + gap
+    const idx = Math.min(N - 1, Math.max(0, Math.round(track.scrollLeft / w)));
+    if (idx !== curDot) {
+      curDot = idx;
+      dots.forEach((d, i) => d.classList.toggle('is-active', i === idx));
+    }
+  }, { passive: true });
   function onScroll() { if (!raf) raf = requestAnimationFrame(update); }
   window.addEventListener('scroll', onScroll, { passive: true });
   window.addEventListener('resize', onScroll, { passive: true });
@@ -1080,7 +1097,7 @@ function renderProjectsPage(category) {
   grid.innerHTML = filtered.map(p => `
     <a href="project.html?id=${p.id}" class="proj-thumb-card" style="text-decoration:none;color:inherit;display:block">
       <div style="overflow:hidden;aspect-ratio:16/10">
-        <img src="${p.img}" alt="${p.name}" class="proj-thumb-img" loading="lazy" data-parallax-pos="0.12" />
+        <img src="${p.img}" alt="${p.name}" class="proj-thumb-img" loading="lazy" />
       </div>
       <div style="padding:20px;background:#fff">
         <p style="font-size:10px;font-weight:700;letter-spacing:0.28em;text-transform:uppercase;color:#F47721;margin-bottom:6px">${p.category}</p>
