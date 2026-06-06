@@ -1405,7 +1405,9 @@ img[loading="lazy"].is-loaded {
   .ph-stage { position: static; height: auto; padding-top: 56px; }
   .ph-head { padding: 0 24px; margin-bottom: 24px; }
   .ph-track { overflow-x: auto; -webkit-overflow-scrolling: touch; transform: none !important; gap: 16px; padding: 0 24px 20px; }
-  .ph-card { width: 82vw; height: 62vh; }
+  .ph-card { width: 82vw; height: auto; aspect-ratio: 4 / 3; }
+  /* show the whole cover (fill width, no vertical crop) instead of cover-crop */
+  .ph-card-img { background-size: contain; background-repeat: no-repeat; background-color: #161816; }
   .ph-dots { display: none; }
 }
 .sr-head > * {
@@ -2238,22 +2240,18 @@ button.bg-orange,
 
 .wb-heading {
   display: flex;
-  flex-wrap: wrap;
+  flex-direction: column;        /* always 2 rows: "We Build" / cycling word */
+  align-items: center;
+  row-gap: 0.06em;
+}
+.wb-heading .wb-row {
+  display: flex;
   align-items: baseline;
-  column-gap: 0.32em;
-  row-gap: 0.05em;
+  justify-content: center;
+  column-gap: 0.28em;
 }
 .wb-heading .wb-word { display: inline-block; }
 .wb-heading.is-center { justify-content: center; }
-@media (min-width: 1024px) {
-  .wb-heading.is-center { align-items: center; }
-  .wb-heading {
-    flex-direction: column;
-    column-gap: 0;
-    row-gap: 0;
-  }
-  .wb-heading .wb-word { display: block; }
-}
 
 /* ── Clients 3-slide carousel.
    Track is a single grid cell that contains all 3 slides stacked
@@ -3388,7 +3386,7 @@ button.bg-orange,
 }
 .jn-quote-text em {
   color: #F47721;
-  font-style: italic;
+  font-style: normal;
 }
 .jn-quote-line {
   width: 48px;
@@ -3867,7 +3865,7 @@ button.bg-orange,
   margin: 0 0 28px;
   letter-spacing: -0.01em;
 }
-.ld-quote-text em { color: var(--c-orange); font-style: italic; }
+.ld-quote-text em { color: var(--c-orange); font-style: normal; }
 .ld-quote-line {
   width: 48px;
   height: 1px;
@@ -3927,7 +3925,7 @@ button.bg-orange,
 }
 .ld-h2 em {
   color: var(--c-orange);
-  font-style: italic;
+  font-style: normal;
   font-weight: 500;
 }
 .ld-leaders-sub {
@@ -7029,17 +7027,42 @@ img[data-parallax] {
   .we-expand-card { width: 100% !important; height: auto; }
 }
 
-/* ═══ Tools hero reuses .ab-intro for text styling, but must NOT inherit
-       the About background image or its tall 185vh fixed-bg behaviour ═══ */
+/* ═══ Tools hero: same fixed-background parallax reveal as About,
+       but with a machine image behind the white card ═══ */
 .page-tools .ab-intro {
-  min-height: auto;
-  background-image: none;
-  background-color: #fff;
+  background-image: url('https://slmindia.in/wp-content/uploads/2025/12/9b3359a950e123125ec9093ae9338e7283b22286.jpg');
 }
-.page-tools .ab-intro::before { display: none; }
 
-/* About mobile: top hero image already clears the fixed nav, so the
-   hero card doesn't need the large nav-clearance top padding. */
+/* About + Tools mobile: the top hero image already clears the fixed nav,
+   so the hero card doesn't need the large nav-clearance top padding. */
 @media (max-width: 1023px) {
-  .page-about .ab-intro-inner { padding-top: 28px; }
+  .page-about .ab-intro-inner,
+  .page-tools .ab-intro-inner { padding-top: 28px; }
 }
+
+/* ═══ Dark mode: "We Build" section turns orange ═══ */
+[data-theme="dark"] .we-expand,
+[data-theme="dark"] .we-expand-card { background: #F47721; }
+[data-theme="dark"] .we-expand .wb-word.text-orange { color: #1F211F; }   /* cycling word: dark on orange */
+[data-theme="dark"] .we-expand .bg-orange { background-color: #1F211F; }  /* "Since 1954" badge stays visible */
+
+/* ═══ Mobile: kill any horizontal drift/overflow (no sticky elements active on mobile) ═══ */
+@media (max-width: 1023px) {
+  html, body { overflow-x: hidden; max-width: 100%; }
+}
+
+/* ═══ Mobile: tighter vertical rhythm site-wide (reduce excess whitespace) ═══
+   Only touches full-section py-* utilities (never hero pt-/pb- clearances)
+   and content-section custom classes — heroes keep their nav clearance.     */
+@media (max-width: 767px) {
+  .py-12, .py-14, .py-16, .py-20, .py-28 { padding-top: 2.5rem !important; padding-bottom: 2.5rem !important; }
+
+  .jn-stats, .ab-stats-band, .pd-main-wrap, .home-reel { padding-top: 40px; padding-bottom: 40px; }
+  .jn-quote, .jn-tl, .ld-intro, .ld-leaders,
+  .ab-principles, .ab-team, .ab-explore, .ab-mv,
+  .tm-stats-section { padding-top: 44px; padding-bottom: 46px; }
+  .tm-grid-wrap { padding-top: 28px; padding-bottom: 40px; }
+}
+
+/* ═══ No italic typefaces anywhere on the site ═══ */
+em, i, .italic { font-style: normal !important; }
