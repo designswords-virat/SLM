@@ -67,7 +67,7 @@
     tailwind.config = {
       theme: {
         extend: {
-          colors: { orange: '#F47721', 'orange-dk': '#D96218', dark: '#111827', muted: '#6B7280', border: '#E5E7EB', off: '#F8F8F6' },
+          colors: { orange: '#F47721', 'orange-dk': '#D96218', dark: '#1F211F', muted: '#6B7280', border: '#E5E7EB', off: '#FFFFFF' },
           fontFamily: { serif: ['"Archivo Black"', 'Impact', 'sans-serif'], sans: ['Inter', 'sans-serif'] }
         }
       }
@@ -75,7 +75,106 @@
   </script>
 
   <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet" />
-  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/style.css?v=57" />
+
+  <style>
+    /* ══ Journey hero — solid orange background (no glow / grid) ══ */
+    .jn-hero { background: #F47721; }
+    .jn-hero-glow, .jn-hero-grid { display: none !important; }
+    /* flip orange-on-orange text to white for legibility */
+    .jn-hero-eyebrow { color: #fff !important; }
+    .jn-hero-eyebrow > span:not([class]), .jn-hero-eyebrow .w-8 { background: #fff !important; }
+    .jn-hero-title, .jn-hero-title .jn-accent { color: #fff !important; }
+    .jn-hero-sub { color: rgba(255,255,255,0.9) !important; }
+    .jn-scroll-cue { color: #fff !important; }
+    .jn-scroll-cue-line { background: rgba(255,255,255,0.3) !important; }
+    .jn-scroll-cue-line::after { background: linear-gradient(to bottom, transparent, #fff) !important; }
+
+    /* ══ Journey timeline — alternating center-line layout ══ */
+    .jn2 { background: #fff; padding: 5rem 1.5rem 4.5rem; }
+    [data-theme="dark"] .jn2 { background: #1F211F; }
+    .jn2-wrap { max-width: 1080px; margin: 0 auto; }
+
+    .jn2-head { text-align: center; margin-bottom: 4rem; }
+    .jn2-eyebrow {
+      display: inline-block; font-size: 11px; font-weight: 600; letter-spacing: .32em;
+      text-transform: uppercase; color: #F47721; margin-bottom: 1rem;
+    }
+    .jn2-title {
+      font-family: 'Archivo Black','Impact',sans-serif; font-size: clamp(26px,3.4vw,42px);
+      line-height: 1.06; color: #1F211F;
+    }
+    [data-theme="dark"] .jn2-title { color: #F9FAFB; }
+
+    .jn2-rows { position: relative; }
+    .jn2-rail {
+      position: absolute; top: 0; bottom: 0; left: 50%; width: 2px;
+      transform: translateX(-50%) scaleY(0); transform-origin: top center;
+      background: #F47721;
+      transition: transform 1.6s cubic-bezier(.16,1,.3,1);
+    }
+    .jn2-rows.is-drawn .jn2-rail { transform: translateX(-50%) scaleY(1); }
+    /* dashed continuation tail (separate from the rail so it isn't scaled) */
+    .jn2-rows::after {
+      content: ""; position: absolute; left: 50%; transform: translateX(-50%);
+      bottom: -64px; width: 2px; height: 64px; opacity: 0; transition: opacity .5s ease 1.4s;
+      background: repeating-linear-gradient(#F47721 0 6px, transparent 6px 13px);
+    }
+    .jn2-rows.is-drawn::after { opacity: 1; }
+
+    .jn2-row {
+      position: relative; display: grid; grid-template-columns: 1fr 48px 1fr;
+      align-items: center; padding: 2.6rem 0;
+    }
+    .jn2-year {
+      order: 1; text-align: right; padding-right: 2.75rem;
+      font-family: 'Archivo Black','Impact',sans-serif; font-weight: 400;
+      font-size: clamp(38px,5.2vw,82px); line-height: .92; color: #F47721;
+    }
+    .jn2-dot {
+      order: 2; width: 16px; height: 16px; border-radius: 50%; margin: 0 auto;
+      background: #F47721; border: 3px solid #fff; box-shadow: 0 0 0 2px #F47721; z-index: 2;
+    }
+    [data-theme="dark"] .jn2-dot { border-color: #1F211F; }
+    .jn2-text { order: 3; text-align: left; padding-left: 2.75rem; }
+    .jn2-text h3 {
+      font-family: 'Archivo Black','Impact',sans-serif; font-size: 1.3rem; line-height: 1.2;
+      color: #1F211F; margin-bottom: .6rem;
+    }
+    [data-theme="dark"] .jn2-text h3 { color: #F9FAFB; }
+    .jn2-text p { color: #6B7280; font-size: .96rem; line-height: 1.72; margin-bottom: .9rem; }
+    .jn2-tag {
+      display: inline-flex; align-items: center; gap: .55rem; font-size: .76rem;
+      font-weight: 600; letter-spacing: .04em; color: #1F211F;
+    }
+    .jn2-tag::before { content: ""; width: 18px; height: 2px; background: #F47721; flex-shrink: 0; }
+    [data-theme="dark"] .jn2-tag { color: #E5E7EB; }
+
+    /* alternate rows — year right, text left */
+    .jn2-row.alt .jn2-year { order: 3; text-align: left; padding-right: 0; padding-left: 2.75rem; }
+    .jn2-row.alt .jn2-text { order: 1; text-align: right; padding-left: 0; padding-right: 2.75rem; }
+    .jn2-row.alt .jn2-tag { flex-direction: row-reverse; }
+
+    /* end marker */
+    .jn2-end { position: relative; text-align: center; padding-top: 4.5rem; }
+    .jn2-end-dot { display: block; width: 12px; height: 12px; border-radius: 50%; background: #F47721; margin: 0 auto .9rem; }
+    .jn2-end-lbl { font-size: 11px; font-weight: 600; letter-spacing: .28em; text-transform: uppercase; color: #6B7280; }
+
+    @media (max-width: 768px) {
+      .jn2 { padding: 3.5rem 1.25rem 3rem; }
+      .jn2-head { margin-bottom: 2.5rem; }
+      .jn2-rail { left: 8px; transform: scaleY(0); }
+      .jn2-rows.is-drawn .jn2-rail { transform: scaleY(1); }
+      .jn2-rows::after { left: 8px; transform: none; bottom: -48px; height: 48px; }
+      .jn2-row, .jn2-row.alt { grid-template-columns: 1fr; padding: 1.4rem 0 1.4rem 2.5rem; }
+      .jn2-dot { position: absolute; left: 8px; top: 1.9rem; transform: translateX(-50%); margin: 0; }
+      .jn2-year, .jn2-row.alt .jn2-year { order: 0; text-align: left; padding: 0 0 .4rem; font-size: 44px; }
+      .jn2-text, .jn2-row.alt .jn2-text { order: 0; text-align: left; padding: 0; }
+      .jn2-row.alt .jn2-tag { flex-direction: row; }
+      .jn2-end { text-align: left; padding-left: 2.5rem; }
+      .jn2-end-dot { margin: 0 0 .9rem; }
+    }
+  </style>
 </head>
 
 <body class="font-sans bg-white text-dark overflow-x-hidden page-journey">
@@ -131,237 +230,101 @@
 
   <span id="journey-timeline" class="sr-anchor" aria-hidden="true"></span>
 
-  <!-- ── TIMELINE ── -->
-  <section class="jn-tl" id="jnTimeline">
-    <div class="jn-tl-wrap">
+  <!-- ── TIMELINE — alternating center-line ── -->
+  <section class="jn2" id="jnTimeline2">
+    <div class="jn2-wrap">
 
-      <aside class="jn-side">
-        <div class="jn-side-inner">
-          <p class="jn-side-eyebrow"><span class="w-8 h-px bg-orange"></span>Seven Decades</p>
-          <h2 class="jn-side-title">Milestones<br/>That Shaped<br/>Us.</h2>
-          <p class="jn-side-sub">A chronicle of the projects, partnerships and principles that built SLM over seven decades.</p>
+      <div class="jn2-head" data-aos="fade-up">
+        <span class="jn2-eyebrow">Seven Decades</span>
+        <h2 class="jn2-title">Milestones That Shaped Us</h2>
+      </div>
 
-          <!-- Sticky block — only the Currently-Viewing panel + year nav pin to the top -->
-          <div class="jn-side-sticky">
-            <div class="jn-active">
-              <p class="jn-active-lbl">Currently Viewing</p>
-              <div class="jn-active-count">
-                <span id="jnCountNum">01</span>
-                <span class="jn-active-sep">/</span>
-                <span id="jnCountTotal">08</span>
-              </div>
-              <div class="jn-active-rail"><div id="jnRailFill"></div></div>
-              <h4 class="jn-active-title" id="jnActiveTitle">The Beginning</h4>
-              <p class="jn-active-year" id="jnActiveYear">1954</p>
-            </div>
+      <div class="jn2-rows">
+        <div class="jn2-rail" aria-hidden="true"></div>
 
-            <nav class="jn-nav" aria-label="Timeline quick-nav">
-              <a class="jn-nav-item" data-idx="0"><span class="jn-nav-y">1954</span><span class="jn-nav-n">The Beginning</span></a>
-              <a class="jn-nav-item" data-idx="1"><span class="jn-nav-y">1960</span><span class="jn-nav-n">Industrial Entry</span></a>
-              <a class="jn-nav-item" data-idx="2"><span class="jn-nav-y">1970</span><span class="jn-nav-n">Government Projects</span></a>
-              <a class="jn-nav-item" data-idx="3"><span class="jn-nav-y">1980</span><span class="jn-nav-n">Blue-Chip Era</span></a>
-              <a class="jn-nav-item" data-idx="4"><span class="jn-nav-y">1990</span><span class="jn-nav-n">Hospitality Era</span></a>
-              <a class="jn-nav-item" data-idx="5"><span class="jn-nav-y">2000</span><span class="jn-nav-n">Hospitality Boom</span></a>
-              <a class="jn-nav-item" data-idx="6"><span class="jn-nav-y">2010</span><span class="jn-nav-n">Township Scale</span></a>
-              <a class="jn-nav-item" data-idx="7"><span class="jn-nav-y">2020</span><span class="jn-nav-n">Present Day</span></a>
-            </nav>
-          </div>
-        </div>
-      </aside>
-
-      <div class="jn-cards">
-        <div class="jn-rail-vert" aria-hidden="true">
-          <div class="jn-rail-bg"></div>
-          <div class="jn-rail-fill" id="jnTrackFill"></div>
-        </div>
-
-        <article class="jn-m" data-idx="0" data-year="1954" data-title="The Beginning">
-          <header class="jn-m-strip">
-            <div class="jn-m-marker"><span class="jn-m-marker-ring"></span><span class="jn-m-marker-dot"></span></div>
-            <div class="jn-m-connector"></div>
-            <h4 class="jn-m-strip-year">1954</h4>
-            <span class="jn-m-strip-sep">•</span>
-            <span class="jn-m-strip-tag">The Beginning</span>
-          </header>
-          <div class="jn-m-card">
-            <div class="jn-m-image">
-              <div class="jn-m-curtain"></div>
-              <img src="https://slmindia.in/wp-content/uploads/2025/09/f1fd0261ead2a207809ea0650704eb3c4297dc48-1024x1006.png" alt="Late Shri Sohan Lal Mathur" loading="lazy" />
-              <div class="jn-m-img-grad"></div>
-              <div class="jn-m-img-meta"><span class="jn-m-img-index">01 / 08</span><span class="jn-m-img-line"></span></div>
-            </div>
-            <div class="jn-m-text">
-              <h3 class="jn-m-head">Foundation Laid in Dust</h3>
-              <p class="jn-m-body">Late Shri Sohan Lal Mathur laid the foundation of SLM, beginning with Rajasthan's earliest bitumen roads, the Mehla-Jobner and Tonk-Malpura stretches. First stones. First trust.</p>
-              <div class="jn-m-meta"><span class="jn-m-meta-dot"></span><span>Mehla-Jobner · Tonk-Malpura</span></div>
-            </div>
+        <article class="jn2-row" data-aos="fade-up">
+          <div class="jn2-year">1954</div>
+          <span class="jn2-dot" aria-hidden="true"></span>
+          <div class="jn2-text">
+            <h3>Foundation Laid in Dust</h3>
+            <p>Late Shri Sohan Lal Mathur laid the foundation of SLM, beginning with Rajasthan's earliest bitumen roads — the Mehla-Jobner and Tonk-Malpura stretches. First stones. First trust.</p>
+            <span class="jn2-tag">Mehla-Jobner · Tonk-Malpura</span>
           </div>
         </article>
 
-        <article class="jn-m" data-idx="1" data-year="1960" data-title="Industrial Entry">
-          <header class="jn-m-strip">
-            <div class="jn-m-marker"><span class="jn-m-marker-ring"></span><span class="jn-m-marker-dot"></span></div>
-            <div class="jn-m-connector"></div>
-            <h4 class="jn-m-strip-year">1960</h4>
-            <span class="jn-m-strip-sep">•</span>
-            <span class="jn-m-strip-tag">Industrial Entry</span>
-          </header>
-          <div class="jn-m-card">
-            <div class="jn-m-image">
-              <div class="jn-m-curtain"></div>
-              <img src="https://slmindia.in/wp-content/uploads/2025/10/04cfe3bc6c5376a8e47d33fba948568d0936cf6e-1024x556.png" alt="Early industrial works" loading="lazy" />
-              <div class="jn-m-img-grad"></div>
-              <div class="jn-m-img-meta"><span class="jn-m-img-index">02 / 08</span><span class="jn-m-img-line"></span></div>
-            </div>
-            <div class="jn-m-text">
-              <h3 class="jn-m-head">Beyond Roads, Into Factories</h3>
-              <p class="jn-m-body">Industrial entry via Rohtas Industries and Kamani Engineering Limited, SLM's first major pivot from public infrastructure into manufacturing-sector construction.</p>
-              <div class="jn-m-meta"><span class="jn-m-meta-dot"></span><span>Rohtas Industries · Kamani Engineering</span></div>
-            </div>
+        <article class="jn2-row alt" data-aos="fade-up">
+          <div class="jn2-year">1960</div>
+          <span class="jn2-dot" aria-hidden="true"></span>
+          <div class="jn2-text">
+            <h3>Beyond Roads, Into Factories</h3>
+            <p>Industrial entry via Rohtas Industries and Kamani Engineering Limited — SLM's first major pivot from public infrastructure into manufacturing-sector construction.</p>
+            <span class="jn2-tag">Rohtas Industries · Kamani Engineering</span>
           </div>
         </article>
 
-        <article class="jn-m" data-idx="2" data-year="1970" data-title="Government Projects">
-          <header class="jn-m-strip">
-            <div class="jn-m-marker"><span class="jn-m-marker-ring"></span><span class="jn-m-marker-dot"></span></div>
-            <div class="jn-m-connector"></div>
-            <h4 class="jn-m-strip-year">1970</h4>
-            <span class="jn-m-strip-sep">•</span>
-            <span class="jn-m-strip-tag">Government Projects</span>
-          </header>
-          <div class="jn-m-card">
-            <div class="jn-m-image">
-              <div class="jn-m-curtain"></div>
-              <img src="https://slmindia.in/wp-content/uploads/2025/11/Screenshot-2025-09-16-150329-1024x683.jpg" alt="Rajasthan Police Academy" loading="lazy" />
-              <div class="jn-m-img-grad"></div>
-              <div class="jn-m-img-meta"><span class="jn-m-img-index">03 / 08</span><span class="jn-m-img-line"></span></div>
-            </div>
-            <div class="jn-m-text">
-              <h3 class="jn-m-head">Building for the Public</h3>
-              <p class="jn-m-body">Started with government infrastructure: the Rajasthan Police Academy and the Open-Air Theatre at Ramniwas Bagh, among the earliest landmark civic assignments.</p>
-              <div class="jn-m-meta"><span class="jn-m-meta-dot"></span><span>Rajasthan Police Academy · Ramniwas Bagh</span></div>
-            </div>
+        <article class="jn2-row" data-aos="fade-up">
+          <div class="jn2-year">1970</div>
+          <span class="jn2-dot" aria-hidden="true"></span>
+          <div class="jn2-text">
+            <h3>Building for the Public</h3>
+            <p>Started with government infrastructure: the Rajasthan Police Academy and the Open-Air Theatre at Ramniwas Bagh, among the earliest landmark civic assignments.</p>
+            <span class="jn2-tag">Rajasthan Police Academy · Ramniwas Bagh</span>
           </div>
         </article>
 
-        <article class="jn-m" data-idx="3" data-year="1980" data-title="Blue-Chip Era">
-          <header class="jn-m-strip">
-            <div class="jn-m-marker"><span class="jn-m-marker-ring"></span><span class="jn-m-marker-dot"></span></div>
-            <div class="jn-m-connector"></div>
-            <h4 class="jn-m-strip-year">1980</h4>
-            <span class="jn-m-strip-sep">•</span>
-            <span class="jn-m-strip-tag">Blue-Chip Era</span>
-          </header>
-          <div class="jn-m-card">
-            <div class="jn-m-image">
-              <div class="jn-m-curtain"></div>
-              <img src="https://slmindia.in/wp-content/uploads/2025/11/edcf4554df9ea0c5aeeb8f89d57d54f3470ce6cd-1-1024x683.jpg" alt="Hindustan Zinc &amp; Birla Cement works" loading="lazy" />
-              <div class="jn-m-img-grad"></div>
-              <div class="jn-m-img-meta"><span class="jn-m-img-index">04 / 08</span><span class="jn-m-img-line"></span></div>
-            </div>
-            <div class="jn-m-text">
-              <h3 class="jn-m-head">Hindustan Zinc &amp; Birla Cement</h3>
-              <p class="jn-m-body">Public works with Hindustan Zinc and Birla Cement, corporate offices, staff quarters, hospitals and the Birla Cement Airstrip at Chittorgarh.</p>
-              <div class="jn-m-meta"><span class="jn-m-meta-dot"></span><span>Hindustan Zinc · Birla Corporation</span></div>
-            </div>
+        <article class="jn2-row alt" data-aos="fade-up">
+          <div class="jn2-year">1980</div>
+          <span class="jn2-dot" aria-hidden="true"></span>
+          <div class="jn2-text">
+            <h3>Hindustan Zinc &amp; Birla Cement</h3>
+            <p>Public works with Hindustan Zinc and Birla Cement — corporate offices, staff quarters, hospitals and the Birla Cement Airstrip at Chittorgarh.</p>
+            <span class="jn2-tag">Hindustan Zinc · Birla Corporation</span>
           </div>
         </article>
 
-        <article class="jn-m" data-idx="4" data-year="1990" data-title="Hospitality Era">
-          <header class="jn-m-strip">
-            <div class="jn-m-marker"><span class="jn-m-marker-ring"></span><span class="jn-m-marker-dot"></span></div>
-            <div class="jn-m-connector"></div>
-            <h4 class="jn-m-strip-year">1990</h4>
-            <span class="jn-m-strip-sep">•</span>
-            <span class="jn-m-strip-tag">Hospitality Era</span>
-          </header>
-          <div class="jn-m-card">
-            <div class="jn-m-image">
-              <div class="jn-m-curtain"></div>
-              <img src="https://slmindia.in/wp-content/uploads/2025/09/b221a8a76143e2a24b678d9222a0b0c575b97849-1024x576.jpg" alt="The Oberoi Vanyavilas" loading="lazy" />
-              <div class="jn-m-img-grad"></div>
-              <div class="jn-m-img-meta"><span class="jn-m-img-index">05 / 08</span><span class="jn-m-img-line"></span></div>
-            </div>
-            <div class="jn-m-text">
-              <h3 class="jn-m-head">The Vanyavilas Benchmark</h3>
-              <p class="jn-m-body">Partnering with leading architects, delivering landmark projects including Oberoi Vanyavilas, India's ultra-luxury wildlife resort benchmark in Ranthambore.</p>
-              <div class="jn-m-meta"><span class="jn-m-meta-dot"></span><span>Oberoi Vanyavilas · Ranthambore</span></div>
-            </div>
+        <article class="jn2-row" data-aos="fade-up">
+          <div class="jn2-year">1990</div>
+          <span class="jn2-dot" aria-hidden="true"></span>
+          <div class="jn2-text">
+            <h3>The Vanyavilas Benchmark</h3>
+            <p>Partnering with leading architects, delivering landmark projects including Oberoi Vanyavilas — India's ultra-luxury wildlife resort benchmark in Ranthambore.</p>
+            <span class="jn2-tag">Oberoi Vanyavilas · Ranthambore</span>
           </div>
         </article>
 
-        <article class="jn-m" data-idx="5" data-year="2000" data-title="Hospitality Boom">
-          <header class="jn-m-strip">
-            <div class="jn-m-marker"><span class="jn-m-marker-ring"></span><span class="jn-m-marker-dot"></span></div>
-            <div class="jn-m-connector"></div>
-            <h4 class="jn-m-strip-year">2000</h4>
-            <span class="jn-m-strip-sep">•</span>
-            <span class="jn-m-strip-tag">Hospitality Boom</span>
-          </header>
-          <div class="jn-m-card">
-            <div class="jn-m-image">
-              <div class="jn-m-curtain"></div>
-              <img src="https://slmindia.in/wp-content/uploads/2025/10/d1abc614572c9cd5df25c6e883ba6151898c2ed9-1-1024x682.jpg" alt="Gold Palace" loading="lazy" />
-              <div class="jn-m-img-grad"></div>
-              <div class="jn-m-img-meta"><span class="jn-m-img-index">06 / 08</span><span class="jn-m-img-line"></span></div>
-            </div>
-            <div class="jn-m-text">
-              <h3 class="jn-m-head">Hotels &amp; High-Rises</h3>
-              <p class="jn-m-body">Hospitality boom, Gold Palace, Hotel Paradise (Ramada), alongside multi-storey premium residential launches like Akshat Nilay in Civil Lines, Jaipur.</p>
-              <div class="jn-m-meta"><span class="jn-m-meta-dot"></span><span>Gold Palace · Akshat Nilay</span></div>
-            </div>
+        <article class="jn2-row alt" data-aos="fade-up">
+          <div class="jn2-year">2000</div>
+          <span class="jn2-dot" aria-hidden="true"></span>
+          <div class="jn2-text">
+            <h3>Hotels &amp; High-Rises</h3>
+            <p>Hospitality boom — Gold Palace, Hotel Paradise (Ramada) — alongside multi-storey premium residential launches like Akshat Nilay in Civil Lines, Jaipur.</p>
+            <span class="jn2-tag">Gold Palace · Akshat Nilay</span>
           </div>
         </article>
 
-        <article class="jn-m" data-idx="6" data-year="2010" data-title="Township Scale">
-          <header class="jn-m-strip">
-            <div class="jn-m-marker"><span class="jn-m-marker-ring"></span><span class="jn-m-marker-dot"></span></div>
-            <div class="jn-m-connector"></div>
-            <h4 class="jn-m-strip-year">2010</h4>
-            <span class="jn-m-strip-sep">•</span>
-            <span class="jn-m-strip-tag">Township Scale</span>
-          </header>
-          <div class="jn-m-card">
-            <div class="jn-m-image">
-              <div class="jn-m-curtain"></div>
-              <img src="https://slmindia.in/wp-content/uploads/2025/10/5cdb493112b6917c60635d70a0cd70cc315d6169-1-1024x576.png" alt="The Westin Pushkar" loading="lazy" />
-              <div class="jn-m-img-grad"></div>
-              <div class="jn-m-img-meta"><span class="jn-m-img-index">07 / 08</span><span class="jn-m-img-line"></span></div>
-            </div>
-            <div class="jn-m-text">
-              <h3 class="jn-m-head">Integrated Developments</h3>
-              <p class="jn-m-body">Township-scale delivery, Akshat Meadows, paired with five-star resorts like The Westin Pushkar and Stardom, plus SEZ-grade industrial facilities at Sitapura.</p>
-              <div class="jn-m-meta"><span class="jn-m-meta-dot"></span><span>Akshat Meadows · Westin Pushkar</span></div>
-            </div>
+        <article class="jn2-row" data-aos="fade-up">
+          <div class="jn2-year">2010</div>
+          <span class="jn2-dot" aria-hidden="true"></span>
+          <div class="jn2-text">
+            <h3>Integrated Developments</h3>
+            <p>Township-scale delivery — Akshat Meadows — paired with five-star resorts like The Westin Pushkar and Stardom, plus SEZ-grade industrial facilities at Sitapura.</p>
+            <span class="jn2-tag">Akshat Meadows · Westin Pushkar</span>
           </div>
         </article>
 
-        <article class="jn-m" data-idx="7" data-year="2020" data-title="Present Day">
-          <header class="jn-m-strip">
-            <div class="jn-m-marker"><span class="jn-m-marker-ring"></span><span class="jn-m-marker-dot"></span></div>
-            <div class="jn-m-connector"></div>
-            <h4 class="jn-m-strip-year">2020</h4>
-            <span class="jn-m-strip-sep">•</span>
-            <span class="jn-m-strip-tag">Present Day</span>
-          </header>
-          <div class="jn-m-card">
-            <div class="jn-m-image">
-              <div class="jn-m-curtain"></div>
-              <img src="https://slmindia.in/wp-content/uploads/2025/11/f7af9c5e16aa703aee16ab27846bfb3150abd216-1024x576.jpg" alt="Hare Krishna Movement Cultural Complex" loading="lazy" />
-              <div class="jn-m-img-grad"></div>
-              <div class="jn-m-img-meta"><span class="jn-m-img-index">08 / 08</span><span class="jn-m-img-line"></span></div>
-            </div>
-            <div class="jn-m-text">
-              <h3 class="jn-m-head">India's Largest Assignments</h3>
-              <p class="jn-m-body">India's largest auto foundries, educational institutes and spiritual complexes, including the 17-storey Gupt Vrindavan Dham cultural complex at Jagatpura.</p>
-              <div class="jn-m-meta"><span class="jn-m-meta-dot"></span><span>Gupt Vrindavan Dham · Jagatpura</span></div>
-            </div>
+        <article class="jn2-row alt" data-aos="fade-up">
+          <div class="jn2-year">2020</div>
+          <span class="jn2-dot" aria-hidden="true"></span>
+          <div class="jn2-text">
+            <h3>India's Largest Assignments</h3>
+            <p>India's largest auto foundries, educational institutes and spiritual complexes — including the 17-storey Gupt Vrindavan Dham cultural complex at Jagatpura.</p>
+            <span class="jn2-tag">Gupt Vrindavan Dham · Jagatpura</span>
           </div>
         </article>
 
-        <div class="jn-rail-end" aria-hidden="true">
-          <div class="jn-rail-end-dot"></div>
-          <p class="jn-rail-end-lbl">The Story Continues</p>
+        <div class="jn2-end" aria-hidden="true">
+          <span class="jn2-end-dot"></span>
+          <p class="jn2-end-lbl">The Story Continues</p>
         </div>
 
       </div>
@@ -402,24 +365,6 @@
     </div>
   </section>
 
-  <!-- CTA (site-wide standard) -->
-  <section class="bg-dark py-20 lg:py-24 relative overflow-hidden" aria-label="Contact">
-    <div class="absolute top-0 right-0 w-[40%] h-full opacity-5" style="background: radial-gradient(circle at right, #F47721, transparent 70%)"></div>
-    <div class="relative max-w-3xl mx-auto px-6 lg:px-10 text-center">
-      <p class="text-[11px] font-bold tracking-[0.32em] uppercase text-orange mb-5">Speak To Our Team</p>
-      <h2 class="font-serif text-3xl lg:text-5xl font-semibold text-white leading-tight mb-5">
-        Ready to build your<br/><span class="text-orange">next landmark</span>
-      </h2>
-      <p class="text-white/60 text-[15px] leading-relaxed max-w-xl mx-auto mb-9">
-        Reach the partners directly for project-level discussions.
-      </p>
-      <a href="index.html#contact" data-magnetic
-         class="inline-flex items-center gap-3 bg-orange text-white text-[12px] font-bold tracking-[0.1em] uppercase px-8 py-4 hover:bg-orange-dk transition-colors">
-        Explore Now
-        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-      </a>
-    </div>
-  </section>
 
 </main>
 
@@ -428,8 +373,46 @@
 
 <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
 <script src="https://unpkg.com/lenis@1.1.20/dist/lenis.min.js"></script>
-<script src="js/chrome.js"></script>
-<script src="js/main.js"></script>
+<script src="js/chrome.js?v=56"></script>
+<script src="js/main.js?v=56"></script>
+
+<!-- Stats counter animation (self-contained — the redesigned timeline no longer uses the legacy journey JS) -->
+<script>
+(function(){
+  var counters = document.querySelectorAll('.jn-counter');
+  if (!counters.length) return;
+  var obs = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      if (e.isIntersecting && e.target.dataset.done !== '1') {
+        e.target.dataset.done = '1';
+        var t = parseInt(e.target.dataset.target, 10);
+        var suffix = e.target.dataset.suffix || '';
+        var start = performance.now();
+        (function tick(now){
+          var p = Math.min(1, (now - start) / 1500);
+          var eased = 1 - Math.pow(1 - p, 3);
+          e.target.textContent = Math.round(t * eased) + suffix;
+          if (p < 1) requestAnimationFrame(tick);
+        })(start);
+        obs.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.5 });
+  counters.forEach(function(c){ obs.observe(c); });
+})();
+
+// Timeline rail "draw" animation — grows the center line when it scrolls into view
+(function(){
+  var rows = document.querySelector('.jn2-rows');
+  if (!rows) return;
+  var io = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      if (e.isIntersecting) { rows.classList.add('is-drawn'); io.disconnect(); }
+    });
+  }, { threshold: 0.12 });
+  io.observe(rows);
+})();
+</script>
 
 </body>
 </html>

@@ -43,7 +43,7 @@
       <li><a href="${HOME}#services" class="nav-link text-[13px] font-medium text-white/85 hover:text-white transition-colors">Services</a></li>
       <li><a href="tools.html"       class="nav-link text-[13px] font-medium text-white/85 hover:text-white transition-colors">Tools</a></li>
       <li><a href="journey.html"     class="nav-link text-[13px] font-medium text-white/85 hover:text-white transition-colors">Journey</a></li>
-      <li><a href="leadership.html"  class="nav-link text-[13px] font-medium text-white/85 hover:text-white transition-colors">Leadership</a></li>
+      <li><a href="career.html"      class="nav-link text-[13px] font-medium text-white/85 hover:text-white transition-colors">Careers</a></li>
       <li><a href="${HOME}#contact"  class="nav-link text-[13px] font-medium text-white/85 hover:text-white transition-colors">Contact</a></li>
     </ul>
 
@@ -88,7 +88,7 @@
       <a href="${HOME}#services" class="mm-link">Services</a>
       <a href="tools.html"       class="mm-link">Tools &amp; Machinery</a>
       <a href="journey.html"     class="mm-link">Journey</a>
-      <a href="leadership.html"  class="mm-link">Leadership</a>
+      <a href="career.html"      class="mm-link">Careers</a>
       <a href="${HOME}#contact"  class="mm-link mm-cta">Contact →</a>
     </div>
   </div>
@@ -98,6 +98,42 @@
   /* ── FOOTER ── */
   function renderFooter(slot) {
     slot.outerHTML = `
+<!-- ═══ CTA, READY TO BUILD ═══ -->
+<section id="cta" class="relative bg-[#1F211F] py-16 lg:py-20 overflow-hidden">
+  <!-- Background image with subtle warm orange tint -->
+  <div class="absolute inset-0 z-0">
+    <img src="Images/Projects/Bright%20Metal%20India%20Pvt.%20Ltd..JPG" alt="" class="w-full h-full object-cover opacity-45" />
+    <div class="absolute inset-0 bg-orange/20 mix-blend-multiply"></div>
+  </div>
+
+  <div class="relative z-10 max-w-screen-xl mx-auto px-6 lg:px-10 text-center">
+    <p class="text-[11px] font-semibold tracking-[0.32em] uppercase text-white/80 flex items-center justify-center gap-3 mb-6"
+       data-aos="fade-up" data-aos-duration="600">
+      Start a Project    </p>
+    <h2 class="section-title section-title--light mb-8"
+        data-aos="fade-up" data-aos-duration="700" data-aos-delay="80">
+      <span class="block mb-2">Ready to Build Your</span>
+      <span class="block">Next Landmark?</span>
+    </h2>
+    <p class="text-white/70 text-base max-w-lg mx-auto mb-10 leading-relaxed"
+       data-aos="fade-up" data-aos-duration="700" data-aos-delay="160">
+      Tell us about your project. Our team will get back to you within 24 hours.
+    </p>
+    <div class="flex flex-wrap items-center justify-center gap-4"
+         data-aos="fade-up" data-aos-duration="700" data-aos-delay="240">
+      <a href="#contact" data-magnetic
+         class="inline-flex items-center gap-2 px-8 py-4 bg-orange text-white text-[13px] font-bold tracking-wide hover:bg-orange-dk transition-all duration-200 group">
+        Start Your Project
+        <svg class="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </a>
+      <a href="tel:9509911871" data-magnetic
+         class="inline-flex items-center gap-2 px-8 py-4 border border-white/40 text-white text-[13px] font-medium hover:border-white/70 hover:bg-white/10 transition-all duration-200">
+        Call Us: +91 9509911871
+      </a>
+    </div>
+  </div>
+</section>
+
 <footer id="contact" class="bg-dark text-white">
 
   <div class="max-w-screen-xl mx-auto px-6 lg:px-10 py-16 lg:py-20">
@@ -143,9 +179,9 @@
         <div class="grid grid-cols-2 gap-x-8 gap-y-2 border-t border-white/10 pt-8">
           <a href="${HOME || 'index.html'}"          class="text-white/45 text-[13px] hover:text-orange transition-colors py-1">Home</a>
           <a href="about.html"                       class="text-white/45 text-[13px] hover:text-orange transition-colors py-1">About</a>
-          <a href="${HOME}#projects"                 class="text-white/45 text-[13px] hover:text-orange transition-colors py-1">Projects</a>
+          <a href="projects.html"                 class="text-white/45 text-[13px] hover:text-orange transition-colors py-1">Projects</a>
           <a href="journey.html"                     class="text-white/45 text-[13px] hover:text-orange transition-colors py-1">Journey</a>
-          <a href="leadership.html"                  class="text-white/45 text-[13px] hover:text-orange transition-colors py-1">Leadership</a>
+          <a href="career.html"                      class="text-white/45 text-[13px] hover:text-orange transition-colors py-1">Careers</a>
           <a href="tools.html"                       class="text-white/45 text-[13px] hover:text-orange transition-colors py-1">Tools &amp; Machinery</a>
           <a href="${HOME}#facts"                    class="text-white/45 text-[13px] hover:text-orange transition-colors py-1">Facts &amp; Figures</a>
           <a href="${HOME}#clients"                  class="text-white/45 text-[13px] hover:text-orange transition-colors py-1">Clients</a>
@@ -206,10 +242,10 @@
   const footerSlot = document.getElementById('footer-slot');
   if (footerSlot) renderFooter(footerSlot);
 
-  // On sub-pages (anywhere chrome.js runs — index.html doesn't have nav-slot),
-  // force the "scrolled" nav variant by default. The home-page nav starts
-  // transparent and gets .scrolled on scroll; every other page stays solid.
-  if (navSlot) {
+  // On sub-pages, force the "scrolled" nav variant by default. The home-page
+  // nav (index.html) starts transparent over the hero and gets .scrolled on
+  // scroll via main.js; every other page stays solid from the top.
+  if (navSlot && !isHome()) {
     const nav = document.getElementById('navbar');
     if (nav) nav.classList.add('scrolled', 'is-subpage');
   }

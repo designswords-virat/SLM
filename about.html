@@ -71,7 +71,7 @@
     tailwind.config = {
       theme: {
         extend: {
-          colors: { orange: '#F47721', 'orange-dk': '#D96218', dark: '#111827', muted: '#6B7280', border: '#E5E7EB', off: '#F8F8F6' },
+          colors: { orange: '#F47721', 'orange-dk': '#D96218', dark: '#1F211F', muted: '#6B7280', border: '#E5E7EB', off: '#FFFFFF' },
           fontFamily: { serif: ['"Archivo Black"', 'Impact', 'sans-serif'], sans: ['Inter', 'sans-serif'] }
         }
       }
@@ -79,7 +79,7 @@
   </script>
 
   <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet" />
-  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/style.css?v=57" />
 </head>
 
 <body class="font-sans bg-white text-dark overflow-x-hidden page-about">
@@ -102,39 +102,25 @@
 
 <main>
 
-  <!-- ═══ HERO — full-bleed photo with 2-column text overlay ═══ -->
-  <section class="ld-hero ld-hero--text-split ab-hero ab-hero--photo">
-    <img class="ab-hero-photo" src="Images/About/hero.jpg" alt="" aria-hidden="true" />
-    <div class="ab-hero-overlay" aria-hidden="true"></div>
-    <div class="ld-hero-glow"></div>
-    <div class="ld-hero-grid-bg"></div>
+  <!-- ═══ MOBILE-ONLY top hero image (full width, no crop) ═══ -->
+  <img src="Images/About/hero.jpg" alt="M/S Sohan Lal Mathur — SLM Construction"
+       class="lg:hidden block w-full h-auto" loading="eager"
+       onerror="this.style.display='none'" />
 
-    <div class="ld-hero-inner">
-
-      <p class="ld-hero-eyebrow"><span class="ld-eb-line"></span>About M/S Sohan Lal Mathur</p>
-
-      <div class="ld-hero-text-grid">
-
-        <!-- LEFT — heading -->
-        <h1 class="ld-hero-title" data-split-words data-split-delay="0.25" data-split-step="0.08">
-          <span class="ld-line">We've been building</span>
-          <span class="ld-line">Rajasthan for 70 years.</span>
-        </h1>
-
-        <!-- RIGHT — lead + CTA -->
-        <div class="ld-hero-body">
-          <p class="ld-hero-sub">
-            A third-generation, family-owned construction company from Jaipur — delivering engineering excellence across industrial, institutional, hospitality and residential sectors since 1954.
-          </p>
-
-          <a href="#ab-mission" class="story-hero-cta" data-magnetic>
+  <!-- ═══ TOP: 2-column text section (deconstructed hero) ═══ -->
+  <section class="ab-intro">
+    <div class="ab-intro-inner">
+      <p class="ab-intro-eyebrow"><span class="ab-intro-bar"></span>About M/S Sohan Lal Mathur</p>
+      <div class="ab-intro-grid">
+        <h2 class="ab-h2">We've been building Rajasthan for 70 years.</h2>
+        <div class="ab-intro-body">
+          <p class="ab-intro-p">A third-generation, family-owned construction company from Jaipur — delivering engineering excellence across industrial, institutional, hospitality and residential sectors since 1954.</p>
+          <a href="#ab-mission" class="story-hero-cta">
             Learn What We Stand For
             <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
           </a>
         </div>
-
       </div>
-
     </div>
   </section>
 
@@ -182,12 +168,124 @@
     </div>
   </section>
 
+  <!-- ═══ LEADERSHIP (incorporated from former Leadership page) ═══ -->
+  <span id="leadership" class="sr-anchor" aria-hidden="true"></span>
+
+  <!-- INTRO / PHILOSOPHY -->
+  <section class="ld-intro">
+    <div class="ld-intro-wrap">
+      <div class="ld-intro-lead">
+        <p class="ld-intro-big">
+          Today, under the guidance of
+          <span class="ld-pill">Mr. Deepak Mathur</span>
+          and
+          <span class="ld-pill">Mr. Kanhaiya Lal Mathur</span>,
+          SLM continues to blend traditional values with modern construction practices.
+        </p>
+      </div>
+      <div class="ld-intro-side">
+        <div class="ld-stat">
+          <span class="ld-stat-num">150+</span>
+          <span class="ld-stat-lbl">Years of Collective<br/>Experience</span>
+        </div>
+        <div class="ld-intro-copy">
+          Together, they lead SLM toward new benchmarks in industrial, institutional, commercial, hospitality, and residential development.
+        </div>
+      </div>
+    </div>
+
+    <div class="ld-quote-wrap">
+      <div class="ld-quote-mark" aria-hidden="true">&ldquo;</div>
+      <p class="ld-quote-text">
+        Build every structure as if it will stand for <em>generations.</em>
+      </p>
+      <div class="ld-quote-line"></div>
+      <p class="ld-quote-attr">The SLM Philosophy</p>
+    </div>
+  </section>
+
+  <!-- THE THIRD GENERATION — team grid -->
+  <section class="ab-team">
+    <div class="ab-inner">
+      <header class="ab-section-head">
+        <p class="ab-eyebrow"><span class="ab-eyebrow-bar"></span>Guiding Partners</p>
+        <h2 class="ab-h2">The Third Generation</h2>
+        <p class="ab-team-sub">Two partners. Seventy years. One unbroken standard of craft.</p>
+      </header>
+      <div class="ab-team-grid">
+        <article class="ab-team-card">
+          <div class="ab-team-photo"><img src="SLM Main logos/Mr. Deepak Mathur.png" alt="Mr. Deepak Mathur" onerror="this.parentElement.classList.add('ab-team-photo--ph');this.parentElement.setAttribute('data-initials','DM');this.remove();" /></div>
+          <h3 class="ab-team-name">Mr. Deepak Mathur</h3>
+          <p class="ab-team-role">Managing Partner</p>
+        </article>
+        <article class="ab-team-card">
+          <div class="ab-team-photo"><img src="SLM Main logos/Mr. Kanhaiya Lal Mathur.png" alt="Mr. Kanhaiya Lal Mathur" onerror="this.parentElement.classList.add('ab-team-photo--ph');this.parentElement.setAttribute('data-initials','KM');this.remove();" /></div>
+          <h3 class="ab-team-name">Mr. Kanhaiya Lal Mathur</h3>
+          <p class="ab-team-role">Managing Partner</p>
+        </article>
+        <!-- Designation & write-up: to be provided by SLM -->
+        <article class="ab-team-card">
+          <div class="ab-team-photo ab-team-photo--ph" data-initials="HM"></div>
+          <h3 class="ab-team-name">Mr. Harsh Vardhan Mathur</h3>
+          <p class="ab-team-role">Partner, SLM</p>
+        </article>
+        <!-- Designation & write-up: to be provided by SLM -->
+        <article class="ab-team-card">
+          <div class="ab-team-photo ab-team-photo--ph" data-initials="YM"></div>
+          <h3 class="ab-team-name">Mr. Yash Vardhan Mathur</h3>
+          <p class="ab-team-role">Partner, SLM</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOUNDER TRIBUTE -->
+  <section class="py-20 lg:py-28 bg-white border-t border-b border-border">
+    <div class="max-w-screen-xl mx-auto px-6 lg:px-10">
+      <div class="grid lg:grid-cols-5 gap-10 lg:gap-16 items-center">
+
+        <div class="lg:col-span-2 relative" data-aos="fade-right">
+          <div class="aspect-[4/5] overflow-hidden bg-white border border-border">
+            <img src="https://slmindia.in/wp-content/uploads/2025/09/f1fd0261ead2a207809ea0650704eb3c4297dc48-1024x1006.png"
+                 alt="Late Shri Sohan Lal Mathur" class="w-full h-full object-cover"
+                 data-parallax="0.16" onerror="this.style.display='none'" />
+          </div>
+          <div class="absolute -bottom-5 -right-5 bg-orange text-white px-5 py-3 hidden sm:block">
+            <p class="text-[10px] font-bold tracking-[0.32em] uppercase">Founder · 1954</p>
+          </div>
+        </div>
+
+        <div class="lg:col-span-3" data-aos="fade-left">
+          <p class="text-[11px] font-bold tracking-[0.32em] uppercase text-orange flex items-center gap-3 mb-5">
+            <span class="block w-6 h-px bg-orange"></span>In Reverence
+          </p>
+          <h2 class="font-serif text-[length:var(--fs-h2)] font-semibold text-dark leading-[1.12] mb-3">
+            Late Shri<br/>Sohan Lal Mathur
+          </h2>
+          <div class="w-12 h-0.5 bg-orange mb-7"></div>
+
+          <p class="text-muted text-base leading-relaxed mb-5">
+            The visionary who, in 1954, laid the first stones of what would become SLM's enduring legacy. Beginning with the Mehla-Jobner road, his commitment to integrity and craftsmanship defined every project that followed.
+          </p>
+          <p class="text-muted text-[15px] leading-relaxed mb-10">
+            Seventy years later, his principles still guide every site, every drawing, every handover. The name on the door remains his, and so does the standard.
+          </p>
+
+          <blockquote class="border-l-[3px] border-orange pl-6 py-2">
+            <p class="font-serif text-xl lg:text-2xl text-dark italic leading-snug mb-3">"We Build Trust."</p>
+            <p class="text-[11px] font-bold tracking-[0.32em] uppercase text-muted">The Founder's Words, Still Our Compass</p>
+          </blockquote>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <!-- ═══ EXPLORE CARDS — gateway to deeper pages ═══ -->
   <section class="ab-explore">
     <div class="ab-inner">
       <header class="ab-section-head">
         <p class="ab-eyebrow"><span class="ab-eyebrow-bar"></span>Keep Exploring</p>
-        <h2 class="ab-h2">Three ways<br/>into SLM.</h2>
+        <h2 class="ab-h2">Two ways<br/>into SLM.</h2>
       </header>
 
       <div class="ab-explore-grid">
@@ -211,25 +309,6 @@
           </div>
         </a>
 
-        <a href="leadership.html" class="ab-card">
-          <figure class="ab-card-media">
-            <img src="https://images.unsplash.com/photo-1758599543152-a73184816eba?auto=format&fit=crop&w=1200&q=80"
-                 alt="Two business partners shaking hands — leadership and partnership"
-                 loading="lazy"
-                 onerror="this.parentElement.classList.add('ab-card-media--fallback');this.remove();" />
-            <div class="ab-card-overlay" aria-hidden="true"></div>
-          </figure>
-          <div class="ab-card-body">
-            <span class="ab-card-tag">02 · People</span>
-            <h3 class="ab-card-title">The Partners</h3>
-            <p class="ab-card-desc">Meet the third-generation Mathur family leading SLM today — 150+ years of collective experience.</p>
-            <span class="ab-card-cta">
-              Meet the Team
-              <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-            </span>
-          </div>
-        </a>
-
         <a href="tools.html" class="ab-card">
           <figure class="ab-card-media">
             <img src="https://slmindia.in/wp-content/uploads/2025/12/6569e43676f6f01d50f372780e1731607e4f6f4f.jpg"
@@ -239,7 +318,7 @@
             <div class="ab-card-overlay" aria-hidden="true"></div>
           </figure>
           <div class="ab-card-body">
-            <span class="ab-card-tag">03 · Capability</span>
+            <span class="ab-card-tag">02 · Capability</span>
             <h3 class="ab-card-title">Our Fleet</h3>
             <p class="ab-card-desc">33+ equipment types, full in-house QA lab — 100% owned, ready to deploy across any site.</p>
             <span class="ab-card-cta">
@@ -253,24 +332,6 @@
     </div>
   </section>
 
-  <!-- ═══ CTA (site-wide standard — matches journey / leadership) ═══ -->
-  <section class="bg-dark py-20 lg:py-24 relative overflow-hidden" aria-label="Contact">
-    <div class="absolute top-0 right-0 w-[40%] h-full opacity-5" style="background: radial-gradient(circle at right, #F47721, transparent 70%)"></div>
-    <div class="relative max-w-3xl mx-auto px-6 lg:px-10 text-center">
-      <p class="text-[11px] font-bold tracking-[0.32em] uppercase text-orange mb-5">Speak To Our Team</p>
-      <h2 class="font-serif text-3xl lg:text-5xl font-semibold text-white leading-tight mb-5">
-        Ready to build your<br/><span class="text-orange">next landmark</span>
-      </h2>
-      <p class="text-white/60 text-[15px] leading-relaxed max-w-xl mx-auto mb-9">
-        Reach the partners directly for project-level discussions.
-      </p>
-      <a href="index.html#contact" data-magnetic
-         class="inline-flex items-center gap-3 bg-orange text-white text-[12px] font-bold tracking-[0.1em] uppercase px-8 py-4 hover:bg-orange-dk transition-colors">
-        Explore Now
-        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-      </a>
-    </div>
-  </section>
 
 </main>
 
@@ -278,8 +339,8 @@
 
 <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
 <script src="https://unpkg.com/lenis@1.1.20/dist/lenis.min.js"></script>
-<script src="js/chrome.js"></script>
-<script src="js/main.js"></script>
+<script src="js/chrome.js?v=56"></script>
+<script src="js/main.js?v=56"></script>
 
 <!-- Counter animation (self-contained — no main.js dependency needed) -->
 <script>

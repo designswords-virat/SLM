@@ -44,7 +44,7 @@
     tailwind.config = {
       theme: {
         extend: {
-          colors: { orange: '#F47721', 'orange-dk': '#D96218', dark: '#111827', muted: '#6B7280', border: '#E5E7EB', off: '#F8F8F6' },
+          colors: { orange: '#F47721', 'orange-dk': '#D96218', dark: '#1F211F', muted: '#6B7280', border: '#E5E7EB', off: '#FFFFFF' },
           fontFamily: { serif: ['"Archivo Black"', 'Impact', 'sans-serif'], sans: ['Inter', 'sans-serif'] }
         }
       }
@@ -52,7 +52,7 @@
   </script>
 
   <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet" />
-  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/style.css?v=57" />
 </head>
 
 <body class="font-sans bg-white text-dark overflow-x-hidden page-tools">
@@ -75,24 +75,30 @@
 
 <main>
 
-  <!-- ═══ HERO STAT BAND ═══ -->
-  <section class="tm-hero">
-    <div class="tm-hero-inner">
-
-      <div class="tm-hero-head">
-        <p class="tm-eyebrow">
-          <span class="tm-eyebrow-bar"></span>Owned Fleet &amp; QA Lab
-        </p>
-        <h1 class="tm-hero-title">Tools &amp; Machinery</h1>
-        <p class="tm-hero-lead">
-          Every piece of equipment on an SLM site is owned, maintained, and deployed by our team. No rentals, no delays — just a complete in-house fleet backed by a full-service QA lab.
-        </p>
+  <!-- ═══ HERO — deconstructed 2-column (matches About page) ═══ -->
+  <section class="ab-intro">
+    <div class="ab-intro-inner">
+      <p class="ab-intro-eyebrow"><span class="ab-intro-bar"></span>Owned Fleet &amp; QA Lab</p>
+      <div class="ab-intro-grid">
+        <h1 class="ab-h2">Tools &amp; Machinery</h1>
+        <div class="ab-intro-body">
+          <p class="ab-intro-p">Every piece of equipment on an SLM site is owned, maintained, and deployed by our team. No rentals, no delays — just a complete in-house fleet backed by a full-service QA lab.</p>
+          <a href="#tmGrid" class="story-hero-cta">
+            Explore the Fleet
+            <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </a>
+        </div>
       </div>
-
     </div>
   </section>
 
-  <!-- ═══ FILTER BAR (sticky) ═══ -->
+  <!-- ═══ HERO MACHINE IMAGE (full-width, no crop) ═══ -->
+  <img src="https://slmindia.in/wp-content/uploads/2025/12/9b3359a950e123125ec9093ae9338e7283b22286.jpg"
+       alt="SLM self-loading concrete mixer — part of the owned fleet"
+       loading="eager" class="block w-full h-auto"
+       onerror="this.style.display='none'" />
+
+  <!-- ═══ FILTER BAR (inline — not sticky) ═══ -->
   <div class="tm-filter-bar">
     <div class="tm-filter-inner">
       <nav id="tmPills" class="tm-pills" aria-label="Equipment categories"></nav>
@@ -114,25 +120,6 @@
     </div>
   </section>
 
-  <!-- ═══ CTA (site-wide standard — matches journey / leadership) ═══ -->
-  <section class="bg-dark py-20 lg:py-24 relative overflow-hidden" aria-label="Contact">
-    <div class="absolute top-0 right-0 w-[40%] h-full opacity-5" style="background: radial-gradient(circle at right, #F47721, transparent 70%)"></div>
-    <div class="relative max-w-3xl mx-auto px-6 lg:px-10 text-center">
-      <p class="text-[11px] font-bold tracking-[0.32em] uppercase text-orange mb-5">Speak To Our Team</p>
-      <h2 class="font-serif text-3xl lg:text-5xl font-semibold text-white leading-tight mb-5">
-        Ready to build your<br/><span class="text-orange">next landmark</span>
-      </h2>
-      <p class="text-white/60 text-[15px] leading-relaxed max-w-xl mx-auto mb-9">
-        Reach the partners directly for project-level discussions.
-      </p>
-      <a href="index.html#contact" data-magnetic
-         class="inline-flex items-center gap-3 bg-orange text-white text-[12px] font-bold tracking-[0.1em] uppercase px-8 py-4 hover:bg-orange-dk transition-colors">
-        Explore Now
-        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-      </a>
-    </div>
-  </section>
-
   <!-- ═══ STICKY MOBILE BAR (reused) ═══ -->
   <div class="prj-sticky-bar" id="prjStickyBar" aria-hidden="false">
     <a href="tel:+919509911871" class="prj-sticky-call" aria-label="Call SLM">
@@ -150,8 +137,8 @@
 
 <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
 <script src="https://unpkg.com/lenis@1.1.20/dist/lenis.min.js"></script>
-<script src="js/chrome.js"></script>
-<script src="js/main.js"></script>
+<script src="js/chrome.js?v=56"></script>
+<script src="js/main.js?v=56"></script>
 
 </body>
 </html>

@@ -126,6 +126,7 @@
    transition on [data-magnetic]. Disabled on touch devices.
 ═══════════════════════════════════════ */
 (function initMagnetic() {
+  return;   /* disabled — buttons stay static (no cursor-follow shake) */
   const targets = document.querySelectorAll('[data-magnetic]');
   if (!targets.length) return;
   if (window.matchMedia('(hover: none)').matches) return;
@@ -240,13 +241,30 @@ AOS.init({ once: true, duration: 680, easing: 'ease-out-quad', offset: 55 });
 const navbar  = document.getElementById('navbar');
 const backTop = document.getElementById('backTop');
 
+let _navLastY = window.scrollY;
 window.addEventListener('scroll', () => {
   const y = window.scrollY;
   // Only home toggles transparent <-> scrolled; sub-pages stay solid (is-subpage marker set by chrome.js)
   if (navbar && !navbar.classList.contains('is-subpage')) {
     navbar.classList.toggle('scrolled', y > 60);
   }
+  // Auto-hide on scroll down, reveal on scroll up / near the top
+  if (navbar) {
+    const menuOpen = mobileMenu && !mobileMenu.classList.contains('hidden');
+    // Mobile: nav stays visible. Desktop: hide on scroll-down, reveal on scroll-up / near top.
+    if (window.innerWidth < 1024 || menuOpen || y <= 140 || y < _navLastY - 4) {
+      navbar.classList.remove('nav-hidden');
+    } else if (y > _navLastY + 4) {
+      navbar.classList.add('nav-hidden');
+    }
+  }
+  _navLastY = y;
   if (backTop) backTop.classList.toggle('is-visible', y > 500);
+}, { passive: true });
+
+// Reveal the nav when the cursor moves near the top of the viewport
+window.addEventListener('mousemove', (e) => {
+  if (navbar && e.clientY < 80) navbar.classList.remove('nav-hidden');
 }, { passive: true });
 
 /* ═══════════════════════════════════════
@@ -453,114 +471,80 @@ const countObs = new IntersectionObserver(entries => {
 document.querySelectorAll('.counter[data-target]').forEach(el => countObs.observe(el));
 
 /* ═══════════════════════════════════════
-   FLAGSHIP — PINNED CINEMA REEL (desktop) / stacked cards (mobile)
-   Scroll-scrubbed cross-fade between project panels with Ken-Burns
-   hold, caption swap, and orange progress rail. On mobile (< lg)
-   panels render as normal-flow cards with no scroll math.
+   FLAGSHIP — SCROLL STACK REVEAL (clip-path wipe)
+   Pinned stage; stacked images are wiped away from the right via
+   clip-path: inset(0 X% 0 0) to reveal the one beneath. Mirrors the
+   reference: progress → stage(N-1) → smoothstep local → per-card crop,
+   orange edge marker, caption swap, counter, segmented progress bar.
 ═══════════════════════════════════════ */
-(function initCinemaReel() {
-  const sec = document.getElementById('flagship');
-  if (!sec || !sec.classList.contains('cr-section')) return;
+(function initFlagshipHScroll() {
+  const wrap = document.getElementById('flagship');
+  if (!wrap || !wrap.classList.contains('ph-wrap')) return;
+  const stage = wrap.querySelector('.ph-stage');
+  const track = document.getElementById('phTrack');
+  if (!stage || !track) return;
 
-  const panels = sec.querySelectorAll('.cr-panel');
-  const imgs   = sec.querySelectorAll('.cr-panel > .cr-img');
-  const fill   = document.getElementById('crRailFill');
-  const num    = document.getElementById('crCountNum');
-  const N      = panels.length;
-  if (!N) return;
+  const dots = Array.from(wrap.querySelectorAll('.ph-dot'));
+  const N = dots.length || 1;
+  let curDot = 0;
 
-  // Section is N viewport-heights of pinned scroll. Set CSS var so the
-  // height calc stays in sync if N ever changes.
-  sec.style.setProperty('--cr-panels', N);
-
-  let lastActive = -1;
+  const isMobile = () => window.matchMedia('(max-width: 1023px)').matches;
   let raf = 0;
-  let pendingProg = 0;
-
-  function render() {
+  function update() {
     raf = 0;
-    const prog      = pendingProg;
-    const idxF      = Math.min(N - 1, prog * N);
-    const activeIdx = Math.min(N - 1, Math.floor(idxF));
-    const localProg = idxF - activeIdx;       // 0..1 inside the active panel
-    const FADE_AT   = 0.78;                   // last 22% of each panel = transition
-
-    for (let i = 0; i < N; i++) {
-      const img = imgs[i];
-      if (!img) continue;
-      let opacity = 0;
-      let scale   = 1;
-      if (i === activeIdx) {
-        opacity = localProg < FADE_AT ? 1 : 1 - (localProg - FADE_AT) / (1 - FADE_AT);
-        scale   = 1 + 0.045 * localProg;       // gentle Ken-Burns drift
-      } else if (i === activeIdx + 1) {
-        opacity = localProg < FADE_AT ? 0 : (localProg - FADE_AT) / (1 - FADE_AT);
-        scale   = 1.02;
-      } else if (i < activeIdx) {
-        scale = 1.045;
-      }
-      img.style.opacity   = opacity.toFixed(3);
-      img.style.transform = `scale(${scale.toFixed(4)})`;
+    if (isMobile()) { track.style.transform = ''; return; }   // native swipe on mobile
+    const total = wrap.offsetHeight - window.innerHeight;
+    const scrolled = Math.min(Math.max(-wrap.getBoundingClientRect().top, 0), total);
+    const p = total > 0 ? scrolled / total : 0;
+    const maxX = Math.max(0, track.scrollWidth - stage.clientWidth);
+    track.style.transform = `translate3d(${(-p * maxX).toFixed(1)}px, 0, 0)`;
+    const idx = Math.round(p * (N - 1));
+    if (idx !== curDot) {
+      curDot = idx;
+      dots.forEach((d, i) => d.classList.toggle('is-active', i === idx));
     }
-
-    if (activeIdx !== lastActive) {
-      for (let i = 0; i < panels.length; i++) {
-        panels[i].classList.toggle('is-active', i === activeIdx);
-      }
-      if (num) num.textContent = String(activeIdx + 1).padStart(2, '0');
-      lastActive = activeIdx;
-    }
-
-    if (fill) fill.style.transform = `scaleX(${prog.toFixed(4)})`;
   }
-
-  function clearDesktopStyles() {
-    imgs.forEach(img => { img.style.opacity = ''; img.style.transform = ''; });
-    panels.forEach(p => p.classList.remove('is-active'));
-    if (fill) fill.style.transform = '';
-  }
-
-  function onScroll() {
-    // Mobile (< lg): all panels render as plain cards. Strip any
-    // inline styles the desktop reel might have set.
-    if (window.innerWidth < 1024) {
-      if (lastActive !== -2) {
-        clearDesktopStyles();
-        lastActive = -2;
-      }
-      return;
-    }
-    const r       = sec.getBoundingClientRect();
-    const totalSc = sec.offsetHeight - window.innerHeight;
-    const prog    = Math.max(0, Math.min(1, -r.top / totalSc));
-    pendingProg   = prog;
-    if (!raf) raf = requestAnimationFrame(render);
-  }
-
+  // click a dot → smooth-scroll to that card's position in the pin
+  dots.forEach((d, i) => d.addEventListener('click', () => {
+    const total = wrap.offsetHeight - window.innerHeight;
+    const targetP = N > 1 ? i / (N - 1) : 0;
+    window.scrollTo({ top: wrap.offsetTop + targetP * total, behavior: 'smooth' });
+  }));
+  function onScroll() { if (!raf) raf = requestAnimationFrame(update); }
   window.addEventListener('scroll', onScroll, { passive: true });
   window.addEventListener('resize', onScroll, { passive: true });
-  onScroll();
+  update();
+})();
 
-  /* ── Mobile horizontal carousel: dots follow scroll position ── */
-  const stage = sec.querySelector('.cr-stage');
-  const mdots = sec.querySelectorAll('.cr-mdot');
-  if (stage && mdots.length) {
-    let mActive = -1;
-    function onStageScroll() {
-      if (window.innerWidth >= 1024) return;     // dots only on mobile
-      const w = stage.clientWidth;
-      if (!w) return;
-      const idx = Math.round(stage.scrollLeft / w);
-      if (idx === mActive) return;
-      mActive = idx;
-      mdots.forEach((d, i) => d.classList.toggle('is-active', i === idx));
-    }
-    stage.addEventListener('scroll', onStageScroll, { passive: true });
-    mdots.forEach((dot, i) => dot.addEventListener('click', () => {
-      stage.scrollTo({ left: i * stage.clientWidth, behavior: 'smooth' });
-    }));
-    onStageScroll();
+/* ═══════════════════════════════════════
+   WE BUILD — scroll-expand card. Pins (sticky) and grows from an inset
+   rounded card to full-bleed as you scroll; releases into the founder
+   section once fully expanded.
+═══════════════════════════════════════ */
+(function initWeExpand() {
+  const wrap = document.getElementById('we-build');
+  if (!wrap || !wrap.classList.contains('we-expand')) return;
+  const card = document.getElementById('weCard');
+  if (!card) return;
+
+  const W0 = 64,  W1 = 100;   // width % (card is full viewport height; only width grows)
+  const EXPAND = 0.85;        // finish expanding over the first 85% of the pin
+
+  const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+  let raf = 0;
+  function update() {
+    raf = 0;
+    if (window.innerWidth < 1024) { card.style.width = ''; return; }  // mobile: static, no expand
+    const r = wrap.getBoundingClientRect();
+    const total = wrap.offsetHeight - window.innerHeight;
+    const prog = total > 0 ? clamp(-r.top / total, 0, 1) : 0;
+    const e = clamp(prog / EXPAND, 0, 1);
+    card.style.width = (W0 + (W1 - W0) * e).toFixed(2) + '%';
   }
+  function onScroll() { if (!raf) raf = requestAnimationFrame(update); }
+  window.addEventListener('scroll', onScroll, { passive: true });
+  window.addEventListener('resize', onScroll, { passive: true });
+  update();
 })();
 
 /* ═══════════════════════════════════════
@@ -708,183 +692,183 @@ const PROJECTS_DATA = [
   //  INDUSTRIAL  (19 projects)
   // ════════════════════════════════
   { id:'bright-metal', category:'Industrial', name:'Bright Metal India Pvt. Ltd.', client:'Bright Metal India (P) Ltd.', location:'Sargoth, Reengus, Rajasthan', area:'1,50,000 sq.ft', year:'2022–23',
-    img:'Images/Projects/Bright%20Metal%20India%20Pvt.%20Ltd..JPG',
+    img:'Projects%20Images/Industrial/Bright%20Metals%20India-20260606T092953Z-3-001/Bright%20Metals%20India/BMI%20Cover%20.JPG',
     desc:'Complete civil development of industrial sheds for production operations, administrative blocks, utility structures and site-wide infrastructure for a non-ferrous metal production facility at Sargoth, Reengus.' },
 
   { id:'hi-growth', category:'Industrial', name:'Hi-Growth International', client:'Hi-Growth International', location:'Kalwada, Mahindra SEZ', area:'Industrial Facility', year:'2024–25',
-    img:'Images/Projects/Hi-Growth%20International.JPG',
+    img:'Projects%20Images/Industrial/HI%20Growth%20International-20260606T093013Z-3-001/HI%20Growth%20International/Hi%20Growth%20Cover.JPG',
     desc:'Cold storage and industrial facility construction with structural works for manufacturing and administrative areas within the Mahindra SEZ at Kalwada.' },
 
   { id:'universal-auto-iii', category:'Industrial', name:'Universal Autofoundry Unit-III', client:'Universal Autofoundry Ltd.', location:'Sargoth, Reengus, Rajasthan', area:'Industrial Facility', year:'2023–24',
-    img:'Images/Projects/Universal%20Autofoundry%20Unit-III.JPG',
+    img:'Projects%20Images/Industrial/UAF%20___rd%20(SARGOTH)-20260606T093543Z-3-001/UAF%20_rd%20(SARGOTH)/UAF%20Industrial%203rd%20Cover.JPG',
     desc:'Complete civil construction of production sheds, utility structures and site infrastructure for auto component manufacturing at Sargoth, Reengus.' },
 
   { id:'paavan-products', category:'Industrial', name:'Paavan Products Bichoon Unit', client:'Paavan Products Pvt. Ltd.', location:'Bichoon, Rajasthan', area:'Industrial Shed', year:'2023–24',
-    img:'Images/Projects/Paavan%20Products%20Bichoon%20Unit.JPG',
+    img:'Projects%20Images/Industrial/PAAVAN%20PRODUCTS%20BICHUN-20260606T093317Z-3-001/PAAVAN%20PRODUCTS%20BICHUN/PAAVAN%20Cover.JPG',
     desc:'Industrial shed for production and storage with administrative spaces and complete site development for manufacturing operations at Bichoon.' },
 
   { id:'precision-auto', category:'Industrial', name:'Precision Autocastings Unit II', client:'Precision Autocastings Pvt. Ltd.', location:'Kaladera, Chomu, Rajasthan', area:'2,00,000 sq.ft', year:'2023–24',
-    img:'Images/Projects/Precision%20Autocastings%20Unit%20II.JPG',
+    img:'Projects%20Images/Industrial/Precision%20Autocastings%20Kaladera-20260606T093415Z-3-001/Precision%20Autocastings%20Kaladera/Precision%20Autocasting%20Website%20Cover.JPG',
     desc:'Complete civil development of large-scale production sheds for foundry operations, utility structures and site infrastructure spanning 2,00,000 sq.ft at Kaladera, Chomu.' },
 
   { id:'oswal-cables', category:'Industrial', name:'Oswal Cables Bagru Unit', client:'Oswal Cables', location:'Bagru Extension II, Jaipur', area:'Industrial Complex', year:'2019–20',
-    img:'Images/Projects/Oswal%20Cables%20Bagru%20Unit.JPG',
+    img:'Projects%20Images/Industrial/Oswal%20Cables%20Bagru-20260606T093209Z-3-001/Oswal%20Cables%20Bagru/Oswal%20Cable%20Cover%20Website.png',
     desc:'Complete civil development of industrial sheds for cable manufacturing, office block and internal infrastructure at Bagru Extension II, Jaipur.' },
 
   { id:'universal-auto-ii', category:'Industrial', name:'Universal Autofoundry Unit-II', client:'Universal Autofoundry Ltd.', location:'SKS Industrial Area, Reengus', area:'Industrial Facility', year:'2018–19',
-    img:'Images/Projects/Universal%20Autofoundry%20Unit-II.JPG',
+    img:'Projects%20Images/Industrial/UAF%20-%20__%20Reengus-20260606T093524Z-3-001/UAF%20-%20_%20Reengus/UAF%202nd%20Unit%20Website%20Cover.png',
     desc:'Full civil development with heavy-duty production sheds, administrative areas and comprehensive site infrastructure for auto component foundry operations at Reengus.' },
 
   { id:'arl-infratech', category:'Industrial', name:'ARL Infratech', client:'ARL Infratech Ltd.', location:'Bagru, Jaipur', area:'Manufacturing Facility', year:'2011–12',
-    img:'Images/Projects/ARL%20Infratech.JPG',
+    img:'Projects%20Images/Industrial/ARL%20Bagru-20260606T092855Z-3-001/ARL%20Bagru/ARL%20Cover.JPG',
     desc:'Cement sheet and pipe manufacturing facility with industrial sheds, utility blocks and site infrastructure for a building materials manufacturer at Bagru, Jaipur.' },
 
   { id:'sigma-j1', category:'Industrial', name:'Sigma Engineered Solutions J1 Unit', client:'Ultratech Metals (India) Pvt. Ltd.', location:'VKIA Industrial Area, Jaipur', area:'Factory Shed', year:'2005–06',
-    img:'https://slmindia.in/wp-content/uploads/2025/10/25be90fcc5289816c531b5f0a4531107ed75ee17-1024x556.png',
+    img:'Projects%20Images/Industrial/Sigma%20Electricals%20VKIA-20260606T093508Z-3-001/Sigma%20Electricals%20VKIA/Sigma%20Cover.png',
     desc:'Factory shed construction for precision manufacturing with structural framework and complete utility infrastructure at VKIA Industrial Area, Jaipur.' },
 
   { id:'mayur-uniquoters-ind', category:'Industrial', name:'Mayur Uniquoters', client:'Mayur Uniquoters Ltd.', location:'Jaitpura, Jaipur', area:'Manufacturing Facility', year:'1993–94',
-    img:'Images/Projects/Mayur%20Uniquoters.JPG',
+    img:'Projects%20Images/Industrial/Mayur%20Uniquoters%20Jaithpura-20260606T093051Z-3-001/Mayur%20Uniquoters%20Jaithpura/MU%20Cover.JPG',
     desc:'Manufacturing sheds and godowns for synthetic leather production facility at Jaitpura, one of SLM\'s long-standing industrial partnerships spanning three decades.' },
 
   { id:'ankit-roofing', category:'Industrial', name:'Ankit Roofing Unit', client:'ARL Infratech Ltd.', location:'Bagru, Jaipur', area:'Industrial Shed', year:'2005–06',
-    img:'https://slmindia.in/wp-content/uploads/2025/10/49da84d19017f90b8f76da8be9d111070c03e1ca-1024x556.png',
+    img:'Projects%20Images/Industrial/Ankit%20Roofing%20Ltd.-20260606T092813Z-3-001/Ankit%20Roofing%20Ltd/AR%20Cover.png',
     desc:'Industrial shed for roofing materials manufacturing with site infrastructure, utility networks and administrative facilities at Bagru, Jaipur.' },
 
   { id:'vinayak-jewels', category:'Industrial', name:'Vinayak Jewels India', client:'Vinayak Jewels India Pvt. Ltd.', location:'Sitapura SEZ, Jaipur', area:'Production Facility', year:'2006–07',
-    img:'https://slmindia.in/wp-content/uploads/2025/10/70d37752fc9f06a1be161159fad3a943ca366ea4-1-1024x556.png',
+    img:'Projects%20Images/Industrial/Vinayak%20Jewels-20260606T093630Z-3-001/Vinayak%20Jewels/Vinayak%20Jewels%20Cover.png',
     desc:'Production sheds for jewellery manufacturing within SEZ guidelines at Sitapura, built to comply with Special Economic Zone standards and export regulations.' },
 
   { id:'autolite', category:'Industrial', name:'Autolite India Ltd.', client:'Autolite India Ltd.', location:'Bindayaka, Rajasthan', area:'Factory Complex', year:'1994–97',
-    img:'https://slmindia.in/wp-content/uploads/2025/10/04cfe3bc6c5376a8e47d33fba948568d0936cf6e-1024x556.png',
+    img:'Projects%20Images/Industrial/Autolite%20-20260606T092916Z-3-001/Autolite/Autolite%20Cover.png',
     desc:'Factory shed and utility infrastructure for lighting equipment manufacturing at Bindayaka, one of SLM\'s key industrial projects from the 1990s.' },
 
   { id:'pacific-granites', category:'Industrial', name:'Pacific Granites', client:'Pacific Industries Ltd.', location:'RIICO Industrial Area, Sukher, Udaipur', area:'Processing Plant', year:'1990–91',
-    img:'https://slmindia.in/wp-content/uploads/2025/10/3cb863cb451604e3da557969512c25ad014a213f-1024x556.png',
+    img:'Projects%20Images/Industrial/Pacific%20Granite-20260606T093345Z-3-001/Pacific%20Granite/Pacific%20Granite%20Cover.png',
     desc:'Granite processing plant with specialised heavy-duty foundations for large machinery at RIICO Industrial Area, Sukher, Udaipur.' },
 
   { id:'reil-kanakpura', category:'Industrial', name:'REIL Kanakpura', client:'Rajasthan Electronics & Instruments Ltd.', location:'Kanakpura, Jaipur', area:'Electronics Facility', year:'1983–89',
-    img:'Images/Projects/REIL%20Kanakpura.JPG',
+    img:'Projects%20Images/Industrial/REIL%20Kanakpura-20260606T093429Z-3-001/REIL%20Kanakpura/REIL%20Cover.png',
     desc:'Electronics manufacturing sheds, utility structures and site infrastructure for REIL at Kanakpura, one of SLM\'s earliest large-scale industrial assignments, spanning six years from 1983 to 1989.' },
 
   { id:'microtek-sitapura', category:'Industrial', name:'Microtek International (Sitapura)', client:'Microtek International', location:'Sitapura, Jaipur', area:'Manufacturing Unit', year:',',
-    img:'https://slmindia.in/wp-content/uploads/2025/10/0921465ad83b7624ca3bbde3081150f63ea849b7-1024x556.png',
+    img:'Projects%20Images/Industrial/Microtek%20-20260606T093116Z-3-001/Microtek/Microtek%20cover.png',
     desc:'Manufacturing and assembly facility for electronics products at Sitapura Industrial Area, featuring industrial sheds and complete support infrastructure.' },
 
   { id:'vaibhav-global', category:'Industrial', name:'Vaibhav Global Ltd.', client:'Vaibhav Global Ltd.', location:'Jaipur, Rajasthan', area:'Industrial Facility', year:',',
-    img:'https://slmindia.in/wp-content/uploads/2025/10/892bfa0001ae235aba334357a7ac17f30659a7c0-1-1024x556.png',
+    img:'Projects%20Images/Industrial/Vaibhav%20%20Gems-20260606T093609Z-3-001/Vaibhav%20%20Gems/VGL%20Cover.png',
     desc:'Industrial facility for a leading global fashion jewellery and lifestyle products company, featuring production sheds, office infrastructure and complete site development at Jaipur.' },
 
   { id:'kec-ind', category:'Industrial', name:'KEC International Ltd.', client:'KEC International Ltd.', location:'Rajasthan', area:'Operations Facility', year:',',
-    img:'https://slmindia.in/wp-content/uploads/2025/10/3fb973a855ce7515b9593b1717184b4d7c2de930-1-1024x556.png',
+    img:'Projects%20Images/Industrial/KEC%20Jhotwara-20260606T093026Z-3-001/KEC%20Jhotwara/KEC%20cover.png',
     desc:'Operations and infrastructure facility for KEC International, a global infrastructure EPC company, covering structural works, administrative blocks and complete site development.' },
 
   { id:'microtek-bassi', category:'Industrial', name:'Microtek International (Bassi)', client:'Microtek International', location:'Bassi, Jaipur', area:'Manufacturing Unit', year:',',
-    img:'https://slmindia.in/wp-content/uploads/2025/10/0921465ad83b7624ca3bbde3081150f63ea849b7-1024x556.png',
+    img:'Projects%20Images/Industrial/Microtek%20-20260606T093116Z-3-001/Microtek/Microtek%20cover.png',
     desc:'Manufacturing facility for electronics products at Bassi, featuring industrial sheds, production spaces and complete utility infrastructure to support operations.' },
 
   // ════════════════════════════════
   //  HOSPITALITY  (9 projects)
   // ════════════════════════════════
   { id:'oberoi-vanyavilas', category:'Hospitality', name:'The Oberoi Vanyavilas Wildlife Resorts', client:'EIH Ltd.', location:'Ranthambore, Sawai Madhopur', area:'65,000 sq.ft', year:'2000–01',
-    img:'https://slmindia.in/wp-content/uploads/2025/09/b221a8a76143e2a24b678d9222a0b0c575b97849-1024x576.jpg',
+    img:'Projects%20Images/Hospitality/Oberoi%20Vanyavillas-20260606T094412Z-3-001/Oberoi%20Vanyavillas/Oberoi%20Cover.png',
     desc:'An ultra-luxury 5-star wildlife resort developed across 20 acres, inspired by royal caravans. SLM executed tented accommodations with heritage detailing, spa, restaurant, wellness zones, staff quarters and complete internal roads and drainage infrastructure.' },
 
   { id:'stardom-resort', category:'Hospitality', name:'Stardom Resort', client:'SSG Kailash Hotels & Resorts', location:'Bhankrota, Jaipur', area:'50,000 sq.ft', year:'2019–20',
-    img:'https://slmindia.in/wp-content/uploads/2025/10/4506724d3cfa65c3222e66c8d3e31e202301e02b-1-1024x576.png',
+    img:'Projects%20Images/Hospitality/Stardom%20Resorts-20260606T094504Z-3-001/Stardom%20Resorts/Stardom%20Cover.png',
     desc:'Modern resort featuring 75 elegantly designed rooms, a bar, restaurant and related infrastructure. Works included luxury guest rooms, restaurant and bar block, utility infrastructure and internal road development at Bhankrota, Jaipur.' },
 
   { id:'hotel-allied-mahendra', category:'Hospitality', name:'Hotel Allied Mahendra', client:'Mahendra Group Jewellery & Gems', location:'Thikariya, Jaipur', area:'48,000 sq.ft', year:'2015–17',
-    img:'https://slmindia.in/wp-content/uploads/2025/10/c2c0ad9768b4ee5d0b6c02aae36b2e6279571e77-1024x576.jpg',
+    img:'Projects%20Images/Hospitality/Hotel%20Allied%20Mahindra-20260606T094348Z-3-001/Hotel%20Allied%20Mahindra/Allied%20cover.png',
     desc:'A 100-room business hotel with grand banquet hall and landscaped surroundings. SLM delivered the complete hotel block with banquet and conference hall, structural finishing, site landscaping and guest service infrastructure at Thikariya, Jaipur.' },
 
   { id:'westin-pushkar', category:'Hospitality', name:'The Westin Pushkar Resort & Spa', client:'Paradise Group', location:'Pushkar, Rajasthan', area:'Luxury Resort', year:'2014–16',
-    img:'https://slmindia.in/wp-content/uploads/2025/10/5cdb493112b6917c60635d70a0cd70cc315d6169-1-1024x576.png',
+    img:'Projects%20Images/Hospitality/Westin%20Pushkar-20260606T094529Z-3-001/Westin%20Pushkar/Westin%20Cover.png',
     desc:'A 5-star wellness resort nestled in the Aravallis featuring 98 luxury guestrooms and villas with private plunge pools, a wellness spa and landscaped views. SLM delivered full infrastructure execution for the entire resort at Pushkar.' },
 
   { id:'hotel-paradise', category:'Hospitality', name:'Hotel Paradise (Ramada by Wyndham)', client:'Paradise Group', location:'Sikar Road, Jaipur', area:'80,000 sq.ft', year:'2007–08',
-    img:'https://slmindia.in/wp-content/uploads/2025/10/4279f4a66badc993a2b2fe7237408e6a2638e435-1-1024x576.jpg',
+    img:'Projects%20Images/Hospitality/Ramada%20-20260606T094440Z-3-001/Ramada/Ramada.cover.JPG',
     desc:'A 9-storey premium hotel featuring 108 rooms and allied hospitality facilities. SLM built the multi-storey structure with modern façade, guest rooms, banquet and service areas with full structural and MEP integration.' },
 
   { id:'gold-palace', category:'Hospitality', name:'The Gold Palace and Resorts', client:'M/s Kishanpura Hotels Pvt. Ltd.', location:'Kukas, Jaipur', area:'86,000 sq.ft', year:'1999–2000',
-    img:'https://slmindia.in/wp-content/uploads/2025/10/d1abc614572c9cd5df25c6e883ba6151898c2ed9-1-1024x682.jpg',
+    img:'Projects%20Images/Hospitality/Gold%20Palace%20Resort-20260606T094310Z-3-001/Gold%20Palace%20Resort/Gold%20Palace.Cover.png',
     desc:'A premium resort combining Mughal-era landscaping with Rajasthani architecture across 13 acres. Features 68 guest rooms with heritage façade, banquet halls, restaurants, spa facilities and recreational zones at Kukas, Jaipur.' },
 
   { id:'hotel-gajner', category:'Hospitality', name:'Hotel Gajner Palace', client:'HRH Group of Hotels', location:'Bikaner, Rajasthan', area:'Heritage Property', year:'1999–2000',
-    img:'https://slmindia.in/wp-content/uploads/2025/10/e2634ace8a508a7e7b8afb65d8a390cfbbc01d5f-1024x576.jpg',
+    img:'Projects%20Images/Hospitality/Gajner%20Palace%20Bikaner-20260606T094204Z-3-001/Gajner%20Palace%20Bikaner/Gajner%20Palace%20Cover.jpg',
     desc:'Heritage conservation and civil development within an iconic palace property in Bikaner, adding modern hospitality facilities while preserving its royal legacy, including spa, utility infrastructure and a kitchen block.' },
 
   { id:'hotel-gaudavan', category:'Hospitality', name:'Hotel Gaudavan', client:'Gaudavan Pvt. Ltd.', location:'Muhana, Sanganer, Jaipur', area:'Hotel Complex', year:'2004–05',
-    img:'https://slmindia.in/wp-content/uploads/2025/10/934d221e4618399d606318e628eeab90fb5d62b4-1024x576.png',
+    img:'Projects%20Images/Hospitality/Gaudavan-20260606T094224Z-3-001/Gaudavan/Gaudavan%20cover.png',
     desc:'Turnkey development including full civil, electrical and plumbing works with landscaping and site infrastructure at Muhana, Sanganer, delivered as a complete ready-to-operate property.' },
 
   { id:'gorbandh-palace', category:'Hospitality', name:'Gorbandh Palace (Taj)', client:'HRH Group of Hotels', location:'Jaisalmer, Rajasthan', area:'Heritage Resort', year:',',
-    img:'https://slmindia.in/wp-content/uploads/2025/10/ac7f73c38b6248e219701f1a9c8465b81bb6bad2-1024x585.png',
+    img:'Projects%20Images/Hospitality/Gorbandh%20Jaisalmer-20260606T094327Z-3-001/Gorbandh%20Jaisalmer/Gorbandh%20cover.jpg',
     desc:'Royal-style heritage resort in Jaisalmer featuring heritage sandstone architecture, luxury guest rooms and dining areas, spa and recreational infrastructure with traditionally-detailed civil work befitting a Taj property.' },
 
   // ════════════════════════════════
   //  INSTITUTIONAL  (8 projects)
   // ════════════════════════════════
   { id:'hare-krishna', category:'Institutional', name:'Gupt Vrindavan Dham', client:'Hare Krishna Movement', location:'Hare Krishna Marg, Jagatpura, Jaipur', area:'2,00,000 sq.ft', year:',',
-    img:'https://slmindia.in/wp-content/uploads/2025/11/f7af9c5e16aa703aee16ab27846bfb3150abd216-1024x576.jpg',
+    img:'Projects%20Images/Institutional/Gupt%20Vrindavan%20Dham-20260606T095014Z-3-001/Gupt%20Vrindavan%20Dham/GVD%20Cover.png',
     desc:'Religious and cultural complex spanning 6 acres with a 17-storey temple, 25,000 sq.ft prayer hall with ornate gateway and exhibition spaces. SLM handled structural execution integrating conventional design with contemporary construction techniques.' },
 
   { id:'jecrc-ncr', category:'Institutional', name:'JECRC University (NCR Campus)', client:'JECRC University', location:'Matsya Industrial Area, Alwar', area:'1,00,000 sq.ft', year:',',
-    img:'https://slmindia.in/wp-content/uploads/2025/11/3b5352f9c7000c944f6c11e8a2d9e1c16b9df9ab.jpg',
+    img:'Projects%20Images/Institutional/JECRC%20University%20Alwar-20260606T095307Z-3-001/JECRC%20University%20Alwar/JECRC%20Cover.png',
     desc:'Retrofitting and renovation of existing structures for the northern region expansion campus at Alwar. Works encompassed structural reinforcement, exterior restoration and mechanical/electrical systems upgrades.' },
 
   { id:'digambar-jain', category:'Institutional', name:'Digambar Jain Shraman Sanskriti Sansthan', client:'Digambar Jain Shraman Sanskriti Sansthan', location:'Sanganer, Jaipur', area:'80,000 sq.ft', year:',',
-    img:'https://slmindia.in/wp-content/uploads/2025/11/c1acec93bcfc0628f75454dfa764906e95a5663f.png',
+    img:'Projects%20Images/Institutional/Digambar%20Jain%20Shraman%20Sanskriti%20Sansthan/Digambar%20Jain%20Shraman%20Sanskriti%20Sansthan/JS.Cover.png',
     desc:'G+4 spiritual retreat facility combining residential quarters and learning spaces for religious scholars and practitioners at Sanganer, Jaipur.' },
 
   { id:'vipra-foundation', category:'Institutional', name:'Vipra Foundation', client:'Vipra Foundation', location:'Mansarovar, Jaipur', area:'60,000 sq.ft', year:',',
-    img:'https://slmindia.in/wp-content/uploads/2025/11/0e6f966f0416b7ad818ff3d7cca564b0a505bbc6-1024x768.jpg',
+    img:'Projects%20Images/Institutional/Vipra%20Foundation-20260606T095510Z-3-001/Vipra%20Foundation/VF%20Cover.jpg',
     desc:'Six-level research and educational hub emphasizing Vedic scholarship and skill advancement for community development, at Mansarovar, Jaipur.' },
 
   { id:'jnit-campus', category:'Institutional', name:'JNIT Campus', client:'Jagan Nath University', location:'Sitapura Industrial Area, Jaipur', area:'1,00,000 sq.ft', year:',',
-    img:'https://slmindia.in/wp-content/uploads/2025/11/dcd49bec3fde3d957c78230edd8076cabdf4c741.jpg',
+    img:'Projects%20Images/Institutional/JNIT%20Sitapura-20260606T095403Z-3-001/JNIT%20Sitapura/JNIT%20Cover.png',
     desc:'Engineering institute development with classroom structures, student housing, administrative facilities and infrastructure networks at Sitapura Industrial Area, Jaipur.' },
 
   { id:'jagannath-chaksu', category:'Institutional', name:'Jagan Nath University (Chaksu)', client:'Jagan Institute of Management & Studies', location:'Chaksu, Tonk Road, Jaipur', area:'90,000 sq.ft', year:',',
-    img:'https://slmindia.in/wp-content/uploads/2025/11/f97c363b6f796670e37e05b7d60839d0fe7be6b3-1024x576.jpg',
+    img:'Projects%20Images/Institutional/Jagan%20Nath%20University/Jagan%20Nath%20University/JIMS.coverJPG.jpg',
     desc:'Multi-building campus encompassing teaching facilities, residential quarters and utility infrastructure at Chaksu on Tonk Road, Jaipur.' },
 
   { id:'gyan-vihar', category:'Institutional', name:'Gyan Vihar University', client:'Gyan Vihar University', location:'Jagatpura, Jaipur', area:'1,00,000 sq.ft', year:',',
-    img:'https://slmindia.in/wp-content/uploads/2025/12/Component-94-3.png',
+    img:'Projects%20Images/Institutional/Gyan%20Vihar-20260606T095049Z-3-001/Gyan%20Vihar/GV%20Cover.png',
     desc:'Twin 9-storey academic towers with administrative facilities designed for vertical space optimization at Jagatpura, Jaipur, serving thousands of students across engineering and management disciplines.' },
 
   { id:'jaipur-dental', category:'Institutional', name:'Jaipur Dental College', client:'Jaipur Dental College', location:'Kukas, Jaipur', area:'Educational Campus', year:',',
-    img:'https://slmindia.in/wp-content/uploads/2025/11/ebc21a47a146307a6c97423a4bf515b76abbd6bd.jpg',
+    img:'Projects%20Images/Institutional/Jaipur%20Dental%20College-20260606T095245Z-3-001/Jaipur%20Dental%20College/JDC%20cover.png',
     desc:'Medical institution development featuring lecture halls, clinical labs, student accommodation and professional-grade infrastructure at Kukas, Jaipur.' },
 
   // ════════════════════════════════
   //  COMMERCIAL  (3 projects)
   // ════════════════════════════════
   { id:'akshat-nilay-c', category:'Commercial', name:'Akshat Nilay', client:'Akshat Apartments Pvt. Ltd.', location:'Hawa Sadak, Civil Lines, Jaipur', area:'1,55,000 sq.ft', year:',',
-    img:'https://slmindia.in/wp-content/uploads/2025/11/96811a8560010fc2306b3b5eff2533185439d7a0-1024x576.jpg',
+    img:'Projects%20Images/Residential/Akshat%20Nilay-20260606T101144Z-3-001/Akshat%20Nilay/AN%20cover.png',
     desc:'Complete civil development of an 8-storey residential apartment complex featuring 62 premium units with structural precision, modern elevation and quality finishes at Civil Lines, Jaipur.' },
 
   { id:'akshat-meadows-c', category:'Commercial', name:'Akshat Meadows Township', client:'Akshat Apartments Pvt. Ltd.', location:'C-Scheme, Jaipur', area:'1,30,000 sq.ft', year:',',
-    img:'https://slmindia.in/wp-content/uploads/2025/11/ef31af097ddf499f86a3e0322684a7d927002e2e-1024x576.jpg',
+    img:'Projects%20Images/Residential/Akshat%20Meadows-20260606T101125Z-3-001/Akshat%20Meadows/AM%20cover.png',
     desc:'Civil construction of a multi-storey residential apartment building comprising 36 luxury dwellings with reinforced concrete framework and high-end urban living standards at C-Scheme, Jaipur.' },
 
   { id:'akshat-meadows-2-c', category:'Commercial', name:'Akshat Meadows Township 2', client:'Akshat Apartments Pvt. Ltd.', location:'Sirsi Road, Jaipur', area:'3,19,000 sq.ft', year:',',
-    img:'https://slmindia.in/wp-content/uploads/2025/11/e3c0bdf83246281eb9091a053dcd6d70daaa0511-1024x576.jpg',
+    img:'Projects%20Images/Residential/Akshay%20Trishla-20260606T101204Z-3-001/Akshay%20Trishla/AT%20Cover.png',
     desc:'Complete township combining luxury villas, group housing and lifestyle amenities across 9.81 acres, featuring 120 luxury villas, walk-up apartments, retail centre, tenement blocks and a 15,000 sq.ft clubhouse.' },
 
   // ════════════════════════════════
   //  RESIDENTIAL  (4 projects)
   // ════════════════════════════════
   { id:'akshat-nilay-r', category:'Residential', name:'Akshat Nilay', client:'Akshat Apartments Pvt. Ltd.', location:'Hawa Sadak, Civil Lines, Jaipur', area:'1,55,000 sq.ft', year:',',
-    img:'https://slmindia.in/wp-content/uploads/2025/11/96811a8560010fc2306b3b5eff2533185439d7a0-1024x576.jpg',
+    img:'Projects%20Images/Residential/Akshat%20Nilay-20260606T101144Z-3-001/Akshat%20Nilay/AN%20cover.png',
     desc:'Complete civil development of an 8-storey residential apartment complex featuring 62 premium units with structural precision, modern elevation and quality finishes at Civil Lines, Jaipur.' },
 
   { id:'akshat-meadows-r', category:'Residential', name:'Akshat Meadows Township', client:'Akshat Apartments Pvt. Ltd.', location:'C-Scheme, Jaipur', area:'1,30,000 sq.ft', year:',',
-    img:'https://slmindia.in/wp-content/uploads/2025/11/ef31af097ddf499f86a3e0322684a7d927002e2e-1024x576.jpg',
+    img:'Projects%20Images/Residential/Akshat%20Meadows-20260606T101125Z-3-001/Akshat%20Meadows/AM%20cover.png',
     desc:'Civil construction of a multi-storey residential apartment building comprising 36 luxury dwellings with reinforced concrete framework and high-end urban living standards at C-Scheme, Jaipur.' },
 
   { id:'akshat-meadows-2-r', category:'Residential', name:'Akshat Meadows Township 2', client:'Akshat Apartments Pvt. Ltd.', location:'Sirsi Road, Jaipur', area:'3,19,000 sq.ft', year:',',
-    img:'https://slmindia.in/wp-content/uploads/2025/11/e3c0bdf83246281eb9091a053dcd6d70daaa0511-1024x576.jpg',
+    img:'Projects%20Images/Residential/Akshay%20Trishla-20260606T101204Z-3-001/Akshay%20Trishla/AT%20Cover.png',
     desc:'Complete township combining luxury villas, group housing and lifestyle amenities across 9.81 acres, featuring 120 luxury villas, walk-up apartments, retail centre and a 15,000 sq.ft clubhouse with gym, library and theatre.' },
 
   // ════════════════════════════════
@@ -912,87 +896,87 @@ const PROJECTS_DATA = [
 ═══════════════════════════════════════ */
 const PROJECT_DETAILS = {
   // ── INDUSTRIAL ──
-  'bright-metal': { gallery:['https://slmindia.in/wp-content/uploads/2025/11/f674b187763cbb2ce5eaeec4e27bf32a2828b9a2-1024x576.jpg','https://slmindia.in/wp-content/uploads/2025/11/fa3908a954b39a312fbbcd761e28636d1728d4cd-1024x576.jpg','https://slmindia.in/wp-content/uploads/2025/11/8ca5929a7ae5e262df9c653a7d1a88b8ab564e26-1024x576.jpg'],
+  'bright-metal': { gallery:['Projects%20Images/Industrial/Bright%20Metals%20India-20260606T092953Z-3-001/Bright%20Metals%20India/BMI%20Cover%20.JPG','Projects%20Images/Industrial/Bright%20Metals%20India-20260606T092953Z-3-001/Bright%20Metals%20India/BMI%20Gallery.1.JPG','Projects%20Images/Industrial/Bright%20Metals%20India-20260606T092953Z-3-001/Bright%20Metals%20India/BMI%20Gallery.2.JPG','Projects%20Images/Industrial/Bright%20Metals%20India-20260606T092953Z-3-001/Bright%20Metals%20India/BMI%20Gallery.3.JPG'],
     scope:['Industrial sheds for production operations','Utility structures & site infrastructure','Administrative blocks for smoother workflows','Planned circulation, internal roads & drainage'] },
-  'hi-growth': { gallery:['https://slmindia.in/wp-content/uploads/2025/10/a880d983da24ddf5dee4c7fefd838bf8e295a6fb-1024x576.jpg','https://slmindia.in/wp-content/uploads/2025/10/b85ee59506beb97ae3f59a0167e5095b24a14b71-1024x576.jpg','https://slmindia.in/wp-content/uploads/2025/10/e73afc6f219b31b30c27233d657926a218cb2039-1024x576.jpg','https://slmindia.in/wp-content/uploads/2025/10/38a34087998a1693467ae6a66d2a1545433fec6e-1024x576.jpg'],
+  'hi-growth': { gallery:['Projects%20Images/Industrial/HI%20Growth%20International-20260606T093013Z-3-001/HI%20Growth%20International/Hi%20Growth%20Cover.JPG','Projects%20Images/Industrial/HI%20Growth%20International-20260606T093013Z-3-001/HI%20Growth%20International/Hi%20Growth%20Gallery.2.png','Projects%20Images/Industrial/HI%20Growth%20International-20260606T093013Z-3-001/HI%20Growth%20International/Hi%20Growth%20gallery.1.png'],
     scope:['Industrial & storage sheds for cold storage operations','Administrative and service areas','Utility structures & mechanical provisions','Integrated internal road and drainage systems'] },
-  'universal-auto-iii': { gallery:['https://slmindia.in/wp-content/uploads/2025/10/b37ff68f1001da6229b29dd4cbb759cd6c807e8f-1024x576.jpg','https://slmindia.in/wp-content/uploads/2025/10/bfb452f8dacf576e5ff0081363c7f8a688ce2aae-1024x576.jpg','https://slmindia.in/wp-content/uploads/2025/10/dfe162edab5eef507d9152d1f529a48bbed82f65-1024x576.jpg'],
+  'universal-auto-iii': { gallery:['Projects%20Images/Industrial/UAF%20___rd%20(SARGOTH)-20260606T093543Z-3-001/UAF%20_rd%20(SARGOTH)/UAF%20Industrial%203rd%20Cover.JPG','Projects%20Images/Industrial/UAF%20___rd%20(SARGOTH)-20260606T093543Z-3-001/UAF%20_rd%20(SARGOTH)/UAF%203rd%20Gallery.2.JPG','Projects%20Images/Industrial/UAF%20___rd%20(SARGOTH)-20260606T093543Z-3-001/UAF%20_rd%20(SARGOTH)/UAF%20Industrial%20Gallery.1.JPG'],
     scope:['Industrial sheds with high-capacity production layout','Utility & service structures','Administrative and control rooms','Site infrastructure and internal circulation planning'] },
-  'paavan-products': { gallery:['https://slmindia.in/wp-content/uploads/2025/10/f01ed58c3fb3a601408869b4e29ccc8861ce5096-1024x576.jpg','https://slmindia.in/wp-content/uploads/2025/10/0f37e7b240f8e03afcd5927f4f6f1d0eb40fb9b7-1024x576.jpg','https://slmindia.in/wp-content/uploads/2025/10/0516ca2089aa3383f4d5bba816f99a8882cde7f2-1024x576.jpg','https://slmindia.in/wp-content/uploads/2025/10/d82da505fa0349bd8210df64805ee38e0546afe8-1024x576.jpg','https://slmindia.in/wp-content/uploads/2025/10/45fa562805dd3775970a965d62a669fc9b461713-1024x576.jpg'],
+  'paavan-products': { gallery:['Projects%20Images/Industrial/PAAVAN%20PRODUCTS%20BICHUN-20260606T093317Z-3-001/PAAVAN%20PRODUCTS%20BICHUN/PAAVAN%20Cover.JPG','Projects%20Images/Industrial/PAAVAN%20PRODUCTS%20BICHUN-20260606T093317Z-3-001/PAAVAN%20PRODUCTS%20BICHUN/PAAVAN%20Galery.1.JPG','Projects%20Images/Industrial/PAAVAN%20PRODUCTS%20BICHUN-20260606T093317Z-3-001/PAAVAN%20PRODUCTS%20BICHUN/PAAVAN%20Gallery.2.JPG','Projects%20Images/Industrial/PAAVAN%20PRODUCTS%20BICHUN-20260606T093317Z-3-001/PAAVAN%20PRODUCTS%20BICHUN/PAAVAN%20Gallery.3.JPG','Projects%20Images/Industrial/PAAVAN%20PRODUCTS%20BICHUN-20260606T093317Z-3-001/PAAVAN%20PRODUCTS%20BICHUN/PAAVAN%20Gallery.4.JPG'],
     scope:['Industrial shed for production & storage','Administrative and support areas','Internal road network & site development','Utility structures for smooth operations'] },
-  'precision-auto': { gallery:['https://slmindia.in/wp-content/uploads/2025/10/image-50.png','https://slmindia.in/wp-content/uploads/2025/10/image-49-2.png','https://slmindia.in/wp-content/uploads/2025/10/Component-95.png','https://slmindia.in/wp-content/uploads/2025/10/image-48-2.png'],
+  'precision-auto': { gallery:['Projects%20Images/Industrial/Precision%20Autocastings%20Kaladera-20260606T093415Z-3-001/Precision%20Autocastings%20Kaladera/Precision%20Autocasting%20Website%20Cover.JPG','Projects%20Images/Industrial/Precision%20Autocastings%20Kaladera-20260606T093415Z-3-001/Precision%20Autocastings%20Kaladera/PAC%20Gallery.1.JPG','Projects%20Images/Industrial/Precision%20Autocastings%20Kaladera-20260606T093415Z-3-001/Precision%20Autocastings%20Kaladera/PAC%20Gallery.2.JPG','Projects%20Images/Industrial/Precision%20Autocastings%20Kaladera-20260606T093415Z-3-001/Precision%20Autocastings%20Kaladera/PAC%20Gallery.3.JPG'],
     scope:['Large-scale production sheds for foundry operations','Administrative and support blocks','Utility structures with integrated services','Site-wide infrastructure and internal circulation roads'] },
-  'oswal-cables': { gallery:['https://slmindia.in/wp-content/uploads/2025/10/231e9c38bd000715dafa19a5e706c11232a49e1f-1024x576.jpg','https://slmindia.in/wp-content/uploads/2025/10/39e221b37ab209a986a231b5309cba4b98ca121a-1024x576.jpg','https://slmindia.in/wp-content/uploads/2025/10/ae981e99d86dcb5663746b38f9076f0f3b4887c3-1024x576.jpg','https://slmindia.in/wp-content/uploads/2025/10/6b2968bee97d3a12c0a3de0740b93b6befcff4be-1024x576.jpg'],
+  'oswal-cables': { gallery:['Projects%20Images/Industrial/Oswal%20Cables%20Bagru-20260606T093209Z-3-001/Oswal%20Cables%20Bagru/Oswal%20Cable%20Cover%20Website.png','Projects%20Images/Industrial/Oswal%20Cables%20Bagru-20260606T093209Z-3-001/Oswal%20Cables%20Bagru/OC%20Gallery.1.JPG','Projects%20Images/Industrial/Oswal%20Cables%20Bagru-20260606T093209Z-3-001/Oswal%20Cables%20Bagru/OC%20Gallery.2.png','Projects%20Images/Industrial/Oswal%20Cables%20Bagru-20260606T093209Z-3-001/Oswal%20Cables%20Bagru/OC%20Gallery.3.png'],
     scope:['Industrial sheds for cable & conductor production','Dedicated administrative office block','Utility & electrical service structures','Internal roads and drainage systems'] },
-  'universal-auto-ii': { gallery:['https://slmindia.in/wp-content/uploads/2025/10/9c1643f83174e72308952ce724f5dfcd7de2dc8f-1024x576.jpg','https://slmindia.in/wp-content/uploads/2025/10/d92e30e0eecf6b6e62a7fba66461a5ca2bc75c61-1024x576.jpg','https://slmindia.in/wp-content/uploads/2025/10/0e24deb976e0eb95705317de4f26971e857da5cf-1024x576.jpg','https://slmindia.in/wp-content/uploads/2025/10/4370a77083fbb8b356b0de3471f3fd5626bed01b-1024x576.jpg'],
+  'universal-auto-ii': { gallery:['Projects%20Images/Industrial/UAF%20-%20__%20Reengus-20260606T093524Z-3-001/UAF%20-%20_%20Reengus/UAF%202nd%20Unit%20Website%20Cover.png','Projects%20Images/Industrial/UAF%20-%20__%20Reengus-20260606T093524Z-3-001/UAF%20-%20_%20Reengus/UAF%202nd%20Gallery.1.JPG','Projects%20Images/Industrial/UAF%20-%20__%20Reengus-20260606T093524Z-3-001/UAF%20-%20_%20Reengus/UAF%202nd%20Gallery.2.png','Projects%20Images/Industrial/UAF%20-%20__%20Reengus-20260606T093524Z-3-001/UAF%20-%20_%20Reengus/UAF%202nd%20Gallery.3.png'],
     scope:['Heavy-duty industrial sheds','Administrative & operations block','Site infrastructure & internal circulation roads','Utility and drainage development'] },
-  'arl-infratech': { gallery:['https://slmindia.in/wp-content/uploads/2025/10/b3d81c782fb91e145c563193e50abee49e1e6c9b-1024x576.jpg','https://slmindia.in/wp-content/uploads/2025/10/3373e6a47b09fc4614d353566f98886a19d921a5-1024x576.jpg','https://slmindia.in/wp-content/uploads/2025/10/8745f13471e63fc5ccdd34a555d032bd73073573-1024x576.jpg','https://slmindia.in/wp-content/uploads/2025/10/76e33f2ed2cf31d2c5cb84dd3953d98f36d5c531-1024x576.jpg','https://slmindia.in/wp-content/uploads/2025/10/56dc0e316a68c08919e2413e28f88155b2069a20-1024x576.jpg'],
+  'arl-infratech': { gallery:['Projects%20Images/Industrial/ARL%20Bagru-20260606T092855Z-3-001/ARL%20Bagru/ARL%20Cover.JPG','Projects%20Images/Industrial/ARL%20Bagru-20260606T092855Z-3-001/ARL%20Bagru/ARL%20Gallery.1%20.JPG','Projects%20Images/Industrial/ARL%20Bagru-20260606T092855Z-3-001/ARL%20Bagru/ARL%20Gallery.2.JPG','Projects%20Images/Industrial/ARL%20Bagru-20260606T092855Z-3-001/ARL%20Bagru/ARL%20Gallery.3.JPG'],
     scope:['Industrial sheds for cement product lines','Utility blocks & site infrastructure','Efficient layout for process flow','Civil & structural execution'] },
-  'sigma-j1': { gallery:['https://slmindia.in/wp-content/uploads/2025/10/f389d35b59a68aad366182167388e9b912d89514-1024x683.jpg'],
+  'sigma-j1': { gallery:['Projects%20Images/Industrial/Sigma%20Electricals%20VKIA-20260606T093508Z-3-001/Sigma%20Electricals%20VKIA/Sigma%20Cover.png','Projects%20Images/Industrial/Sigma%20Electricals%20VKIA-20260606T093508Z-3-001/Sigma%20Electricals%20VKIA/Sigma%20Gallery.1.png','Projects%20Images/Industrial/Sigma%20Electricals%20VKIA-20260606T093508Z-3-001/Sigma%20Electricals%20VKIA/Sigma%20Gallery.2.png','Projects%20Images/Industrial/Sigma%20Electricals%20VKIA-20260606T093508Z-3-001/Sigma%20Electricals%20VKIA/Sigma%20Gallery.3.png'],
     scope:['Factory shed for precision manufacturing','Site infrastructure & utilities','Structural & civil framework','Optimized layout for operations'] },
-  'mayur-uniquoters-ind': { gallery:['https://slmindia.in/wp-content/uploads/2025/10/DJI_20250403095837_0002_D-2-1024x556.png','https://slmindia.in/wp-content/uploads/2025/10/image-49.png','https://slmindia.in/wp-content/uploads/2025/10/image-47.png','https://slmindia.in/wp-content/uploads/2025/10/image-48.png'],
+  'mayur-uniquoters-ind': { gallery:['Projects%20Images/Industrial/Mayur%20Uniquoters%20Jaithpura-20260606T093051Z-3-001/Mayur%20Uniquoters%20Jaithpura/MU%20Cover.JPG','Projects%20Images/Industrial/Mayur%20Uniquoters%20Jaithpura-20260606T093051Z-3-001/Mayur%20Uniquoters%20Jaithpura/MU%20Gallery.1.png','Projects%20Images/Industrial/Mayur%20Uniquoters%20Jaithpura-20260606T093051Z-3-001/Mayur%20Uniquoters%20Jaithpura/MU%20Gallery.2.JPG','Projects%20Images/Industrial/Mayur%20Uniquoters%20Jaithpura-20260606T093051Z-3-001/Mayur%20Uniquoters%20Jaithpura/MU%20Gallery.3.png'],
     scope:['Manufacturing sheds & godowns','Utility structures for operations','Internal roads & site development','Durable civil execution'] },
-  'ankit-roofing': { gallery:['https://slmindia.in/wp-content/uploads/2025/10/Frame-337-1.png','https://slmindia.in/wp-content/uploads/2025/10/image-49-1.png','https://slmindia.in/wp-content/uploads/2025/10/image-48-1.png'],
+  'ankit-roofing': { gallery:['Projects%20Images/Industrial/Ankit%20Roofing%20Ltd.-20260606T092813Z-3-001/Ankit%20Roofing%20Ltd/AR%20Cover.png','Projects%20Images/Industrial/Ankit%20Roofing%20Ltd.-20260606T092813Z-3-001/Ankit%20Roofing%20Ltd/AR%20gallery.1.png','Projects%20Images/Industrial/Ankit%20Roofing%20Ltd.-20260606T092813Z-3-001/Ankit%20Roofing%20Ltd/AR%20gallery.2.png','Projects%20Images/Industrial/Ankit%20Roofing%20Ltd.-20260606T092813Z-3-001/Ankit%20Roofing%20Ltd/AR%20gallery.3.png','Projects%20Images/Industrial/Ankit%20Roofing%20Ltd.-20260606T092813Z-3-001/Ankit%20Roofing%20Ltd/AR%20gallery.4.png'],
     scope:['Industrial shed for roofing manufacturing','Site infrastructure & utilities','Administrative provisions','Civil and structural works'] },
-  'vinayak-jewels': { gallery:['https://slmindia.in/wp-content/uploads/2025/10/DJI_20250403095837_0002_D-2-1-1024x543.png','https://slmindia.in/wp-content/uploads/2025/10/60520108fea84fbc78f4eab837d08d6cddf01132.png','https://slmindia.in/wp-content/uploads/2025/10/749c401d22da940a8de16dbe10165e0b1b60cf5a.png','https://slmindia.in/wp-content/uploads/2025/10/b063b90e1189b5fd920e3b6b1b9a8e750ae6fd07.png'],
+  'vinayak-jewels': { gallery:['Projects%20Images/Industrial/Vinayak%20Jewels-20260606T093630Z-3-001/Vinayak%20Jewels/Vinayak%20Jewels%20Cover.png','Projects%20Images/Industrial/Vinayak%20Jewels-20260606T093630Z-3-001/Vinayak%20Jewels/Vinayak%20Jewels%20Gallery.1.jpg','Projects%20Images/Industrial/Vinayak%20Jewels-20260606T093630Z-3-001/Vinayak%20Jewels/Vinayak%20Jewels%20Gallery.3.jpg','Projects%20Images/Industrial/Vinayak%20Jewels-20260606T093630Z-3-001/Vinayak%20Jewels/Vinayak%20jewels%20gallery.2.jpg'],
     scope:['Production sheds for jewellery manufacturing','Utility and service structures','Civil works within SEZ guidelines','Complete site development'] },
-  'autolite': { gallery:[], scope:['Factory shed for light component production','Utility & service blocks','Civil and electrical integration','Site-level development'] },
-  'pacific-granites': { gallery:['https://slmindia.in/wp-content/uploads/2025/10/DJI_20250403095837_0002_D-2-3-1024x556.png'],
+  'autolite': { gallery:['Projects%20Images/Industrial/Autolite%20-20260606T092916Z-3-001/Autolite/Autolite%20Cover.png','Projects%20Images/Industrial/Autolite%20-20260606T092916Z-3-001/Autolite/Autolite%20Gallery%20.1.png','Projects%20Images/Industrial/Autolite%20-20260606T092916Z-3-001/Autolite/Autolite%20Gallery.2.png'], scope:['Factory shed for light component production','Utility & service blocks','Civil and electrical integration','Site-level development'] },
+  'pacific-granites': { gallery:['Projects%20Images/Industrial/Pacific%20Granite-20260606T093345Z-3-001/Pacific%20Granite/Pacific%20Granite%20Cover.png','Projects%20Images/Industrial/Pacific%20Granite-20260606T093345Z-3-001/Pacific%20Granite/Pacific%20Granite%20Gallery.1.png'],
     scope:['Granite processing sheds','Specialized heavy foundations','Industrial layout & site development','Structural works for machinery load'] },
-  'reil-kanakpura': { gallery:['https://slmindia.in/wp-content/uploads/2025/10/image-47-1.png','https://slmindia.in/wp-content/uploads/2025/10/image-48-3.png','https://slmindia.in/wp-content/uploads/2025/10/image-49-3.png'],
+  'reil-kanakpura': { gallery:['Projects%20Images/Industrial/REIL%20Kanakpura-20260606T093429Z-3-001/REIL%20Kanakpura/REIL%20Cover.png','Projects%20Images/Industrial/REIL%20Kanakpura-20260606T093429Z-3-001/REIL%20Kanakpura/REIL%20Gallery.1.png','Projects%20Images/Industrial/REIL%20Kanakpura-20260606T093429Z-3-001/REIL%20Kanakpura/REIL%20Gallery.2.png','Projects%20Images/Industrial/REIL%20Kanakpura-20260606T093429Z-3-001/REIL%20Kanakpura/REIL%20Gallery.3.png'],
     scope:['Electronics manufacturing sheds','Utility & service structures','Civil works & site infrastructure','Integrated process layout'] },
-  'microtek-sitapura': { gallery:[], scope:['Manufacturing and assembly facility','Industrial sheds with complete support','Utility networks and services','Administrative infrastructure'] },
-  'vaibhav-global': { gallery:[], scope:['Industrial facility for fashion jewellery production','Production sheds & office infrastructure','Complete site development','Utility & service infrastructure'] },
-  'kec-ind': { gallery:[], scope:['Operations and infrastructure facility','Structural works & administrative blocks','Complete site development','Service infrastructure'] },
-  'microtek-bassi': { gallery:[], scope:['Manufacturing and assembly operations','Industrial sheds with full support','Electrical & utility networks','Site development and infrastructure'] },
+  'microtek-sitapura': { gallery:['Projects%20Images/Industrial/Microtek%20-20260606T093116Z-3-001/Microtek/Microtek%20cover.png'], scope:['Manufacturing and assembly facility','Industrial sheds with complete support','Utility networks and services','Administrative infrastructure'] },
+  'vaibhav-global': { gallery:['Projects%20Images/Industrial/Vaibhav%20%20Gems-20260606T093609Z-3-001/Vaibhav%20%20Gems/VGL%20Cover.png','Projects%20Images/Industrial/Vaibhav%20%20Gems-20260606T093609Z-3-001/Vaibhav%20%20Gems/VGL%20Gallery.1.png','Projects%20Images/Industrial/Vaibhav%20%20Gems-20260606T093609Z-3-001/Vaibhav%20%20Gems/VGL%20Gallery.2.jpg'], scope:['Industrial facility for fashion jewellery production','Production sheds & office infrastructure','Complete site development','Utility & service infrastructure'] },
+  'kec-ind': { gallery:['Projects%20Images/Industrial/KEC%20Jhotwara-20260606T093026Z-3-001/KEC%20Jhotwara/KEC%20cover.png','Projects%20Images/Industrial/KEC%20Jhotwara-20260606T093026Z-3-001/KEC%20Jhotwara/Kec%20Gallery.1.png','Projects%20Images/Industrial/KEC%20Jhotwara-20260606T093026Z-3-001/KEC%20Jhotwara/Kec%20gallery.2.png'], scope:['Operations and infrastructure facility','Structural works & administrative blocks','Complete site development','Service infrastructure'] },
+  'microtek-bassi': { gallery:['Projects%20Images/Industrial/Microtek%20-20260606T093116Z-3-001/Microtek/Microtek%20cover.png'], scope:['Manufacturing and assembly operations','Industrial sheds with full support','Electrical & utility networks','Site development and infrastructure'] },
 
   // ── HOSPITALITY ──
-  'oberoi-vanyavilas': { gallery:[], scope:['Luxury tented accommodations with heritage detailing','Spa, restaurant, and wellness zones amid landscaped greens','Staff quarters & back-of-house facilities','Internal roads, utilities, and drainage infrastructure'] },
-  'stardom-resort': { gallery:['https://slmindia.in/wp-content/uploads/2025/10/99fc13cdfe743de4d08c740ebe636bf594cf6cd6-1024x576.jpg','https://slmindia.in/wp-content/uploads/2025/10/31555fcda6e0fb4a78efad786c66187fae667f6a-1024x576.jpg','https://slmindia.in/wp-content/uploads/2025/10/69e2c013cf748fc2c1fc66ca2b8b3d483d506018-1024x576.jpg','https://slmindia.in/wp-content/uploads/2025/10/62b1f68f7352f2591ea0b26463875c37fcf4d44c-1024x576.jpg'],
+  'oberoi-vanyavilas': { gallery:['Projects%20Images/Hospitality/Oberoi%20Vanyavillas-20260606T094412Z-3-001/Oberoi%20Vanyavillas/Oberoi%20Cover.png','Projects%20Images/Hospitality/Oberoi%20Vanyavillas-20260606T094412Z-3-001/Oberoi%20Vanyavillas/Oberoi%20Gallery.1.png','Projects%20Images/Hospitality/Oberoi%20Vanyavillas-20260606T094412Z-3-001/Oberoi%20Vanyavillas/Oberoi%20Gallery.10.png','Projects%20Images/Hospitality/Oberoi%20Vanyavillas-20260606T094412Z-3-001/Oberoi%20Vanyavillas/Oberoi%20Gallery.6.png','Projects%20Images/Hospitality/Oberoi%20Vanyavillas-20260606T094412Z-3-001/Oberoi%20Vanyavillas/Oberoi%20Gallery.7.png','Projects%20Images/Hospitality/Oberoi%20Vanyavillas-20260606T094412Z-3-001/Oberoi%20Vanyavillas/Oberoi%20Gallery.8.png','Projects%20Images/Hospitality/Oberoi%20Vanyavillas-20260606T094412Z-3-001/Oberoi%20Vanyavillas/Oberoi%20Gallery.9.png','Projects%20Images/Hospitality/Oberoi%20Vanyavillas-20260606T094412Z-3-001/Oberoi%20Vanyavillas/Oberoi%20gallery.3.jpg'], scope:['Luxury tented accommodations with heritage detailing','Spa, restaurant, and wellness zones amid landscaped greens','Staff quarters & back-of-house facilities','Internal roads, utilities, and drainage infrastructure'] },
+  'stardom-resort': { gallery:['Projects%20Images/Hospitality/Stardom%20Resorts-20260606T094504Z-3-001/Stardom%20Resorts/Stardom%20Cover.png','Projects%20Images/Hospitality/Stardom%20Resorts-20260606T094504Z-3-001/Stardom%20Resorts/Stardom%20Gallery.1.JPG','Projects%20Images/Hospitality/Stardom%20Resorts-20260606T094504Z-3-001/Stardom%20Resorts/Stardom%20Gallery.2.jpg','Projects%20Images/Hospitality/Stardom%20Resorts-20260606T094504Z-3-001/Stardom%20Resorts/Stardom%20Gallery.3.JPG','Projects%20Images/Hospitality/Stardom%20Resorts-20260606T094504Z-3-001/Stardom%20Resorts/Stardom%20Gallery.4.jpg','Projects%20Images/Hospitality/Stardom%20Resorts-20260606T094504Z-3-001/Stardom%20Resorts/Stardom%20Gallery.5.JPG'],
     scope:['Luxury guest rooms & hospitality facilities','Restaurant & bar block','Utility and service infrastructure','Internal road & site development'] },
-  'hotel-allied-mahendra': { gallery:[], scope:['Hotel block with banquet & conference hall','Structural & finishing works','Site landscaping & utilities','Guest service infrastructure'] },
-  'westin-pushkar': { gallery:['https://slmindia.in/wp-content/uploads/2025/10/c546c947d1b77388e986e771a9c387a103888d15-1024x576.jpg','https://slmindia.in/wp-content/uploads/2025/10/6f27c2659941130dc4a446ebd46ea08c05fdd22e-1024x576.jpg','https://slmindia.in/wp-content/uploads/2025/10/0beed6799d218cb7f3a269847843750ce29fbad1-1024x576.jpg','https://slmindia.in/wp-content/uploads/2025/10/c6dcc9b708878b25482c55efc3a8b51b9e7a91eb-1024x576.jpg'],
+  'hotel-allied-mahendra': { gallery:['Projects%20Images/Hospitality/Hotel%20Allied%20Mahindra-20260606T094348Z-3-001/Hotel%20Allied%20Mahindra/Allied%20cover.png','Projects%20Images/Hospitality/Hotel%20Allied%20Mahindra-20260606T094348Z-3-001/Hotel%20Allied%20Mahindra/Allied%20gallery.1.png','Projects%20Images/Hospitality/Hotel%20Allied%20Mahindra-20260606T094348Z-3-001/Hotel%20Allied%20Mahindra/Allied%20gallery.2.png'], scope:['Hotel block with banquet & conference hall','Structural & finishing works','Site landscaping & utilities','Guest service infrastructure'] },
+  'westin-pushkar': { gallery:['Projects%20Images/Hospitality/Westin%20Pushkar-20260606T094529Z-3-001/Westin%20Pushkar/Westin%20Cover.png','Projects%20Images/Hospitality/Westin%20Pushkar-20260606T094529Z-3-001/Westin%20Pushkar/Westin%20gallery.1.JPG','Projects%20Images/Hospitality/Westin%20Pushkar-20260606T094529Z-3-001/Westin%20Pushkar/Westin%20gallery.2.JPG','Projects%20Images/Hospitality/Westin%20Pushkar-20260606T094529Z-3-001/Westin%20Pushkar/Westin%20gallery.3.JPG','Projects%20Images/Hospitality/Westin%20Pushkar-20260606T094529Z-3-001/Westin%20Pushkar/Westin%20gallery.4.JPG','Projects%20Images/Hospitality/Westin%20Pushkar-20260606T094529Z-3-001/Westin%20Pushkar/Westin%20gallery.5.JPG'],
     scope:['98 luxury guestrooms and villas','Private plunge pools with landscaped views','Wellness spa and leisure amenities','Civil and infrastructure execution across site'] },
-  'hotel-paradise': { gallery:['https://slmindia.in/wp-content/uploads/2025/10/735c52eeffd011ca83af2e01d399b5be829b676c-1024x576.jpg','https://slmindia.in/wp-content/uploads/2025/10/d14d19e0d9ede295bc2705b5cf3e7829cafa531e-1024x576.jpg','https://slmindia.in/wp-content/uploads/2025/10/2f5ced9cc8ae9aa77fc99644410e7904b5a9347b-1-1024x576.jpg','https://slmindia.in/wp-content/uploads/2025/10/13c0f6d1999acd1847a8eba9e8a55a083a2e02f7-1-1024x576.jpg'],
+  'hotel-paradise': { gallery:['Projects%20Images/Hospitality/Ramada%20-20260606T094440Z-3-001/Ramada/Ramada.cover.JPG','Projects%20Images/Hospitality/Ramada%20-20260606T094440Z-3-001/Ramada/Ramada%20.1.png','Projects%20Images/Hospitality/Ramada%20-20260606T094440Z-3-001/Ramada/Ramada.2.JPG','Projects%20Images/Hospitality/Ramada%20-20260606T094440Z-3-001/Ramada/Ramada.3.JPG'],
     scope:['Multi-storey hotel structure with modern façade','Guest rooms, banquet & service areas','Structural and MEP integration','Civil finishing & infrastructure delivery'] },
-  'gold-palace': { gallery:['https://slmindia.in/wp-content/uploads/2025/10/0206c68d51c4eb45d19a57427f83b7ec9ee55c20-1024x683.jpg'],
+  'gold-palace': { gallery:['Projects%20Images/Hospitality/Gold%20Palace%20Resort-20260606T094310Z-3-001/Gold%20Palace%20Resort/Gold%20Palace.Cover.png','Projects%20Images/Hospitality/Gold%20Palace%20Resort-20260606T094310Z-3-001/Gold%20Palace%20Resort/Gold%20Palace.1.png','Projects%20Images/Hospitality/Gold%20Palace%20Resort-20260606T094310Z-3-001/Gold%20Palace%20Resort/Gold%20Palace.2.png','Projects%20Images/Hospitality/Gold%20Palace%20Resort-20260606T094310Z-3-001/Gold%20Palace%20Resort/Gold%20Palace.3.png','Projects%20Images/Hospitality/Gold%20Palace%20Resort-20260606T094310Z-3-001/Gold%20Palace%20Resort/Gold%20Palace.4.png','Projects%20Images/Hospitality/Gold%20Palace%20Resort-20260606T094310Z-3-001/Gold%20Palace%20Resort/Gold%20Palace.5.png'],
     scope:['68 guest rooms with heritage façade detailing','Banquet halls, restaurants, and spa facilities','Recreational zones and landscaped courtyards','Infrastructure development across 13 acres'] },
-  'hotel-gajner': { gallery:[], scope:['Spa & wellness facility within heritage complex','Utility infrastructure & service areas','Kitchen block and maintenance works','Restoration aligned with conservation standards'] },
-  'hotel-gaudavan': { gallery:['https://slmindia.in/wp-content/uploads/2025/10/0206c68d51c4eb45d19a57427f83b7ec9ee55c20-1024x683.jpg','https://slmindia.in/wp-content/uploads/2025/10/1a45eeab671f4ae0cdc7db6ded162f1ee183c835-1024x683.jpg','https://slmindia.in/wp-content/uploads/2025/10/65d524b1cb11bef6c7e7584bb9b6612792d893ea-1024x683.jpg','https://slmindia.in/wp-content/uploads/2025/10/93ac551a1f9f7b8302ff74fce8c747bde7089a1f-1024x683.jpg'],
+  'hotel-gajner': { gallery:['Projects%20Images/Hospitality/Gajner%20Palace%20Bikaner-20260606T094204Z-3-001/Gajner%20Palace%20Bikaner/Gajner%20Palace%20Cover.jpg','Projects%20Images/Hospitality/Gajner%20Palace%20Bikaner-20260606T094204Z-3-001/Gajner%20Palace%20Bikaner/Gajner%20gallery.1.jpg','Projects%20Images/Hospitality/Gajner%20Palace%20Bikaner-20260606T094204Z-3-001/Gajner%20Palace%20Bikaner/Gajner%20gallery.3.jpg','Projects%20Images/Hospitality/Gajner%20Palace%20Bikaner-20260606T094204Z-3-001/Gajner%20Palace%20Bikaner/Gajner%20gallery.4.jpg'], scope:['Spa & wellness facility within heritage complex','Utility infrastructure & service areas','Kitchen block and maintenance works','Restoration aligned with conservation standards'] },
+  'hotel-gaudavan': { gallery:['Projects%20Images/Hospitality/Gaudavan-20260606T094224Z-3-001/Gaudavan/Gaudavan%20cover.png','Projects%20Images/Hospitality/Gaudavan-20260606T094224Z-3-001/Gaudavan/Gaudavan.2.png','Projects%20Images/Hospitality/Gaudavan-20260606T094224Z-3-001/Gaudavan/Gaudavan.4.png','Projects%20Images/Hospitality/Gaudavan-20260606T094224Z-3-001/Gaudavan/Gaudavan.5.png','Projects%20Images/Hospitality/Gaudavan-20260606T094224Z-3-001/Gaudavan/gaudavan.3.png'],
     scope:['Complete civil & finishing works','Electrical & plumbing installations','Landscape & external development','Ready-to-operate handover'] },
-  'gorbandh-palace': { gallery:[], scope:['Heritage-style architecture in sandstone','Luxury guest rooms and dining areas','Spa and recreational infrastructure','Civil works matching traditional detailing'] },
+  'gorbandh-palace': { gallery:['Projects%20Images/Hospitality/Gorbandh%20Jaisalmer-20260606T094327Z-3-001/Gorbandh%20Jaisalmer/Gorbandh%20cover.jpg','Projects%20Images/Hospitality/Gorbandh%20Jaisalmer-20260606T094327Z-3-001/Gorbandh%20Jaisalmer/Gorbandh%20.2.webp','Projects%20Images/Hospitality/Gorbandh%20Jaisalmer-20260606T094327Z-3-001/Gorbandh%20Jaisalmer/Gorbandh.3.webp','Projects%20Images/Hospitality/Gorbandh%20Jaisalmer-20260606T094327Z-3-001/Gorbandh%20Jaisalmer/Gorbandh.4.jpg'], scope:['Heritage-style architecture in sandstone','Luxury guest rooms and dining areas','Spa and recreational infrastructure','Civil works matching traditional detailing'] },
 
   // ── INSTITUTIONAL ──
-  'hare-krishna': { gallery:['https://slmindia.in/wp-content/uploads/2025/09/9b01fbc120d6ab132271ee20ec6a03d384070dc5-1024x576.jpg'],
+  'hare-krishna': { gallery:['Projects%20Images/Institutional/Gupt%20Vrindavan%20Dham-20260606T095014Z-3-001/Gupt%20Vrindavan%20Dham/GVD%20Cover.png','Projects%20Images/Institutional/Gupt%20Vrindavan%20Dham-20260606T095014Z-3-001/Gupt%20Vrindavan%20Dham/GVD.1.png','Projects%20Images/Institutional/Gupt%20Vrindavan%20Dham-20260606T095014Z-3-001/Gupt%20Vrindavan%20Dham/GVD.2.png','Projects%20Images/Institutional/Gupt%20Vrindavan%20Dham-20260606T095014Z-3-001/Gupt%20Vrindavan%20Dham/GVD.3.png','Projects%20Images/Institutional/Gupt%20Vrindavan%20Dham-20260606T095014Z-3-001/Gupt%20Vrindavan%20Dham/GVD.4.JPG','Projects%20Images/Institutional/Gupt%20Vrindavan%20Dham-20260606T095014Z-3-001/Gupt%20Vrindavan%20Dham/GVD.5.jpeg','Projects%20Images/Institutional/Gupt%20Vrindavan%20Dham-20260606T095014Z-3-001/Gupt%20Vrindavan%20Dham/GVD.6.png'],
     scope:['17-storey temple & cultural center','25,000 sq.ft temple hall with grand Mayur Dwar','Convention & exhibition areas','Complete civil and infrastructure works'] },
-  'jecrc-ncr': { gallery:['https://slmindia.in/wp-content/uploads/2025/11/3b5352f9c7000c944f6c11e8a2d9e1c16b9df9ab-1024x576.png'],
+  'jecrc-ncr': { gallery:['Projects%20Images/Institutional/JECRC%20University%20Alwar-20260606T095307Z-3-001/JECRC%20University%20Alwar/JECRC%20Cover.png','Projects%20Images/Institutional/JECRC%20University%20Alwar-20260606T095307Z-3-001/JECRC%20University%20Alwar/JECRC.1.png','Projects%20Images/Institutional/JECRC%20University%20Alwar-20260606T095307Z-3-001/JECRC%20University%20Alwar/JECRC.2.png','Projects%20Images/Institutional/JECRC%20University%20Alwar-20260606T095307Z-3-001/JECRC%20University%20Alwar/JECRC.3.jpeg','Projects%20Images/Institutional/JECRC%20University%20Alwar-20260606T095307Z-3-001/JECRC%20University%20Alwar/JECRC.4.png'],
     scope:['Structural repair & façade restoration','Civil & interior refurbishing works','Plumbing & electrical upgrades','Comprehensive campus redevelopment'] },
-  'digambar-jain': { gallery:['https://slmindia.in/wp-content/uploads/2025/12/Component-94-1.png'],
+  'digambar-jain': { gallery:['Projects%20Images/Institutional/Digambar%20Jain%20Shraman%20Sanskriti%20Sansthan/Digambar%20Jain%20Shraman%20Sanskriti%20Sansthan/JS.Cover.png','Projects%20Images/Institutional/Digambar%20Jain%20Shraman%20Sanskriti%20Sansthan/Digambar%20Jain%20Shraman%20Sanskriti%20Sansthan/JS%201.JPG','Projects%20Images/Institutional/Digambar%20Jain%20Shraman%20Sanskriti%20Sansthan/Digambar%20Jain%20Shraman%20Sanskriti%20Sansthan/JS.2.png','Projects%20Images/Institutional/Digambar%20Jain%20Shraman%20Sanskriti%20Sansthan/Digambar%20Jain%20Shraman%20Sanskriti%20Sansthan/JS.3.png'],
     scope:['G+4 institutional & hostel buildings','Civil & interior development','Spiritual and residential facilities','Structural and finishing works'] },
-  'vipra-foundation': { gallery:['https://slmindia.in/wp-content/uploads/2025/11/ab2f633d62560eaaf2ca29a009b820b5ca3f7450-1024x771.jpg','https://slmindia.in/wp-content/uploads/2025/11/6054bccf64b39d13cc87ea324b7fc93a12971f7f-1024x576.jpg','https://slmindia.in/wp-content/uploads/2025/11/01fd6179a80e7eaa89cc1df4507498def6aa2532-1024x576.jpg'],
+  'vipra-foundation': { gallery:['Projects%20Images/Institutional/Vipra%20Foundation-20260606T095510Z-3-001/Vipra%20Foundation/VF%20Cover.jpg','Projects%20Images/Institutional/Vipra%20Foundation-20260606T095510Z-3-001/Vipra%20Foundation/VF.1.png','Projects%20Images/Institutional/Vipra%20Foundation-20260606T095510Z-3-001/Vipra%20Foundation/VF.2.png','Projects%20Images/Institutional/Vipra%20Foundation-20260606T095510Z-3-001/Vipra%20Foundation/VF.3.png','Projects%20Images/Institutional/Vipra%20Foundation-20260606T095510Z-3-001/Vipra%20Foundation/VF.4.png'],
     scope:['Six-floor institutional complex','Classrooms & training centers','Research and skill development facilities','Structural & civil execution'] },
-  'jnit-campus': { gallery:['https://slmindia.in/wp-content/uploads/2025/12/Component-94-2.png'],
+  'jnit-campus': { gallery:['Projects%20Images/Institutional/JNIT%20Sitapura-20260606T095403Z-3-001/JNIT%20Sitapura/JNIT%20Cover.png','Projects%20Images/Institutional/JNIT%20Sitapura-20260606T095403Z-3-001/JNIT%20Sitapura/JNIT.1.png','Projects%20Images/Institutional/JNIT%20Sitapura-20260606T095403Z-3-001/JNIT%20Sitapura/JNIT.3.png','Projects%20Images/Institutional/JNIT%20Sitapura-20260606T095403Z-3-001/JNIT%20Sitapura/JNIT.4.png','Projects%20Images/Institutional/JNIT%20Sitapura-20260606T095403Z-3-001/JNIT%20Sitapura/JNIT.5.png','Projects%20Images/Institutional/JNIT%20Sitapura-20260606T095403Z-3-001/JNIT%20Sitapura/JNIT.6.png','Projects%20Images/Institutional/JNIT%20Sitapura-20260606T095403Z-3-001/JNIT%20Sitapura/JNIT.7.png'],
     scope:['Academic & administrative blocks','Hostel & residential facilities','Internal roads and site infrastructure','Complete campus development'] },
-  'jagannath-chaksu': { gallery:['https://slmindia.in/wp-content/uploads/2025/11/29b2fac5998d7605770ab86dfa347e2565efff8a-1024x576.jpg','https://slmindia.in/wp-content/uploads/2025/11/19d07edc6ee840cd73977ca912ddaaad03e6c1a3-1024x576.jpg','https://slmindia.in/wp-content/uploads/2025/11/308c0fa9b190978f238b4f16a4643a7033ba37d1-1024x576.jpg','https://slmindia.in/wp-content/uploads/2025/11/24e4826606065c3357e14db76afed61a6cbbb67e-1024x576.jpg'],
+  'jagannath-chaksu': { gallery:['Projects%20Images/Institutional/Jagan%20Nath%20University/Jagan%20Nath%20University/JIMS.coverJPG.jpg','Projects%20Images/Institutional/Jagan%20Nath%20University/Jagan%20Nath%20University/JIMS.1.JPG','Projects%20Images/Institutional/Jagan%20Nath%20University/Jagan%20Nath%20University/JIMS.3.JPG','Projects%20Images/Institutional/Jagan%20Nath%20University/Jagan%20Nath%20University/JIMS.4.JPG','Projects%20Images/Institutional/Jagan%20Nath%20University/Jagan%20Nath%20University/JIMS.5.JPG','Projects%20Images/Institutional/Jagan%20Nath%20University/Jagan%20Nath%20University/JIMS.6.JPG'],
     scope:['Academic and residential buildings','Infrastructure & utility networks','Administrative facilities','Complete campus planning & delivery'] },
-  'gyan-vihar': { gallery:['https://slmindia.in/wp-content/uploads/2025/12/Component-95.png','https://slmindia.in/wp-content/uploads/2025/12/Component-96.png','https://slmindia.in/wp-content/uploads/2025/11/707b1f7e213d67ad0ed8b9a1f6e27a29dafd6f67-1024x576.jpg'],
+  'gyan-vihar': { gallery:['Projects%20Images/Institutional/Gyan%20Vihar-20260606T095049Z-3-001/Gyan%20Vihar/GV%20Cover.png','Projects%20Images/Institutional/Gyan%20Vihar-20260606T095049Z-3-001/Gyan%20Vihar/GV.1.png','Projects%20Images/Institutional/Gyan%20Vihar-20260606T095049Z-3-001/Gyan%20Vihar/GV.2.png','Projects%20Images/Institutional/Gyan%20Vihar-20260606T095049Z-3-001/Gyan%20Vihar/GV.3.png'],
     scope:['Twin 9-storey academic towers','Administrative & service blocks','Structural & civil works','Site infrastructure execution'] },
-  'jaipur-dental': { gallery:[], scope:['Auditorium & classroom blocks','Hostel and student facilities','Civil & infrastructure works','Institutional-level finishing'] },
+  'jaipur-dental': { gallery:['Projects%20Images/Institutional/Jaipur%20Dental%20College-20260606T095245Z-3-001/Jaipur%20Dental%20College/JDC%20cover.png','Projects%20Images/Institutional/Jaipur%20Dental%20College-20260606T095245Z-3-001/Jaipur%20Dental%20College/JDC%20.1.png'], scope:['Auditorium & classroom blocks','Hostel and student facilities','Civil & infrastructure works','Institutional-level finishing'] },
 
   // ── COMMERCIAL ──
-  'akshat-nilay-c': { gallery:['https://slmindia.in/wp-content/uploads/2025/11/e8e4c56229787f0dbbae746aef3d02d932f69b98-1024x576.jpg','https://slmindia.in/wp-content/uploads/2025/11/726110fe4b6cea1d0f2ca97fd06e04ae6712e218-1024x576.jpg','https://slmindia.in/wp-content/uploads/2025/11/cf547f4b4bbdea830ee89691d2dac914888a2a98-1024x576.jpg'],
+  'akshat-nilay-c': { gallery:['Projects%20Images/Residential/Akshat%20Nilay-20260606T101144Z-3-001/Akshat%20Nilay/AN%20cover.png','Projects%20Images/Residential/Akshat%20Nilay-20260606T101144Z-3-001/Akshat%20Nilay/AN.1.png','Projects%20Images/Residential/Akshat%20Nilay-20260606T101144Z-3-001/Akshat%20Nilay/AN.2.png','Projects%20Images/Residential/Akshat%20Nilay-20260606T101144Z-3-001/Akshat%20Nilay/AN.3.png','Projects%20Images/Residential/Akshat%20Nilay-20260606T101144Z-3-001/Akshat%20Nilay/AN.4.png','Projects%20Images/Residential/Akshat%20Nilay-20260606T101144Z-3-001/Akshat%20Nilay/AN.5.png','Projects%20Images/Residential/Akshat%20Nilay-20260606T101144Z-3-001/Akshat%20Nilay/AN.6.png'],
     scope:['8-storey premium apartment building','62 well-planned residential units','Structural precision and modern elevation','Civil & infrastructure execution with quality assurance'] },
-  'akshat-meadows-c': { gallery:['https://slmindia.in/wp-content/uploads/2025/11/8a9c7f73933914fcc2aa2d09779fcf172b75da09-1024x576.jpg','https://slmindia.in/wp-content/uploads/2025/11/33146384867eb1f105634c2424219ab2e6c10bd5-1024x576.jpg','https://slmindia.in/wp-content/uploads/2025/11/cff215fe13838bc0c924bc91ff142cf462ba1402-1024x576.jpg'],
+  'akshat-meadows-c': { gallery:['Projects%20Images/Residential/Akshat%20Meadows-20260606T101125Z-3-001/Akshat%20Meadows/AM%20cover.png','Projects%20Images/Residential/Akshat%20Meadows-20260606T101125Z-3-001/Akshat%20Meadows/AM.1.jpg','Projects%20Images/Residential/Akshat%20Meadows-20260606T101125Z-3-001/Akshat%20Meadows/AM.2.png','Projects%20Images/Residential/Akshat%20Meadows-20260606T101125Z-3-001/Akshat%20Meadows/AM.3.png','Projects%20Images/Residential/Akshat%20Meadows-20260606T101125Z-3-001/Akshat%20Meadows/AM.4.png','Projects%20Images/Residential/Akshat%20Meadows-20260606T101125Z-3-001/Akshat%20Meadows/AM.5.JPG','Projects%20Images/Residential/Akshat%20Meadows-20260606T101125Z-3-001/Akshat%20Meadows/AM.6.png','Projects%20Images/Residential/Akshat%20Meadows-20260606T101125Z-3-001/Akshat%20Meadows/AM.7.JPG'],
     scope:['Multi-storey premium residential structure','36 exclusive apartments','Reinforced concrete framework with modern finishes','Executed to high-end urban living standards'] },
-  'akshat-meadows-2-c': { gallery:['https://slmindia.in/wp-content/uploads/2025/11/83a10eabe748c11201ab6dfd3578cb2fc342c00b-1024x576.jpg','https://slmindia.in/wp-content/uploads/2025/11/640e002f741f1b20dd69871ccfdf81cf76c34772-1024x576.jpg','https://slmindia.in/wp-content/uploads/2025/11/0ff40f9cfacca498129b1407c637399edbab04c7-1024x576.jpg'],
+  'akshat-meadows-2-c': { gallery:['Projects%20Images/Residential/Akshay%20Trishla-20260606T101204Z-3-001/Akshay%20Trishla/AT%20Cover.png','Projects%20Images/Residential/Akshay%20Trishla-20260606T101204Z-3-001/Akshay%20Trishla/AT.1.png','Projects%20Images/Residential/Akshay%20Trishla-20260606T101204Z-3-001/Akshay%20Trishla/AT.2.png','Projects%20Images/Residential/Akshay%20Trishla-20260606T101204Z-3-001/Akshay%20Trishla/AT.3.png','Projects%20Images/Residential/Akshay%20Trishla-20260606T101204Z-3-001/Akshay%20Trishla/AT.4.png'],
     scope:['120 luxury villas & walk-up apartments','Retail center & tenement blocks','15,000 sq.ft clubhouse with gym, library & home theatre','Infrastructure including roads, STP, and electrical networks'] },
 
   // ── RESIDENTIAL ──
-  'akshat-nilay-r': { gallery:['https://slmindia.in/wp-content/uploads/2025/11/e8e4c56229787f0dbbae746aef3d02d932f69b98-1024x576.jpg','https://slmindia.in/wp-content/uploads/2025/11/726110fe4b6cea1d0f2ca97fd06e04ae6712e218-1024x576.jpg','https://slmindia.in/wp-content/uploads/2025/11/cf547f4b4bbdea830ee89691d2dac914888a2a98-1024x576.jpg'],
+  'akshat-nilay-r': { gallery:['Projects%20Images/Residential/Akshat%20Nilay-20260606T101144Z-3-001/Akshat%20Nilay/AN%20cover.png','Projects%20Images/Residential/Akshat%20Nilay-20260606T101144Z-3-001/Akshat%20Nilay/AN.1.png','Projects%20Images/Residential/Akshat%20Nilay-20260606T101144Z-3-001/Akshat%20Nilay/AN.2.png','Projects%20Images/Residential/Akshat%20Nilay-20260606T101144Z-3-001/Akshat%20Nilay/AN.3.png','Projects%20Images/Residential/Akshat%20Nilay-20260606T101144Z-3-001/Akshat%20Nilay/AN.4.png','Projects%20Images/Residential/Akshat%20Nilay-20260606T101144Z-3-001/Akshat%20Nilay/AN.5.png','Projects%20Images/Residential/Akshat%20Nilay-20260606T101144Z-3-001/Akshat%20Nilay/AN.6.png'],
     scope:['8-storey premium apartment building','62 well-planned residential units','Structural precision and modern elevation','Civil & infrastructure execution with quality assurance'] },
-  'akshat-meadows-r': { gallery:['https://slmindia.in/wp-content/uploads/2025/11/8a9c7f73933914fcc2aa2d09779fcf172b75da09-1024x576.jpg','https://slmindia.in/wp-content/uploads/2025/11/33146384867eb1f105634c2424219ab2e6c10bd5-1024x576.jpg','https://slmindia.in/wp-content/uploads/2025/11/cff215fe13838bc0c924bc91ff142cf462ba1402-1024x576.jpg'],
+  'akshat-meadows-r': { gallery:['Projects%20Images/Residential/Akshat%20Meadows-20260606T101125Z-3-001/Akshat%20Meadows/AM%20cover.png','Projects%20Images/Residential/Akshat%20Meadows-20260606T101125Z-3-001/Akshat%20Meadows/AM.1.jpg','Projects%20Images/Residential/Akshat%20Meadows-20260606T101125Z-3-001/Akshat%20Meadows/AM.2.png','Projects%20Images/Residential/Akshat%20Meadows-20260606T101125Z-3-001/Akshat%20Meadows/AM.3.png','Projects%20Images/Residential/Akshat%20Meadows-20260606T101125Z-3-001/Akshat%20Meadows/AM.4.png','Projects%20Images/Residential/Akshat%20Meadows-20260606T101125Z-3-001/Akshat%20Meadows/AM.5.JPG','Projects%20Images/Residential/Akshat%20Meadows-20260606T101125Z-3-001/Akshat%20Meadows/AM.6.png','Projects%20Images/Residential/Akshat%20Meadows-20260606T101125Z-3-001/Akshat%20Meadows/AM.7.JPG'],
     scope:['Multi-storey premium residential structure','36 exclusive apartments','Reinforced concrete framework with modern finishes','Executed to high-end urban living standards'] },
-  'akshat-meadows-2-r': { gallery:['https://slmindia.in/wp-content/uploads/2025/11/83a10eabe748c11201ab6dfd3578cb2fc342c00b-1024x576.jpg','https://slmindia.in/wp-content/uploads/2025/11/640e002f741f1b20dd69871ccfdf81cf76c34772-1024x576.jpg','https://slmindia.in/wp-content/uploads/2025/11/0ff40f9cfacca498129b1407c637399edbab04c7-1024x576.jpg'],
+  'akshat-meadows-2-r': { gallery:['Projects%20Images/Residential/Akshay%20Trishla-20260606T101204Z-3-001/Akshay%20Trishla/AT%20Cover.png','Projects%20Images/Residential/Akshay%20Trishla-20260606T101204Z-3-001/Akshay%20Trishla/AT.1.png','Projects%20Images/Residential/Akshay%20Trishla-20260606T101204Z-3-001/Akshay%20Trishla/AT.2.png','Projects%20Images/Residential/Akshay%20Trishla-20260606T101204Z-3-001/Akshay%20Trishla/AT.3.png','Projects%20Images/Residential/Akshay%20Trishla-20260606T101204Z-3-001/Akshay%20Trishla/AT.4.png'],
     scope:['120 luxury villas & walk-up apartments','Retail center & tenement blocks','15,000 sq.ft clubhouse with gym, library & home theatre','Infrastructure including roads, STP, and electrical networks'] },
 
   // ── PUBLIC WORKS ──
@@ -1077,7 +1061,7 @@ function renderProjectsPage(category) {
       '@type': 'BreadcrumbList',
       'itemListElement': [
         { '@type': 'ListItem', 'position': 1, 'name': 'Home',     'item': location.origin + '/' },
-        { '@type': 'ListItem', 'position': 2, 'name': 'Projects', 'item': location.origin + '/index.html#projects' },
+        { '@type': 'ListItem', 'position': 2, 'name': 'Projects', 'item': location.origin + '/projects.html' },
         { '@type': 'ListItem', 'position': 3, 'name': category,   'item': pageUrl }
       ]
     },
@@ -1100,9 +1084,9 @@ function renderProjectsPage(category) {
       </div>
       <div style="padding:20px;background:#fff">
         <p style="font-size:10px;font-weight:700;letter-spacing:0.28em;text-transform:uppercase;color:#F47721;margin-bottom:6px">${p.category}</p>
-        <h3 style="font-family:'Archivo Black',sans-serif;font-size:16px;font-weight:600;color:#111827;line-height:1.35;margin-bottom:5px">${p.name}</h3>
+        <h3 style="font-family:'Archivo Black',sans-serif;font-size:16px;font-weight:600;color:#1F211F;line-height:1.35;margin-bottom:5px">${p.name}</h3>
         <p style="color:#6B7280;font-size:13px;margin-bottom:5px">${p.location}</p>
-        <p style="color:#111827;font-size:12px;font-weight:600">${p.area}</p>
+        <p style="color:#1F211F;font-size:12px;font-weight:600">${p.area}</p>
       </div>
     </a>
   `).join('');
@@ -1116,7 +1100,7 @@ function renderProjectPage(id) {
   const content = document.getElementById('projectDetailContent');
   if (!content) return;
   if (!p) {
-    content.innerHTML = `<div style="padding:140px 24px;text-align:center"><h1 style="font-family:'Archivo Black',sans-serif;font-size:42px;font-weight:700;margin:0 0 16px">Project Not Found</h1><p style="color:#6B7280;margin-bottom:28px">The project you're looking for doesn't exist.</p><a href="index.html#projects" style="display:inline-flex;align-items:center;gap:8px;background:#F47721;color:#fff;padding:14px 28px;text-decoration:none;font-weight:700;font-size:12px;letter-spacing:0.1em;text-transform:uppercase">Back to Projects</a></div>`;
+    content.innerHTML = `<div style="padding:140px 24px;text-align:center"><h1 style="font-family:'Archivo Black',sans-serif;font-size:42px;font-weight:700;margin:0 0 16px">Project Not Found</h1><p style="color:#6B7280;margin-bottom:28px">The project you're looking for doesn't exist.</p><a href="projects.html" style="display:inline-flex;align-items:center;gap:8px;background:#F47721;color:#fff;padding:14px 28px;text-decoration:none;font-weight:700;font-size:12px;letter-spacing:0.1em;text-transform:uppercase">Back to Projects</a></div>`;
     return;
   }
   const details = PROJECT_DETAILS[id] || { gallery: [], scope: [] };
@@ -1152,7 +1136,7 @@ function renderProjectPage(id) {
       { '@type': 'ListItem', 'position': 3, 'name': p.name,     'item': pageUrl }
     ]
   });
-  const allImgs = [p.img, ...(details.gallery || [])].filter(Boolean);
+  const allImgs = [...new Set([p.img, ...(details.gallery || [])])].filter(Boolean);
   const scope = details.scope || [];
 
   // Related projects — ONLY other projects in the same category (wraps forward from current).
@@ -1180,6 +1164,7 @@ function renderProjectPage(id) {
     <!-- Hero -->
     <section class="prj-hero">
       <div class="prj-hero-img" style="background-image:url('${p.img}')" role="img" aria-label="${p.name}"></div>
+      <img class="prj-hero-photo" src="${p.img}" alt="${p.name}" loading="eager" />
       <div class="prj-hero-content">
         <p class="prj-hero-eyebrow">
           <span>${p.category}</span>
@@ -1289,24 +1274,6 @@ function renderProjectPage(id) {
       </div>
     </section>
 
-    <!-- CTA (site-wide standard — matches journey / leadership) -->
-    <section class="bg-dark py-20 lg:py-24 relative overflow-hidden" aria-label="Contact">
-      <div class="absolute top-0 right-0 w-[40%] h-full opacity-5" style="background: radial-gradient(circle at right, #F47721, transparent 70%)"></div>
-      <div class="relative max-w-3xl mx-auto px-6 lg:px-10 text-center">
-        <p class="text-[11px] font-bold tracking-[0.32em] uppercase text-orange mb-5">Speak To Our Team</p>
-        <h2 class="font-serif text-3xl lg:text-5xl font-semibold text-white leading-tight mb-5">
-          Ready to build your<br/><span class="text-orange">next landmark</span>
-        </h2>
-        <p class="text-white/60 text-[15px] leading-relaxed max-w-xl mx-auto mb-9">
-          Reach the partners directly for project-level discussions.
-        </p>
-        <a href="index.html#contact" data-magnetic
-           class="inline-flex items-center gap-3 bg-orange text-white text-[12px] font-bold tracking-[0.1em] uppercase px-8 py-4 hover:bg-orange-dk transition-colors">
-          Explore Now
-          <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-        </a>
-      </div>
-    </section>
 
     <!-- Sticky bottom action bar (mobile only via CSS) -->
     <div class="prj-sticky-bar" id="prjStickyBar" aria-hidden="false">
@@ -1692,7 +1659,7 @@ function initJourneyAnimations() {
   });
 }
 
-/* ── Leader card 3D tilt on mouse move (runs on leadership.html) ── */
+/* ── Leader card 3D tilt on mouse move (runs on about.html) ── */
 function initLeadershipTilt() {
   const cards = document.querySelectorAll('.ld-card[data-tilt]');
   cards.forEach(card => {
@@ -1939,4 +1906,52 @@ function _initToolsFilters() {
   } else if (body.classList.contains('page-leadership')) {
     initLeadershipTilt();
   }
+})();
+
+/* ═══════════════════════════════════════
+   SCROLL PARALLAX — images + text (site-wide)
+   Opt-in via:  img[data-parallax]  /  [data-parallax-text]
+   GPU transforms only; respects reduced-motion.
+═══════════════════════════════════════ */
+(function () {
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  let imgs = [], texts = [], ticking = false;
+
+  function collect() {
+    imgs  = Array.from(document.querySelectorAll('img[data-parallax]'));
+    texts = Array.from(document.querySelectorAll('[data-parallax-text]'));
+  }
+
+  function update() {
+    ticking = false;
+    const vh = window.innerHeight;
+    for (const el of imgs) {
+      const r = el.getBoundingClientRect();
+      if (r.bottom < -160 || r.top > vh + 160) continue;
+      const sp = parseFloat(el.getAttribute('data-parallax')) || 0.16;
+      const center = r.top + r.height / 2;
+      let off = (vh / 2 - center) * sp;
+      const cap = r.height * 0.08;                 // stay inside the 1.16x scale slack
+      off = Math.max(-cap, Math.min(cap, off));
+      el.style.setProperty('--py', off.toFixed(1) + 'px');
+    }
+    for (const el of texts) {
+      const r = el.getBoundingClientRect();
+      if (r.bottom < -160 || r.top > vh + 160) continue;
+      const sp = parseFloat(el.getAttribute('data-parallax-text')) || 0.06;
+      const center = r.top + r.height / 2;
+      let off = (vh / 2 - center) * sp;
+      off = Math.max(-28, Math.min(28, off));
+      el.style.transform = 'translate3d(0,' + off.toFixed(1) + 'px,0)';
+    }
+  }
+
+  function onScroll() { if (!ticking) { requestAnimationFrame(update); ticking = true; } }
+  function init() { collect(); if (imgs.length || texts.length) update(); }
+
+  window.addEventListener('scroll', onScroll, { passive: true });
+  window.addEventListener('resize', () => { collect(); update(); }, { passive: true });
+  document.addEventListener('DOMContentLoaded', init);
+  window.addEventListener('load', init);
+  setTimeout(init, 900);   // re-collect after JS-rendered grids (projects/tools) mount
 })();
