@@ -1080,7 +1080,7 @@ function renderProjectsPage(category) {
   grid.innerHTML = filtered.map(p => `
     <a href="project.html?id=${p.id}" class="proj-thumb-card" style="text-decoration:none;color:inherit;display:block">
       <div style="overflow:hidden;aspect-ratio:16/10">
-        <img src="${p.img}" alt="${p.name}" class="proj-thumb-img" loading="lazy" />
+        <img src="${p.img}" alt="${p.name}" class="proj-thumb-img" loading="lazy" data-parallax-pos="0.12" />
       </div>
       <div style="padding:20px;background:#fff">
         <p style="font-size:10px;font-weight:700;letter-spacing:0.28em;text-transform:uppercase;color:#F47721;margin-bottom:6px">${p.category}</p>
@@ -1163,7 +1163,7 @@ function renderProjectPage(id) {
   content.innerHTML = `
     <!-- Hero -->
     <section class="prj-hero">
-      <div class="prj-hero-img" style="background-image:url('${p.img}')" role="img" aria-label="${p.name}"></div>
+      <div class="prj-hero-img" style="background-image:url('${p.img}')" role="img" aria-label="${p.name}" data-parallax-pos="0.16"></div>
       <img class="prj-hero-photo" src="${p.img}" alt="${p.name}" loading="eager" />
       <div class="prj-hero-content">
         <p class="prj-hero-eyebrow">
@@ -1915,11 +1915,12 @@ function _initToolsFilters() {
 ═══════════════════════════════════════ */
 (function () {
   if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-  let imgs = [], texts = [], ticking = false;
+  let imgs = [], texts = [], poss = [], ticking = false;
 
   function collect() {
     imgs  = Array.from(document.querySelectorAll('img[data-parallax]'));
     texts = Array.from(document.querySelectorAll('[data-parallax-text]'));
+    poss  = Array.from(document.querySelectorAll('[data-parallax-pos]'));
   }
 
   function update() {
@@ -1944,10 +1945,21 @@ function _initToolsFilters() {
       off = Math.max(-28, Math.min(28, off));
       el.style.transform = 'translate3d(0,' + off.toFixed(1) + 'px,0)';
     }
+    // Position-shift parallax (object-position / background-position) —
+    // safe for images that already use a hover transform (no conflict, no overflow).
+    for (const el of poss) {
+      const r = el.getBoundingClientRect();
+      if (r.bottom < -160 || r.top > vh + 160) continue;
+      const sp = parseFloat(el.getAttribute('data-parallax-pos')) || 0.12;
+      const center = r.top + r.height / 2;
+      let off = (vh / 2 - center) * sp;
+      off = Math.max(-30, Math.min(30, off));        // keep within the cover-crop slack
+      el.style.setProperty('--ppos', off.toFixed(1) + 'px');
+    }
   }
 
   function onScroll() { if (!ticking) { requestAnimationFrame(update); ticking = true; } }
-  function init() { collect(); if (imgs.length || texts.length) update(); }
+  function init() { collect(); if (imgs.length || texts.length || poss.length) update(); }
 
   window.addEventListener('scroll', onScroll, { passive: true });
   window.addEventListener('resize', () => { collect(); update(); }, { passive: true });
