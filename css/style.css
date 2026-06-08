@@ -7123,3 +7123,19 @@ em, i, .italic { font-style: normal !important; }
   #hero > .relative.z-10 .border-white\/35 { color: #1F211F; border-color: rgba(31,33,31,0.28); }
   #hero .pt-28 { padding-top: 30px; padding-bottom: 40px; }
 }
+
+/* ═══ Mobile: Career hero — same layout as home (image on top, text below on white) ═══ */
+@media (max-width: 1023px) {
+  #career-hero { display: block; min-height: auto; background: #fff; }
+  #career-hero > .absolute.inset-0 { position: relative; inset: auto; }
+  #career-hero > .absolute.inset-0 > img {
+    position: relative; height: auto; aspect-ratio: 5 / 4; width: 100%;
+    object-fit: cover; transform: none !important;
+  }
+  #career-hero > .absolute.inset-0 > .absolute { display: none; }   /* hide gradient + orange overlays */
+  #career-hero > .relative.z-10 { padding-top: 30px; padding-bottom: 40px; }
+  /* text → dark on white (orange "Build What Matters" + orange button kept) */
+  #career-hero h1 { color: #1F211F; }
+  #career-hero .text-white\/65 { color: #6B7280; }
+  #career-hero .border-white\/35 { color: #1F211F; border-color: rgba(31,33,31,0.28); }
+}
