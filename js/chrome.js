@@ -100,10 +100,10 @@
     slot.outerHTML = `
 <!-- ═══ CTA, READY TO BUILD ═══ -->
 <section id="cta" class="relative bg-[#1F211F] py-16 lg:py-20 overflow-hidden">
-  <!-- Background image with subtle warm orange tint -->
+  <!-- Background image with dark overlay -->
   <div class="absolute inset-0 z-0">
-    <img src="Images/Projects/Bright%20Metal%20India%20Pvt.%20Ltd..JPG" alt="" class="w-full h-full object-cover opacity-45" />
-    <div class="absolute inset-0 bg-orange/20 mix-blend-multiply"></div>
+    <img src="Images/Projects/Bright%20Metal%20India%20Pvt.%20Ltd..JPG" alt="" class="w-full h-full object-cover" />
+    <div class="absolute inset-0 bg-dark/80"></div>
   </div>
 
   <div class="relative z-10 max-w-screen-xl mx-auto px-6 lg:px-10 text-center">
@@ -242,11 +242,12 @@
   const footerSlot = document.getElementById('footer-slot');
   if (footerSlot) renderFooter(footerSlot);
 
-  // On sub-pages, force the "scrolled" nav variant by default. The home-page
-  // nav (index.html) starts transparent over the hero and gets .scrolled on
-  // scroll via main.js; every other page stays solid from the top.
-  if (navSlot && !isHome()) {
+  // Nav always uses the solid ("scrolled") variant — on every page, from the top.
+  if (navSlot) {
     const nav = document.getElementById('navbar');
-    if (nav) nav.classList.add('scrolled', 'is-subpage');
+    if (nav) {
+      nav.classList.add('scrolled');
+      if (!isHome()) nav.classList.add('is-subpage');
+    }
   }
 })();

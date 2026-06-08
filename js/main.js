@@ -244,10 +244,8 @@ const backTop = document.getElementById('backTop');
 let _navLastY = window.scrollY;
 window.addEventListener('scroll', () => {
   const y = window.scrollY;
-  // Only home toggles transparent <-> scrolled; sub-pages stay solid (is-subpage marker set by chrome.js)
-  if (navbar && !navbar.classList.contains('is-subpage')) {
-    navbar.classList.toggle('scrolled', y > 60);
-  }
+  // Nav is always solid (.scrolled added by chrome.js on every page) — no transparent-at-top state.
+  if (navbar) navbar.classList.add('scrolled');
   // Auto-hide on scroll down, reveal on scroll up / near the top
   if (navbar) {
     const menuOpen = mobileMenu && !mobileMenu.classList.contains('hidden');

@@ -1315,13 +1315,13 @@ img[loading="lazy"].is-loaded {
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  padding-top: 72px;          /* clears the fixed nav */
-  padding-bottom: 20px;
+  padding-top: 64px;          /* clears the fixed nav */
+  padding-bottom: 0;
 }
 .ph-head {
   flex: 0 0 auto;
   padding: 0 clamp(24px, 5vw, 64px);
-  margin-bottom: 22px;        /* tighter so cards get more height */
+  margin-bottom: 14px;        /* tight so the card track fills the viewport */
 }
 .ph-track {
   flex: 1 1 auto;
@@ -1380,12 +1380,13 @@ img[loading="lazy"].is-loaded {
 }
 /* Progress dots (match the Clients section) */
 .ph-dots {
-  flex: 0 0 auto;
+  position: absolute;          /* overlay at the bottom so cards get the full height */
+  left: 0; right: 0; bottom: 16px;
+  z-index: 5;
   display: flex;
   justify-content: center;
   align-items: center;
   gap: 9px;
-  padding: 14px 0 6px;
 }
 .ph-dot {
   width: 8px;
@@ -1410,14 +1411,17 @@ img[loading="lazy"].is-loaded {
     gap: 16px; padding: 0 24px 20px;
     align-items: flex-start;          /* don't stretch cards to the tallest — keep uniform */
     scroll-snap-type: x mandatory; scroll-padding: 24px;
+    scrollbar-width: none;            /* hide the (orange) scrollbar thumb — the "orange bar" */
   }
+  .ph-track::-webkit-scrollbar { display: none; }
   .ph-card { width: 82vw; height: auto; aspect-ratio: 4 / 3; scroll-snap-align: start; }
-  /* show the whole cover (fill width, no vertical crop) instead of cover-crop */
-  .ph-card-img { background-size: contain; background-repeat: no-repeat; background-color: #161816; }
+  /* fill the card uniformly (no letterbox bands) */
+  .ph-card-img { background-size: cover; background-position: center; }
 
   /* Progress dots — matches the Services & Expertise carousel */
   .ph-dots {
-    display: flex; justify-content: center; gap: 6px; margin-top: 16px;
+    display: flex; justify-content: center; gap: 6px;
+    margin-top: 18px; margin-bottom: 36px;   /* breathing room above the next section */
     position: static; transform: none;
   }
   .ph-dot {
@@ -7094,3 +7098,23 @@ em, i, .italic { font-style: normal !important; }
 .sr-bar, .cr-eyebrow-bar, .cr-mhead-bar,
 .home-reel-bar, .prj-rel-bar, .service-item-bar,
 .jn-hero-eyebrow .w-8 { display: none !important; }
+
+/* ═══ Mobile: homepage hero — full-width uncropped image on top, text below ═══ */
+@media (max-width: 1023px) {
+  /* nav opaque on mobile so it cleanly covers the top — no see-through / dark strip */
+  #navbar.scrolled { background: #fff !important; backdrop-filter: none !important; -webkit-backdrop-filter: none !important; }
+  [data-theme="dark"] #navbar.scrolled { background: #1F211F !important; }
+
+  #hero.hero-section { min-height: auto; display: block; background: #1F211F; padding-top: 64px; }  /* tucked just under the fixed nav (no gap) */
+  /* image wrapper → in-flow block at the top */
+  #hero > .absolute.inset-0 { position: relative; inset: auto; }
+  #hero .hero-slides {
+    position: relative; top: 0; bottom: 0; left: 0; right: 0;
+    aspect-ratio: 5 / 4; background: #1F211F;   /* taller image area */
+    transform: none !important;                 /* disable hero parallax on mobile */
+  }
+  #hero .hero-slide { object-fit: contain; }      /* show the whole image, no crop (dark bands blend into the dark hero) */
+  #hero > .absolute.inset-0 > .absolute { display: none; }   /* hide the gradient overlays */
+  /* text block now sits below the image (white text on the dark section) */
+  #hero .pt-28 { padding-top: 30px; padding-bottom: 40px; }
+}
