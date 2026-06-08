@@ -1351,7 +1351,7 @@ img[loading="lazy"].is-loaded {
   content: "";
   position: absolute;
   inset: 0;
-  background: linear-gradient(to top, rgba(11,18,32,0.88) 0%, rgba(11,18,32,0.1) 55%, rgba(11,18,32,0) 100%);
+  background: linear-gradient(to top, rgba(11,18,32,0.92) 0%, rgba(11,18,32,0.65) 34%, rgba(11,18,32,0.2) 62%, rgba(11,18,32,0) 88%);
 }
 .ph-card-cap {
   position: absolute;
@@ -1370,6 +1370,7 @@ img[loading="lazy"].is-loaded {
   text-transform: uppercase;
   color: var(--c-orange);
   margin-bottom: 10px;
+  text-shadow: 0 1px 6px rgba(0,0,0,0.65);   /* keep legible over bright images */
 }
 .ph-card-title {
   font-family: 'Archivo Black', 'Impact', sans-serif;
@@ -1377,6 +1378,7 @@ img[loading="lazy"].is-loaded {
   line-height: 1.08;
   color: #fff;
   margin: 0;
+  text-shadow: 0 2px 12px rgba(0,0,0,0.45);
 }
 /* Progress dots (match the Clients section) */
 .ph-dots {
@@ -7105,7 +7107,7 @@ em, i, .italic { font-style: normal !important; }
   #navbar.scrolled { background: #fff !important; backdrop-filter: none !important; -webkit-backdrop-filter: none !important; }
   [data-theme="dark"] #navbar.scrolled { background: #1F211F !important; }
 
-  #hero.hero-section { min-height: auto; display: block; background: #1F211F; padding-top: 64px; }  /* tucked just under the fixed nav (no gap) */
+  #hero.hero-section { min-height: auto; display: block; background: #fff; }   /* white text area */
   /* image wrapper → in-flow block at the top */
   #hero > .absolute.inset-0 { position: relative; inset: auto; }
   #hero .hero-slides {
@@ -7113,8 +7115,11 @@ em, i, .italic { font-style: normal !important; }
     aspect-ratio: 5 / 4; background: #1F211F;   /* taller image area */
     transform: none !important;                 /* disable hero parallax on mobile */
   }
-  #hero .hero-slide { object-fit: contain; }      /* show the whole image, no crop (dark bands blend into the dark hero) */
+  #hero .hero-slide { object-fit: cover; }        /* fill — no letterbox bands, no gap */
   #hero > .absolute.inset-0 > .absolute { display: none; }   /* hide the gradient overlays */
-  /* text block now sits below the image (white text on the dark section) */
+  /* text block sits below the image on a white background — flip text to dark */
+  #hero > .relative.z-10 h1 { color: #1F211F; }
+  #hero > .relative.z-10 .text-white\/65 { color: #6B7280; }
+  #hero > .relative.z-10 .border-white\/35 { color: #1F211F; border-color: rgba(31,33,31,0.28); }
   #hero .pt-28 { padding-top: 30px; padding-bottom: 40px; }
 }
