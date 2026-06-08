@@ -1315,12 +1315,13 @@ img[loading="lazy"].is-loaded {
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  padding-top: 80px;          /* standard top padding (also clears the fixed nav) */
+  padding-top: 72px;          /* clears the fixed nav */
+  padding-bottom: 20px;
 }
 .ph-head {
   flex: 0 0 auto;
   padding: 0 clamp(24px, 5vw, 64px);
-  margin-bottom: 40px;        /* standard header gap */
+  margin-bottom: 22px;        /* tighter so cards get more height */
 }
 .ph-track {
   flex: 1 1 auto;
@@ -1384,7 +1385,7 @@ img[loading="lazy"].is-loaded {
   justify-content: center;
   align-items: center;
   gap: 9px;
-  padding: 22px 0 28px;
+  padding: 14px 0 6px;
 }
 .ph-dot {
   width: 8px;
