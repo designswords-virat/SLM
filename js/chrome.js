@@ -39,7 +39,7 @@
     <ul class="hidden lg:flex items-center gap-5 list-none">
       <li><a href="${HOME || 'index.html'}" class="nav-link text-[13px] font-medium text-white/85 hover:text-white transition-colors">Home</a></li>
       <li><a href="about.html"       class="nav-link text-[13px] font-medium text-white/85 hover:text-white transition-colors">About</a></li>
-      <li><a href="${HOME}#projects" class="nav-link text-[13px] font-medium text-white/85 hover:text-white transition-colors">Projects</a></li>
+      <li><a href="categories.html" class="nav-link text-[13px] font-medium text-white/85 hover:text-white transition-colors">Projects</a></li>
       <li><a href="${HOME}#services" class="nav-link text-[13px] font-medium text-white/85 hover:text-white transition-colors">Services</a></li>
       <li><a href="tools.html"       class="nav-link text-[13px] font-medium text-white/85 hover:text-white transition-colors">Tools</a></li>
       <li><a href="journey.html"     class="nav-link text-[13px] font-medium text-white/85 hover:text-white transition-colors">Journey</a></li>
@@ -76,6 +76,7 @@
           <svg class="mm-chevron" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M19 9l-7 7-7-7"/></svg>
         </button>
         <div class="mm-group-list">
+          <a href="categories.html"                       class="mm-sublink">All Categories</a>
           <a href="projects.html?category=Industrial"    class="mm-sublink">Industrial</a>
           <a href="projects.html?category=Hospitality"   class="mm-sublink">Hospitality</a>
           <a href="projects.html?category=Institutional" class="mm-sublink">Institutional</a>
@@ -122,12 +123,12 @@
     <div class="flex flex-wrap items-center justify-center gap-4"
          data-aos="fade-up" data-aos-duration="700" data-aos-delay="240">
       <a href="#contact" data-magnetic
-         class="inline-flex items-center gap-2 px-8 py-4 bg-orange text-white text-[13px] font-bold tracking-wide hover:bg-orange-dk transition-all duration-200 group">
+         class="inline-flex w-full sm:w-auto justify-center items-center gap-2 px-8 py-4 bg-orange text-white text-[13px] font-bold tracking-wide hover:bg-orange-dk transition-all duration-200 group">
         Start Your Project
         <svg class="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
       </a>
       <a href="tel:9509911871" data-magnetic
-         class="inline-flex items-center gap-2 px-8 py-4 border border-white/40 text-white text-[13px] font-medium hover:border-white/70 hover:bg-white/10 transition-all duration-200">
+         class="inline-flex w-full sm:w-auto justify-center items-center gap-2 px-8 py-4 border border-white/40 text-white text-[13px] font-medium hover:border-white/70 hover:bg-white/10 transition-all duration-200">
         Call Us: +91 9509911871
       </a>
     </div>
@@ -226,14 +227,7 @@
       <p class="text-white/20 text-xs">Partners: Deepak &nbsp;·&nbsp; Kanhaiya Lal &nbsp;·&nbsp; Harsh Vardhan</p>
     </div>
   </div>
-</footer>
-
-<button id="backTop"
-  class="fixed bottom-7 right-7 z-50 w-12 h-12 bg-orange text-white items-center justify-center hover:bg-orange-dk"
-  aria-label="Back to top"
-  onclick="window.scrollTo({top:0,behavior:'smooth'})">
-  <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 15l7-7 7 7"/></svg>
-</button>`;
+</footer>`;
   }
 
   // Run immediately (before main.js queries these elements)

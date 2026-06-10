@@ -242,15 +242,15 @@ const navbar  = document.getElementById('navbar');
 const backTop = document.getElementById('backTop');
 
 let _navLastY = window.scrollY;
+const _navDesktop = () => window.matchMedia('(min-width: 1024px)').matches;
 window.addEventListener('scroll', () => {
   const y = window.scrollY;
   // Nav is always solid (.scrolled added by chrome.js on every page) — no transparent-at-top state.
   if (navbar) navbar.classList.add('scrolled');
-  // Auto-hide on scroll down, reveal on scroll up / near the top
   if (navbar) {
     const menuOpen = mobileMenu && !mobileMenu.classList.contains('hidden');
-    // Mobile: nav stays visible. Desktop: hide on scroll-down, reveal on scroll-up / near top.
-    if (window.innerWidth < 1024 || menuOpen || y <= 140 || y < _navLastY - 4) {
+    // Mobile: nav stays visible. Desktop: reveal on scroll-up, hide on scroll-down (even at the top).
+    if (!_navDesktop() || menuOpen || y < _navLastY - 4) {
       navbar.classList.remove('nav-hidden');
     } else if (y > _navLastY + 4) {
       navbar.classList.add('nav-hidden');
@@ -259,6 +259,11 @@ window.addEventListener('scroll', () => {
   _navLastY = y;
   if (backTop) backTop.classList.toggle('is-visible', y > 500);
 }, { passive: true });
+
+// Desktop: nav greets on load, then auto-hides after ~1.2s (reveal on scroll-up or cursor near top).
+if (navbar && _navDesktop()) {
+  setTimeout(() => { navbar.classList.add('nav-hidden'); }, 1200);
+}
 
 // Reveal the nav when the cursor moves near the top of the viewport
 window.addEventListener('mousemove', (e) => {
@@ -1259,8 +1264,7 @@ function renderProjectPage(id) {
     <!-- Related projects carousel -->
     <section class="prj-rel" aria-label="More projects">
       <div class="prj-rel-head">
-        <p class="prj-rel-eyebrow"><span class="prj-rel-bar"></span>More Projects</p>
-        <h2 class="prj-rel-title">Other work from<br/><span class="prj-rel-title-cat">${p.category}</span>.</h2>
+        <h2 class="prj-rel-title">Explore More Projects</h2>
       </div>
       <div class="prj-rel-viewport">
         <button type="button" class="prj-rel-btn prj-rel-btn--prev" data-dir="-1" aria-label="Previous projects">
@@ -1799,7 +1803,7 @@ function renderToolsPage() {
     `;
   }
 
-  // Category pills
+  // Category pills (desktop)
   const pillsWrap = document.getElementById('tmPills');
   if (pillsWrap) {
     pillsWrap.innerHTML = `
@@ -1809,6 +1813,17 @@ function renderToolsPage() {
           ${c.label.split(' ')[0]}
           <span class="tm-pill-count">${TM_EQUIPMENT.filter(x => x.cat === c.id).length}</span>
         </button>`).join('')}
+    `;
+  }
+
+  // Category dropdown (mobile — same filter, clearer affordance)
+  const catSelect = document.getElementById('tmCatSelect');
+  if (catSelect) {
+    catSelect.innerHTML = `
+      <option value="all">All Categories (${TM_EQUIPMENT.length})</option>
+      ${TM_CATEGORIES.map(c =>
+        `<option value="${c.id}">${c.label} (${TM_EQUIPMENT.filter(x => x.cat === c.id).length})</option>`
+      ).join('')}
     `;
   }
 
@@ -1860,13 +1875,20 @@ function renderToolsPage() {
 }
 
 function _initToolsFilters() {
-  const pills  = document.querySelectorAll('.tm-pill');
-  const search = document.getElementById('tmSearch');
-  const cards  = document.querySelectorAll('.tm-card');
-  const empty  = document.getElementById('tmEmpty');
-  const count  = document.getElementById('tmResultCount');
+  const pills     = document.querySelectorAll('.tm-pill');
+  const catSelect = document.getElementById('tmCatSelect');
+  const search    = document.getElementById('tmSearch');
+  const cards     = document.querySelectorAll('.tm-card');
+  const empty     = document.getElementById('tmEmpty');
+  const count     = document.getElementById('tmResultCount');
   let activeCat = 'all';
   let query = '';
+
+  // Keep pills and dropdown in sync to the same active category
+  function syncControls() {
+    pills.forEach(x => x.classList.toggle('is-active', x.dataset.cat === activeCat));
+    if (catSelect && catSelect.value !== activeCat) catSelect.value = activeCat;
+  }
 
   function apply() {
     let visible = 0;
@@ -1883,12 +1905,18 @@ function _initToolsFilters() {
 
   pills.forEach(p => {
     p.addEventListener('click', () => {
-      pills.forEach(x => x.classList.remove('is-active'));
-      p.classList.add('is-active');
       activeCat = p.dataset.cat;
+      syncControls();
       apply();
     });
   });
+  if (catSelect) {
+    catSelect.addEventListener('change', () => {
+      activeCat = catSelect.value;
+      syncControls();
+      apply();
+    });
+  }
   if (search) {
     search.addEventListener('input', e => {
       query = e.target.value.toLowerCase().trim();
@@ -1914,8 +1942,6 @@ function _initToolsFilters() {
     if (id) renderProjectPage(id);
   } else if (body.classList.contains('page-tools') || path.endsWith('/tools.html') || path.endsWith('tools.html')) {
     renderToolsPage();
-    _initPrjStickyBar();
-    document.body.classList.add('has-prj-sticky-bar');
   } else if (body.classList.contains('page-journey')) {
     initJourneyAnimations();
   } else if (body.classList.contains('page-leadership')) {
