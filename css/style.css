@@ -5722,7 +5722,7 @@ a[href^="#"] {
 /* Category dropdown — mobile only (desktop keeps the pills) */
 .tm-cat-select { display: none; }
 @media (max-width: 1023px) {
-  .tm-pills { display: none; }
+  .tm-pills { display: none !important; }   /* mobile: dropdown only */
   .tm-cat-select {
     display: block;
     width: 100%;
