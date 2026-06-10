@@ -862,22 +862,7 @@ const PROJECTS_DATA = [
     desc:'Medical institution development featuring lecture halls, clinical labs, student accommodation and professional-grade infrastructure at Kukas, Jaipur.' },
 
   // ════════════════════════════════
-  //  COMMERCIAL  (3 projects)
-  // ════════════════════════════════
-  { id:'akshat-nilay-c', category:'Commercial', name:'Akshat Nilay', client:'Akshat Apartments Pvt. Ltd.', location:'Hawa Sadak, Civil Lines, Jaipur', area:'1,55,000 sq.ft', year:',',
-    img:'Projects%20Images/Residential/Akshat%20Nilay-20260606T101144Z-3-001/Akshat%20Nilay/AN%20cover.png',
-    desc:'Complete civil development of an 8-storey residential apartment complex featuring 62 premium units with structural precision, modern elevation and quality finishes at Civil Lines, Jaipur.' },
-
-  { id:'akshat-meadows-c', category:'Commercial', name:'Akshat Meadows Township', client:'Akshat Apartments Pvt. Ltd.', location:'C-Scheme, Jaipur', area:'1,30,000 sq.ft', year:',',
-    img:'Projects%20Images/Residential/Akshat%20Meadows-20260606T101125Z-3-001/Akshat%20Meadows/AM%20cover.png',
-    desc:'Civil construction of a multi-storey residential apartment building comprising 36 luxury dwellings with reinforced concrete framework and high-end urban living standards at C-Scheme, Jaipur.' },
-
-  { id:'akshat-meadows-2-c', category:'Commercial', name:'Akshat Meadows Township 2', client:'Akshat Apartments Pvt. Ltd.', location:'Sirsi Road, Jaipur', area:'3,19,000 sq.ft', year:',',
-    img:'Projects%20Images/Residential/Akshay%20Trishla-20260606T101204Z-3-001/Akshay%20Trishla/AT%20Cover.png',
-    desc:'Complete township combining luxury villas, group housing and lifestyle amenities across 9.81 acres, featuring 120 luxury villas, walk-up apartments, retail centre, tenement blocks and a 15,000 sq.ft clubhouse.' },
-
-  // ════════════════════════════════
-  //  RESIDENTIAL  (4 projects)
+  //  RESIDENTIAL  (3 projects)
   // ════════════════════════════════
   { id:'akshat-nilay-r', category:'Residential', name:'Akshat Nilay', client:'Akshat Apartments Pvt. Ltd.', location:'Hawa Sadak, Civil Lines, Jaipur', area:'1,55,000 sq.ft', year:',',
     img:'Projects%20Images/Residential/Akshat%20Nilay-20260606T101144Z-3-001/Akshat%20Nilay/AN%20cover.png',
@@ -887,7 +872,7 @@ const PROJECTS_DATA = [
     img:'Projects%20Images/Residential/Akshat%20Meadows-20260606T101125Z-3-001/Akshat%20Meadows/AM%20cover.png',
     desc:'Civil construction of a multi-storey residential apartment building comprising 36 luxury dwellings with reinforced concrete framework and high-end urban living standards at C-Scheme, Jaipur.' },
 
-  { id:'akshat-meadows-2-r', category:'Residential', name:'Akshat Meadows Township 2', client:'Akshat Apartments Pvt. Ltd.', location:'Sirsi Road, Jaipur', area:'3,19,000 sq.ft', year:',',
+  { id:'akshat-meadows-2-r', category:'Residential', name:'Akshat Trishla', client:'Akshat Apartments Pvt. Ltd.', location:'Sirsi Road, Jaipur', area:'3,19,000 sq.ft', year:',',
     img:'Projects%20Images/Residential/Akshay%20Trishla-20260606T101204Z-3-001/Akshay%20Trishla/AT%20Cover.png',
     desc:'Complete township combining luxury villas, group housing and lifestyle amenities across 9.81 acres, featuring 120 luxury villas, walk-up apartments, retail centre and a 15,000 sq.ft clubhouse with gym, library and theatre.' },
 
@@ -982,14 +967,6 @@ const PROJECT_DETAILS = {
   'gyan-vihar': { gallery:['Projects%20Images/Institutional/Gyan%20Vihar-20260606T095049Z-3-001/Gyan%20Vihar/GV%20Cover.png','Projects%20Images/Institutional/Gyan%20Vihar-20260606T095049Z-3-001/Gyan%20Vihar/GV.1.png','Projects%20Images/Institutional/Gyan%20Vihar-20260606T095049Z-3-001/Gyan%20Vihar/GV.2.png','Projects%20Images/Institutional/Gyan%20Vihar-20260606T095049Z-3-001/Gyan%20Vihar/GV.3.png'],
     scope:['Twin 9-storey academic towers','Administrative & service blocks','Structural & civil works','Site infrastructure execution'] },
   'jaipur-dental': { gallery:['Projects%20Images/Institutional/Jaipur%20Dental%20College-20260606T095245Z-3-001/Jaipur%20Dental%20College/JDC%20cover.png','Projects%20Images/Institutional/Jaipur%20Dental%20College-20260606T095245Z-3-001/Jaipur%20Dental%20College/JDC%20.1.png'], scope:['Auditorium & classroom blocks','Hostel and student facilities','Civil & infrastructure works','Institutional-level finishing'] },
-
-  // ── COMMERCIAL ──
-  'akshat-nilay-c': { gallery:['Projects%20Images/Residential/Akshat%20Nilay-20260606T101144Z-3-001/Akshat%20Nilay/AN%20cover.png','Projects%20Images/Residential/Akshat%20Nilay-20260606T101144Z-3-001/Akshat%20Nilay/AN.1.png','Projects%20Images/Residential/Akshat%20Nilay-20260606T101144Z-3-001/Akshat%20Nilay/AN.2.png','Projects%20Images/Residential/Akshat%20Nilay-20260606T101144Z-3-001/Akshat%20Nilay/AN.3.png','Projects%20Images/Residential/Akshat%20Nilay-20260606T101144Z-3-001/Akshat%20Nilay/AN.4.png','Projects%20Images/Residential/Akshat%20Nilay-20260606T101144Z-3-001/Akshat%20Nilay/AN.5.png','Projects%20Images/Residential/Akshat%20Nilay-20260606T101144Z-3-001/Akshat%20Nilay/AN.6.png'],
-    scope:['8-storey premium apartment building','62 well-planned residential units','Structural precision and modern elevation','Civil & infrastructure execution with quality assurance'] },
-  'akshat-meadows-c': { gallery:['Projects%20Images/Residential/Akshat%20Meadows-20260606T101125Z-3-001/Akshat%20Meadows/AM%20cover.png','Projects%20Images/Residential/Akshat%20Meadows-20260606T101125Z-3-001/Akshat%20Meadows/AM.1.jpg','Projects%20Images/Residential/Akshat%20Meadows-20260606T101125Z-3-001/Akshat%20Meadows/AM.2.png','Projects%20Images/Residential/Akshat%20Meadows-20260606T101125Z-3-001/Akshat%20Meadows/AM.3.png','Projects%20Images/Residential/Akshat%20Meadows-20260606T101125Z-3-001/Akshat%20Meadows/AM.4.png','Projects%20Images/Residential/Akshat%20Meadows-20260606T101125Z-3-001/Akshat%20Meadows/AM.5.JPG','Projects%20Images/Residential/Akshat%20Meadows-20260606T101125Z-3-001/Akshat%20Meadows/AM.6.png','Projects%20Images/Residential/Akshat%20Meadows-20260606T101125Z-3-001/Akshat%20Meadows/AM.7.JPG'],
-    scope:['Multi-storey premium residential structure','36 exclusive apartments','Reinforced concrete framework with modern finishes','Executed to high-end urban living standards'] },
-  'akshat-meadows-2-c': { gallery:['Projects%20Images/Residential/Akshay%20Trishla-20260606T101204Z-3-001/Akshay%20Trishla/AT%20Cover.png','Projects%20Images/Residential/Akshay%20Trishla-20260606T101204Z-3-001/Akshay%20Trishla/AT.1.png','Projects%20Images/Residential/Akshay%20Trishla-20260606T101204Z-3-001/Akshay%20Trishla/AT.2.png','Projects%20Images/Residential/Akshay%20Trishla-20260606T101204Z-3-001/Akshay%20Trishla/AT.3.png','Projects%20Images/Residential/Akshay%20Trishla-20260606T101204Z-3-001/Akshay%20Trishla/AT.4.png'],
-    scope:['120 luxury villas & walk-up apartments','Retail center & tenement blocks','15,000 sq.ft clubhouse with gym, library & home theatre','Infrastructure including roads, STP, and electrical networks'] },
 
   // ── RESIDENTIAL ──
   'akshat-nilay-r': { gallery:['Projects%20Images/Residential/Akshat%20Nilay-20260606T101144Z-3-001/Akshat%20Nilay/AN%20cover.png','Projects%20Images/Residential/Akshat%20Nilay-20260606T101144Z-3-001/Akshat%20Nilay/AN.1.png','Projects%20Images/Residential/Akshat%20Nilay-20260606T101144Z-3-001/Akshat%20Nilay/AN.2.png','Projects%20Images/Residential/Akshat%20Nilay-20260606T101144Z-3-001/Akshat%20Nilay/AN.3.png','Projects%20Images/Residential/Akshat%20Nilay-20260606T101144Z-3-001/Akshat%20Nilay/AN.4.png','Projects%20Images/Residential/Akshat%20Nilay-20260606T101144Z-3-001/Akshat%20Nilay/AN.5.png','Projects%20Images/Residential/Akshat%20Nilay-20260606T101144Z-3-001/Akshat%20Nilay/AN.6.png'],
@@ -1096,6 +1073,23 @@ function renderProjectsPage(category) {
       }))
     }
   });
+
+  if (filtered.length === 0) {
+    // Empty sector (e.g. Commercial) — show a friendly "no projects" state
+    grid.style.display = 'block';
+    grid.innerHTML = `
+      <div style="grid-column:1/-1;text-align:center;padding:64px 24px;border:1px solid #E5E7EB;background:#fff">
+        <p style="font-family:'Archivo Black',sans-serif;font-size:22px;color:#1F211F;margin-bottom:10px">No projects found</p>
+        <p style="color:#6B7280;font-size:14px;line-height:1.7;max-width:42ch;margin:0 auto 22px">
+          We don't have any ${category} projects to show here yet. Explore our work across the other sectors.
+        </p>
+        <a href="categories.html" style="display:inline-flex;align-items:center;gap:8px;font-size:12px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:#fff;background:#F47721;padding:14px 26px;text-decoration:none">
+          View All Sectors
+          <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
+      </div>`;
+    return;
+  }
 
   grid.innerHTML = filtered.map(p => `
     <a href="project.html?id=${p.id}" class="proj-thumb-card" style="text-decoration:none;color:inherit;display:block">
