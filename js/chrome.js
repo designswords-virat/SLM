@@ -100,11 +100,11 @@
   function renderFooter(slot) {
     slot.outerHTML = `
 <!-- ═══ CTA, READY TO BUILD ═══ -->
-<section id="cta" class="relative bg-[#1F211F] py-16 lg:py-20 overflow-hidden">
-  <!-- Background image with dark overlay -->
+<section id="cta" class="relative bg-[#0B1220] py-16 lg:py-20 overflow-hidden">
+  <!-- Background image with blue-navy gradient overlay -->
   <div class="absolute inset-0 z-0">
     <img src="Images/Projects/Bright%20Metal%20India%20Pvt.%20Ltd..JPG" alt="" class="w-full h-full object-cover" />
-    <div class="absolute inset-0 bg-dark/80"></div>
+    <div class="absolute inset-0" style="background:linear-gradient(160deg, rgba(11,18,32,0.93) 0%, rgba(21,34,59,0.84) 50%, rgba(11,18,32,0.95) 100%)"></div>
   </div>
 
   <div class="relative z-10 max-w-screen-xl mx-auto px-6 lg:px-10 text-center">
@@ -135,7 +135,7 @@
   </div>
 </section>
 
-<footer id="contact" class="bg-dark text-white">
+<footer id="contact" class="text-white" style="background:linear-gradient(180deg,#15223b 0%,#111827 45%,#0B1220 100%)">
 
   <div class="max-w-screen-xl mx-auto px-6 lg:px-10 py-16 lg:py-20">
     <div class="grid lg:grid-cols-2 gap-16 xl:gap-24">

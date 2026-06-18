@@ -67,7 +67,7 @@
     tailwind.config = {
       theme: {
         extend: {
-          colors: { orange: '#F47721', 'orange-dk': '#D96218', dark: '#1F211F', muted: '#6B7280', border: '#E5E7EB', off: '#FFFFFF' },
+          colors: { orange: '#F47721', 'orange-dk': '#D96218', dark: '#111827', muted: '#6B7280', border: '#E5E7EB', off: '#FFFFFF' },
           fontFamily: { serif: ['"Archivo Black"', 'Impact', 'sans-serif'], sans: ['Inter', 'sans-serif'] }
         }
       }
@@ -75,7 +75,7 @@
   </script>
 
   <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet" />
-  <link rel="stylesheet" href="css/style.css?v=73" />
+  <link rel="stylesheet" href="css/style.css?v=75" />
 
   <style>
     /* ══ Journey hero — solid orange background (no glow / grid) ══ */
@@ -92,7 +92,7 @@
 
     /* ══ Journey timeline — alternating center-line layout ══ */
     .jn2 { background: #fff; padding: 5rem 1.5rem 4.5rem; }
-    [data-theme="dark"] .jn2 { background: #1F211F; }
+    [data-theme="dark"] .jn2 { background: #111827; }
     .jn2-wrap { max-width: 1080px; margin: 0 auto; }
 
     .jn2-head { text-align: center; margin-bottom: 4rem; }
@@ -102,7 +102,7 @@
     }
     .jn2-title {
       font-family: 'Archivo Black','Impact',sans-serif; font-size: clamp(26px,3.4vw,42px);
-      line-height: 1.06; color: #1F211F;
+      line-height: 1.06; color: #111827;
     }
     [data-theme="dark"] .jn2-title { color: #F9FAFB; }
 
@@ -138,17 +138,17 @@
       order: 2; width: 16px; height: 16px; border-radius: 50%; margin: 0 auto;
       background: #F47721; border: 3px solid #fff; box-shadow: 0 0 0 2px #F47721; z-index: 2;
     }
-    [data-theme="dark"] .jn2-dot { border-color: #1F211F; }
+    [data-theme="dark"] .jn2-dot { border-color: #111827; }
     .jn2-text { order: 3; text-align: left; padding-left: 2.75rem; }
     .jn2-text h3 {
       font-family: 'Archivo Black','Impact',sans-serif; font-size: 1.3rem; line-height: 1.2;
-      color: #1F211F; margin-bottom: .6rem;
+      color: #111827; margin-bottom: .6rem;
     }
     [data-theme="dark"] .jn2-text h3 { color: #F9FAFB; }
     .jn2-text p { color: #6B7280; font-size: .96rem; line-height: 1.72; margin-bottom: .9rem; }
     .jn2-tag {
       display: inline-flex; align-items: center; gap: .55rem; font-size: .76rem;
-      font-weight: 600; letter-spacing: .04em; color: #1F211F;
+      font-weight: 600; letter-spacing: .04em; color: #111827;
     }
     .jn2-tag::before { content: ""; width: 18px; height: 2px; background: #F47721; flex-shrink: 0; }
     [data-theme="dark"] .jn2-tag { color: #E5E7EB; }
@@ -395,8 +395,8 @@
 
 <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
 <script src="https://unpkg.com/lenis@1.1.20/dist/lenis.min.js"></script>
-<script src="js/chrome.js?v=62"></script>
-<script src="js/main.js?v=64"></script>
+<script src="js/chrome.js?v=63"></script>
+<script src="js/main.js?v=65"></script>
 
 <!-- Stats counter animation (self-contained — the redesigned timeline no longer uses the legacy journey JS) -->
 <script>

@@ -1079,7 +1079,7 @@ function renderProjectsPage(category) {
     grid.style.display = 'block';
     grid.innerHTML = `
       <div style="grid-column:1/-1;text-align:center;padding:64px 24px;border:1px solid #E5E7EB;background:#fff">
-        <p style="font-family:'Archivo Black',sans-serif;font-size:22px;color:#1F211F;margin-bottom:10px">No projects found</p>
+        <p style="font-family:'Archivo Black',sans-serif;font-size:22px;color:#111827;margin-bottom:10px">No projects found</p>
         <p style="color:#6B7280;font-size:14px;line-height:1.7;max-width:42ch;margin:0 auto 22px">
           We don't have any ${category} projects to show here yet. Explore our work across the other sectors.
         </p>
@@ -1098,9 +1098,9 @@ function renderProjectsPage(category) {
       </div>
       <div style="padding:20px;background:#fff">
         <p style="font-size:10px;font-weight:700;letter-spacing:0.28em;text-transform:uppercase;color:#F47721;margin-bottom:6px">${p.category}</p>
-        <h3 style="font-family:'Archivo Black',sans-serif;font-size:16px;font-weight:600;color:#1F211F;line-height:1.35;margin-bottom:5px">${p.name}</h3>
+        <h3 style="font-family:'Archivo Black',sans-serif;font-size:16px;font-weight:600;color:#111827;line-height:1.35;margin-bottom:5px">${p.name}</h3>
         <p style="color:#6B7280;font-size:13px;margin-bottom:5px">${p.location}</p>
-        <p style="color:#1F211F;font-size:12px;font-weight:600">${p.area}</p>
+        <p style="color:#111827;font-size:12px;font-weight:600">${p.area}</p>
       </div>
     </a>
   `).join('');
