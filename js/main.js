@@ -880,7 +880,7 @@ const PROJECTS_DATA = [
   //  PUBLIC WORKS  (4 projects)
   // ════════════════════════════════
   { id:'hindustan-zinc-pw', category:'Public Works', name:'Hindustan Zinc Limited', client:'Hindustan Zinc Ltd.', location:'Udaipur, Rajasthan', area:'Multiple Facilities', year:',',
-    img:'https://slmindia.in/wp-content/uploads/2025/10/901ca8f25a3367819559f74f5eab3470febb91ff.png',
+    img:'Images/Hindustan%20Zinc%20Limited.jpeg',
     desc:'Multiple landmark developments for one of India\'s largest zinc-lead-silver producers, including the 5-storey Yashad Bhavan corporate office at Swaroop Sagar, residential quarters, guesthouses and hospitals at various mine sites (Zawar, Dariba, Agucha).' },
 
   { id:'birla-corporation', category:'Public Works', name:'Birla Corporation', client:'Birla Corporation Ltd.', location:'Chittorgarh, Rajasthan', area:'Corporate Complex', year:',',
@@ -1735,6 +1735,52 @@ const TM_CATEGORIES = [
 // SLM WordPress upload host for equipment imagery
 const TM_IMG_BASE = 'https://slmindia.in/wp-content/uploads/2025/12/';
 
+// Free public-domain equipment imagery (Wikimedia Commons), one per category —
+// used instead of the old (now offline) WordPress images.
+const TM_CAT_IMG = {
+  concrete:    'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e7/Clean_concrete_mixer_truck.jpg/1280px-Clean_concrete_mixer_truck.jpg',
+  earthworks:  'https://upload.wikimedia.org/wikipedia/commons/thumb/6/62/Caterpillar_CB54B_roller_on_dirt_lot_in_Campbell.jpg/1280px-Caterpillar_CB54B_roller_on_dirt_lot_in_Campbell.jpg',
+  cutting:     'https://upload.wikimedia.org/wikipedia/commons/thumb/a/aa/Winkelschleifer_Trennscheibe_Metall.jpg/1280px-Winkelschleifer_Trennscheibe_Metall.jpg',
+  material:    'https://upload.wikimedia.org/wikipedia/commons/thumb/d/db/Big_colorful_mobile_crane_in_the_construction_site_-_1.jpg/1280px-Big_colorful_mobile_crane_in_the_construction_site_-_1.jpg',
+  fabrication: 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/35/Welding_Steel_Plate.JPG/1280px-Welding_Steel_Plate.JPG',
+  qa:          'https://upload.wikimedia.org/wikipedia/commons/thumb/2/29/Concrete_Compression_Testing.jpg/1280px-Concrete_Compression_Testing.jpg'
+};
+
+// Distinct image per equipment item (Wikimedia Commons, free to use).
+// Items not listed here fall back to the category image above.
+const TM_ITEM_IMG = {
+  "Auto Level & Dumpy Level": 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/49/Level_%28instrument%29.jpg/1280px-Level_%28instrument%29.jpg',
+  "Bar Cutting Machines": 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/A_bunch_of_rebar_up_close.jpg/1280px-A_bunch_of_rebar_up_close.jpg',
+  "Compression Testing Machine": 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/29/Concrete_Compression_Testing.jpg/1280px-Concrete_Compression_Testing.jpg',
+  "Concrete Mixers": 'https://upload.wikimedia.org/wikipedia/commons/thumb/7/7e/Argos_Cement_Mixer%2C_MACK.JPG/1280px-Argos_Cement_Mixer%2C_MACK.JPG',
+  "Concrete Vibrators": 'https://upload.wikimedia.org/wikipedia/commons/thumb/1/13/Concrete_Vib_%289022002%29.jpg/1280px-Concrete_Vib_%289022002%29.jpg',
+  "Core Cutting Machines": 'https://upload.wikimedia.org/wikipedia/commons/d/dd/Core_drill_06_2005.jpg',
+  "Drying Oven": 'https://upload.wikimedia.org/wikipedia/commons/1/17/Hot-air-oven-125x125.jpg',
+  "Earth Compactors": 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/ee/BOMAG_BPR_70_70_D_Reversible_Vibratory_Plates_machine_%281%29.jpg/1280px-BOMAG_BPR_70_70_D_Reversible_Vibratory_Plates_machine_%281%29.jpg',
+  "Electronic Weighing Machine": 'https://upload.wikimedia.org/wikipedia/commons/thumb/d/d0/Analytical_balance_%26_old_weighing_scales.JPG/1280px-Analytical_balance_%26_old_weighing_scales.JPG',
+  "Field Testing Labs": 'https://upload.wikimedia.org/wikipedia/commons/thumb/7/7c/Soil_test_laboratory.jpg/1280px-Soil_test_laboratory.jpg',
+  "Fleet Vehicles": 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/9b/Lorry_04_%282290422391%29.jpg/1280px-Lorry_04_%282290422391%29.jpg',
+  "Gas Torch Cutting Sets": 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a6/Cutting_torch.jpg/1280px-Cutting_torch.jpg',
+  "Gauges & Callipers": 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/5c/2020_Suwmiarka_cyfrowa.jpg/1280px-2020_Suwmiarka_cyfrowa.jpg',
+  "Hammer Drill Machines": 'https://upload.wikimedia.org/wikipedia/commons/f/f3/Black_%26_Decker_P80-38_Rotary_Hammer_Drill_1.jpg',
+  "Hydrometer": 'https://upload.wikimedia.org/wikipedia/commons/thumb/6/67/2023_Areometr_Ballinga.jpg/1280px-2023_Areometr_Ballinga.jpg',
+  "MS Pipes & Couplers": 'https://upload.wikimedia.org/wikipedia/commons/9/9f/Scaffolding.jpg',
+  "Material Lifts with Trolley": 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/85/Construction_workers_being_hoisted_by_a_crane_-_geograph.org.uk_-_3794740.jpg/1280px-Construction_workers_being_hoisted_by_a_crane_-_geograph.org.uk_-_3794740.jpg',
+  "Measuring Jars": 'https://upload.wikimedia.org/wikipedia/commons/c/c5/Different_types_of_graduated_cylinder-_10ml%2C_25ml%2C_50ml_and_100_ml_graduated_cylinder.jpg',
+  "Monkey Lifts": 'https://upload.wikimedia.org/wikipedia/commons/8/8e/Hoist_used_for_hauling_gravel_up_slope_next_to_the_dam_site%2C_August_28%2C_1924_%28SPWS_386%29.jpg',
+  "Pickup Loading Vehicles": 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/ee/Tata_ACE_HT.jpg/1280px-Tata_ACE_HT.jpg',
+  "Plate Bending Machines": 'https://upload.wikimedia.org/wikipedia/commons/f/fa/Bystronic_Bending.jpg',
+  "Self-Loading Mixer": 'https://upload.wikimedia.org/wikipedia/commons/d/da/Self_loading_concrete_mixer.jpg',
+  "Shuttering Material": 'https://upload.wikimedia.org/wikipedia/commons/thumb/f/f0/Buger_Br%C3%BCcke_Neubau_Schalung-20240218-RM-102143.jpg/1280px-Buger_Br%C3%BCcke_Neubau_Schalung-20240218-RM-102143.jpg',
+  "Sieve Analysis Set": 'https://upload.wikimedia.org/wikipedia/commons/a/a9/Vibrating_sieve.jpg',
+  "Slump Apparatus": 'https://upload.wikimedia.org/wikipedia/commons/6/62/Cono_de_Abrams_01.jpg',
+  "Tractor Bull Loader": 'https://upload.wikimedia.org/wikipedia/commons/thumb/6/63/Case_580_Super_L_backhoe_loader_-_1.jpg/1280px-Case_580_Super_L_backhoe_loader_-_1.jpg',
+  "Trowel & Spatula": 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/93/Masons_trowel.jpg/1280px-Masons_trowel.jpg',
+  "V-Funnel": 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b7/V-funnel_test_for_Self-compacting_concrete.jpg/1280px-V-funnel_test_for_Self-compacting_concrete.jpg',
+  "VDC Flooring Sets": 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/5f/Mag_float_%289021986%29.jpg/1280px-Mag_float_%289021986%29.jpg',
+  "Welding Transformers": 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/51/SMAW_welding_machine-2.jpg/1280px-SMAW_welding_machine-2.jpg'
+};
+
 const TM_EQUIPMENT = [
   // Concrete Works (3 types · 27 units)
   { cat:'concrete',   name:'Concrete Mixers',            count:'14', unit:'Units',   img:TM_IMG_BASE+'6569e43676f6f01d50f372780e1731607e4f6f4f.jpg', desc:'On-site batch mixers for continuous concrete supply across active sites.' },
@@ -1829,7 +1875,7 @@ function renderToolsPage() {
     return `
       <article class="tm-card" data-cat="${item.cat}" data-search="${searchBlob}">
         <div class="tm-card-media">
-          <img src="${item.img}" alt="${item.name} — SLM Construction equipment" loading="lazy" onerror="this.parentElement.classList.add('tm-card-media--fallback');this.remove();" />
+          <img src="${TM_ITEM_IMG[item.name] || TM_CAT_IMG[item.cat] || item.img}" alt="${item.name} — SLM Construction equipment" loading="lazy" onerror="this.parentElement.classList.add('tm-card-media--fallback');this.remove();" />
           <div class="tm-card-icon" aria-hidden="true">
             <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">${cat.icon}</svg>
           </div>
